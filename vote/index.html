@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes">
+
+		<title>Laastutabloo Voting App</title>
+		
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="../lib/jQuery.mmenu/dist/jquery.mmenu.all.css" />
+
+
+<style type="text/css">
+	
+	body, html {
+	padding : 0;
+	margin : 0;
+	}
+	body {
+	background-color : #fff;
+	font-family : Arial, Helvetica, Verdana;
+	font-size : 14px;
+	line-height : 22px;
+	color : #666;
+	min-height : 100vh;
+	position : relative;
+	}
+
+	p{
+		margin: 0 0 10px 0;
+	}
+
+	.mm-navbar_size-2
+		{
+			background: #FFFFFF;
+			
+		}
+		.mm-navbar_size-2 span{
+			color: #000000 !important;
+			font-size: 1em;
+		}	
+
+</style>
+	<script src="../lib/jquery-3.3.1.min.js"></script>
+	<script src="../lib/jQuery.mmenu/dist/jquery.mmenu.all.js"></script>
+		
+</head>
+	<body class="mm-wrapper">
+
+		<div id="page">
+		</div>
+		
+		<nav id="menu">
+	  
+				<ul>
+						
+						<li class="Divider Spacer">For visitors of Estonian National Museum</li>
+
+
+						<li ><span>Vote for district</span>
+
+							<div id="locations">
+							<ul>
+								<li><span>Valga County</span>
+
+									<ul>
+										<li><span>Otepää</span>
+
+											<ul>	
+												<li class="Divider Spacer">My vote</li>
+												<li><span><button>Cast my vote!</button></span></li>
+												<li><span >Votes left</span><em class="Counter" style="color: green">5</em></li>
+
+												<li class="Divider Spacer">Current status</li>
+												<li><span >Number of votes</span><em class="Counter" style="color: green">3</em></li>
+												<li><span >Place in playlist</span><em class="Counter" style="color: green">2nd</em></li>
+												<li><span >Estimated display time</span><em class="Counter" style="color: green">40mins</em></li>
+											</ul>
+											
+										</li>
+
+										<li><span>Neeruti</span></li>
+										<li><span>Otepää</span></li>
+										<li><span>Neeruti</span></li>
+										<li><span>Otepää</span></li>
+										<li><span>Neeruti</span></li>
+										<li><span>Otepää</span></li>
+										<li><span>Neeruti</span></li>
+										<li><span>Otepää</span></li>
+										<li><span>Neeruti</span></li>
+										<li><span>Otepää</span></li>
+										<li><span>Neeruti</span></li>
+									</ul>
+
+								</li>
+
+								<li><span>Tartu County</span>
+									<ul>
+										<li><a href="#/">Ülenurme</a></li>
+										<li><a href="#/">Nõo</a></li>
+										<li><a href="#/">Luunja</a></li>
+									</ul>
+								</li>
+
+								<li><span>Harju County</span></li>
+							</ul>
+						</div>
+
+						</li>
+
+
+
+						<li><span>View playlist</span>
+						
+						<ul>
+							<li class="Divider Spacer">Currently on display</li>
+
+							<li>
+								<span style="color: green">Palupera</span>
+								<em class="Counter" style="color: green">now</em>
+							</li>
+
+							<li class="Divider Spacer">Next in queue</li>
+						
+							<li><span>Otepää</span><em class="Counter" style="color: black">2 mins</em></li>
+							<li><span>Neeruti</span><em class="Counter" style="color: black">5 mins</em></li>
+							<li><span>Vorstimäe</span><em class="Counter" style="color: black">7 mins</em></li>
+							<li><span>Tartu</span><em class="Counter" style="color: black">10 mins</em></li>
+						
+
+						</ul>
+					</li>
+					
+					<li class="Divider">&nbsp;</li>
+
+					<li>
+						<span>About</span>
+						<div>
+							<br />
+							<p><strong>Laastutabloo (Shingle display) is a installation in Estonian National Museum. </strong>
+								<br />
+								<br />
+								It displays real-time information from all kinds of online information sources.
+								<br />
+								<br />
+								To use is this app, you should be in the museum to interact with the display.
+								<br />
+								<br />
+								To create your own display, use our <a href="#/">online version</a>.
+							</p>
+						</div>
+
+					</li>
+
+					<li>
+						<span>Data providers</span>
+						
+					<ul>
+						<li>
+							<span>Police and Border Guard Board</span>
+							<div>
+								<strong>Politsei- ja Piirivalveamet</strong>
+								<br/><br/>
+							Includes registries of incidents.
+							</div>
+
+						</li>
+					</ul>
+							
+					</li>
+
+					<li>
+						<span>Help</span>
+						<div>
+								<br />
+				<p><strong>To use is this app, you should be visiting Estonian National Museum in Tartu!</strong>
+					<br />
+					<br />
+					You can vote for your favourite districts in Estonia to be shown on the display. You can choose between all Estonian  villages, towns  or cities. 
+					<br />
+					<br />
+
+					<strong>Voting</strong><br />
+					Choose <strong>"Vote for district"</strong> in the menu and find your favourite district. 
+					<br />
+					<br />
+					<strong>Search</strong>
+					<br/>
+					You can also search for district by name. Type in the search box below.
+					
+					<br />
+					<br />
+					<strong>Playlist</strong>
+					<br/>
+					The playlist of the exhibit is created by votes of the visitors. The district that get more votes will be shown next. Open <strong>"View playlist"</strong> to see the queue. Ask a friend to vote to bring your favourite up!
+					
+					<br />
+					<br />
+
+				</p>
+							</div>
+
+
+					</li>
+					<li><span>Create your own display</span>
+<div>
+								<br />
+				<p><strong>Laastutabloo online version.</strong>
+					<br />
+					<br />
+					You can use online version of Laastutabloo to create your own display. You can customize the districts and data sources you are interested in. 
+					<br />
+					<br />
+					<strong><a href="">OPEN ONLINE VERSION</a></strong>
+				
+				</p>
+							</div>
+
+					</li>
+
+
+
+						
+					</ul>
+
+
+	</nav>
+		
+	
+		<script>
+			$(function() {
+				
+				$("#menu").mmenu({
+					extensions	: [ 'theme-light' ],
+					offCanvas: false,
+					counters	: true,
+					searchfield	: {
+						add			: true,
+						addTo		: "#locations",
+						placeholder	: "Search for district"
+					},
+					navbars		: [
+						{
+							position	: 'top',
+							height: 2,
+							content		:  ['<img src="logo.png" style="width:50%;margin:auto">']
+						},
+{
+               "position": "top",
+               "content": [
+                  "<a href='#/?lang=et'>EST</a>",
+                  "<a href='#/?lang=en'>ENG</a>",
+                  "<a href='#/?lang=ru'>RUS</a>"
+               ]
+            },
+
+						  {
+							content		: [ 'prev', 'breadcrumbs']
+						},{
+							position	: 'bottom',
+							content		: [ 'searchfield' ]
+						},
+						
+						 {
+               "position": "bottom",
+               "content": [
+                  '<a href="https://www.instagram.com/explore/tags/laastutabloo/" target="_blank"><span class="fa fa-instagram"></span></a>',
+                  "<a class='fa fa-twitter' href='#/'></a>",
+                  "<a class='fa fa-facebook' href='#/'></a>"
+               ]
+            }
+					]
+
+				}, { 	navbars		: {
+						breadcrumbs	: {
+							removeFirst	: true
+						}
+					}});
+
+
+			});
+		</script>
+	
+</body></html>

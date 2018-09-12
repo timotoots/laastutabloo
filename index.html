@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="author" content="www.masinism.ee" />
+		<meta name="viewport" content="width=device-width initial-scale=1.0 maximum-scale=1.0 user-scalable=yes" />
+
+		<title>Laastutabloo</title>
+
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="css/style.css" />
+		<link rel="stylesheet" href="lib/jQuery.mmenu/dist/jquery.mmenu.all.css" />
+
+		<style>
+			@media (min-width: 992px) {
+				.header a {
+					display: none;
+				}
+			}
+
+		
+		</style>
+
+		<script src="lib/jquery-3.3.1.min.js"></script>
+		<script src="lib/jQuery.mmenu/dist/jquery.mmenu.all.js"></script>
+		<script>
+			$(function() {
+				$('nav#menu').mmenu({
+					extensions	: [ 'theme-dark' ,"fullscreen",],
+					setSelected	: true,
+					counters	: true,
+					searchfield : {
+						placeholder		: 'Search'
+					},
+					iconbar		: {
+						add 		: true,
+						size		: 40,
+						top 		: [ 
+							'<a href="#/"><span class="fa fa-home"></span></a>'
+						],
+						bottom 		: [
+							'<a href="#/"  target="_blank"><span class="fa fa-twitter"></span></a>',
+							'<a href="#/"  target="_blank"><span class="fa fa-facebook"></span></a>',
+							'<a href="https://www.instagram.com/explore/tags/laastutabloo/" target="_blank"><span class="fa fa-instagram"></span></a>'
+						]
+					},
+					sidebar		: {
+						collapsed		: {
+							use 			: '(min-width: 450px)',
+							size			: 40,
+							hideNavbar		: false
+						},
+						expanded		: {
+							use 			: '(min-width: 992px)',
+							size			: 35
+						}
+					},
+					navbars		: [
+						{
+							position	: 'top',
+							content		: [ '<a href="/">LAASTUTABLOO</a>' ]
+						},{
+               "position": "top",
+               "content": [
+                  "<a href='#/?lang=et'>EST</a>",
+                  "<a href='#/?lang=en'>ENG</a>",
+                  "<a href='#/?lang=ru'>RUS</a>"
+               ]
+            }, {
+							content		: [ 'prev', 'breadcrumbs', "close"]
+						},{
+							position	: 'bottom',
+							content		: [ 'searchfield' ]
+						}
+					]
+				}, {
+					searchfield : {
+						clear 		: true
+					},
+					navbars		: {
+						breadcrumbs	: {
+							removeFirst	: true
+						}
+					}
+				});
+
+				$('a[href^="#/"]').click(function() {
+					alert( 'Thank you for clicking, but that\'s a demo link' );
+					return false;
+				})
+			});
+		</script>
+	</head>
+	<body>
+		<div id="page">
+			<div class="header">
+				<a href="#menu"><span></span></a>
+				Demo
+			</div>
+			<div class="content">
+				<p><strong>This is an advanced demo.</strong><br />
+					Click the menu icon to open the menu.</p>
+			</div>
+			<nav id="menu">
+				<div id="panel-menu">
+					<ul>
+
+						<li class="Divider Spacer">Customize</li>
+
+						<li><span>Districts</span>
+							<ul>
+								<li class="Divider Spacer">All</li>
+								<li><span>Enable all</span> <input type="checkbox" class="Check" /></li>
+										<li><span>Disable all</span> <input type="checkbox" class="Check" /></li>
+								
+								<li class="Divider Spacer">Counties</li>
+
+								<li><span>Valga County</span>
+									<ul>
+										<li><span>Enable all</span> <input type="checkbox" class="Check" /></li>
+										<li><span>Disable all</span> <input type="checkbox" class="Check" /></li>
+										<li><span>Otepää</span> <input type="checkbox" class="Check" /></li>
+										<li><span>Neeruti</span> <input type="checkbox" class="Check" /></li>
+										<li><span>Otepää</span> <input type="checkbox" class="Check" /></li>
+										<li><span>Neeruti</span> <input type="checkbox" class="Check" /></li>
+										<li><span>Otepää</span> <input type="checkbox" class="Check" /></li>
+										<li><span>Neeruti</span> <input type="checkbox" class="Check" /></li>
+										<li><span>Otepää</span> <input type="checkbox" class="Check" /></li>
+										<li><span>Neeruti</span> <input type="checkbox" class="Check" /></li>
+										<li><span>Otepää</span><input type="checkbox" class="Check" /></li>
+										<li><span>Neeruti</span><input type="checkbox" class="Check" /></li>
+										<li><span>Otepää</span><input type="checkbox" class="Check" /></li>
+										<li><span>Neeruti</span><input type="checkbox" class="Check" /></li>
+												</ul>
+
+								</li>
+								<li><span>Tartu County</span>
+									<ul>
+										<li><a href="#/">Management</a></li>
+										<li><a href="#/">Sales</a></li>
+										<li><a href="#/">Development</a></li>
+									</ul>
+								</li>
+								<li><span>Harju County</span></li>
+							</ul>
+						</li>
+						<li><a href="#/">Data sources</a></li>
+						<li><span>Settings</span>
+							<ul>
+								<li class="Divider Spacer">Data slides</li>
+
+								<li><span>Delay between slides</span><em class="Counter" style="color: green">3sec</em>
+									<ul>
+										<li><span>1sec</span><input type="checkbox" class="Check" /></li>
+										<li><span>5sec</span><input type="checkbox" class="Check" /></li>
+										<li><span>10sec</span><input type="checkbox" class="Check" /></li>
+										<li><span>20sec</span><input type="checkbox" class="Check" /></li>
+									</ul>
+
+								</li>
+								<li><span>Maximum pages per slide</span><em class="Counter" style="color: green">3</em></li>
+								<li class="Divider Spacer">Display mode</li>
+								<li><span>Selection sorted alphabetically</span><input type="checkbox" class="Check" /></li>
+								<li><span>Selection shuffled</span><input type="checkbox" class="Check" /></li>
+								<li><span>As in the museum</span><input type="checkbox" class="Check" /></li>
+								<li><span>By your GPS location</span><input type="checkbox" class="Check" /></li>
+
+
+							</ul>
+						</li>
+			
+
+						<li class="Divider Spacer">About</li>
+						<li><a href="default.html">Data providers</a></li>
+						<li><a href="onepage.html">Laastutabloo</a></li>
+						<li><a href="onepage.html">Estonian National Museum</a></li>
+					
+						<li class="Divider Spacer">For museum visitors</li>
+						<li><a href="#/">Voting App</a></li>
+
+					</ul>
+				</div>
+
+			
+
+		
+			</nav>
+		</div>
+	</body>
+</html>
