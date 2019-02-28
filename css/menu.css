@@ -46,6 +46,10 @@ nav:not(.mm-menu)
 	display: none;
 }
 
+label.mm-check{
+	padding-right: 20px;
+}
+
 .header,
 .content,
 .footer
@@ -109,3 +113,36 @@ nav:not(.mm-menu)
 {
 	padding: 150px 50px 50px 50px;
 }
+
+@media (min-width: 992px) {
+		.header a {
+			/*display: none;*/
+		}
+	}
+
+	.active_lang{
+		color: rgba(255,255,255,1) !important;
+		
+	}
+
+	td{
+/*		width: 3%
+		height: 4%;*/
+		border: 1px solid;
+	}
+
+	table{
+		display: none;
+	}
+
+	
+	.content{
+		padding: 0;
+	}
+
+	.breadcrumb_first{
+		width: 1px;
+		margin-left: -52px;
+		color: white;
+		font-weight: bold;
+	}

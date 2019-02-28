@@ -1,0 +1,33 @@
+body {
+	margin: 0px;
+	background-color: #000000;
+	overflow: hidden;
+}
+#controls{
+	z-index: 100;
+	position: absolute;
+	right:0;
+	top:0;
+	color: white;
+}
+
+#content{
+	background: gray;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top:30px;
+	left:0;
+	/*display: none*/
+}
+
+#tabloo_wrapper{
+	background: gray;
+	width: 1600px;
+	height: 1000px;
+}
+
+canvas{
+	width: 100% !important;
+	height: 100% !important;
+}

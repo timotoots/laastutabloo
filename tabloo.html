@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Tabloo WebGL</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="css/tabloo.css">
+
+		<!-- Fit DIVs -->
+		<script type="text/javascript" src="lib/fit.min.js"></script>
+		<script type="text/javascript" src="js/tabloo_fit.js"></script>
+
+		<!-- WebGL -->
+		<script src="lib/node_modules/three/build/three.js"></script>
+		<script src="lib/node_modules/three/examples/js/controls/OrbitControls.js"></script>
+		<script src="lib/node_modules/three/examples/js/libs/stats.min.js"></script>
+
+	</head>
+
+<body id="body">
+
+	<div id="controls">
+		<a href="javascript://" onclick="rotateLaast(4,5,1080,1,5000);">RO1</a>
+		<a href="javascript://" onclick="rotateLaast(4,5,-1080,-1,5000);">RO2</a>
+		<a href="javascript://" onclick="rotateRow(1,1080,1)">ROW</a>
+		<a href="javascript://" onclick="changeLetter(10,10,2)">L2</a>
+		<a href="javascript://" onclick="changeLetter(10,10,3)">L3</a>
+	</div>
+
+	<div id="content">
+	    <div id="tabloo_wrapper"></div>
+	</div>
+
+	<!-- Run script -->
+	<script src="js/tabloo_webgl.js"></script>
+
+</body>
+</html>
