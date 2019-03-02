@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Converter UI</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+<style>
+
+  html {
+    font-size: 100%;
+  }
+  body {background-image: none}
+
+</style>
+
+<!-- JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+
+</head>
+
+<body>
+
+<div class="container-fluid bg-white border rounded p-3">
+  <h2> Column selection </h2>
+  Select columns from the original:
+  <div class="container-fluid border border-primary rounded" id="jstree">
+  </div>
+  <br>
+  <button type="button" class="btn btn-secondary" onclick=create_table();>Update columns</button>
+</div>
+
+
+<br>
+
+<div class="container-fluid border rounded p-3">
+  <h2> Custom script </h2>
+  <div class="container-fluid border rounded p-3">
+    <div class="form-group">
+      <textarea rows="10" class="form-control bg-white border border-primary rounded" id="inputscript"></textarea>
+    </div>
+  </div>
+  <br>
+</div>
+
+<br>
+
+<div class="container-fluid border rounded p-3">
+  <h2> Column types </h2>
+  Map columns to types
+  <table id="tab" class="table"></table>
+</div>
+
+<br>
+
+<div>
+  <button type="button" class="btn btn-secondary" onclick=save();>Save</button>
+</div>
+
+<script>
+// JSTree
+$('#jstree').jstree({
+	  'core' : {
+		  'data' : {
+        'url' : 'test.json',
+        'data' : function (node) {
+          return { 'id' : node.id };
+        }
+  }
+	  }, "plugins" : ["checkbox"]
+});
+
+// Table
+function create_table(){
+  
+  // Get checked elements
+  var list = $("#jstree").jstree(true).get_checked(true)
+
+  // Get table
+  var table = document.getElementById("tab");
+  table.innerHTML = "";
+  // Create header for the table
+  var header = table.createTHead();
+  var hrow = header.insertRow(0);
+  var headercell0 = hrow.insertCell(0);
+  var headercell1 = hrow.insertCell(1);
+  var headercell2 = hrow.insertCell(2);
+  headercell0.innerHTML = "<b>Original column name</b>";
+  headercell1.innerHTML = "<b>New column name</b>";
+  headercell2.innerHTML = "<b>Column type</b>";
+  
+  // Fill body with checked columns
+  var body = table.createTBody();
+  var i;
+  for (i = 0; i < list.length; i++) {
+    
+    // Column 0
+    var row = body.insertRow(0);
+    var cell0 = row.insertCell(0);
+    cell0.innerHTML = list[i].text.toString();
+
+    // Column 1
+    var cell1 = row.insertCell(1);
+    cell1.innerHTML = '<input type="text" class="form-control" id=' + list[i].text.toString() + ' placeholder="new column name"  value="">';
+    
+    // Column 2
+    var cell2 = row.insertCell(2);
+    var options = ["int", "lat", "long", "string"]; // Column type options
+   
+    tmp = '<select class="form-control">';
+    var j;
+    for (j = 0; j < options.length; j++) {
+      tmp += '<option>' + options[j] + '</option>';
+    }
+    tmp += '</select>';
+    cell2.innerHTML = tmp;
+  } 
+};
+
+
+// Send schema and script
+function save() {
+
+  var schema = {}
+  var rows = document.getElementById("tab").tBodies[0].rows
+  var i;
+  for (i = 0; i < rows.length; i++) {
+    schema[rows[i].cells[0].textContent.toString() ] = {
+      "newname": rows[i].cells[1].children[0].value.toString(), 
+      "newtype": rows[i].cells[2].children[0].value.toString()
+    };
+  }
+    
+  var script = $("#inputscript").val()
+    
+  // // Get metadata then upload schema and script
+  // $.ajax({ type: "GET",
+  //         url: window.location.origin + "/api/action/resource_show",
+  //         headers: {"X-CKAN-API-Key": '{{ api_key }}' },
+  //         data: {"id": '{{ resource_id }}'}        
+  // }).then(function func(metadata) {
+  //       window.data = metadata.result;
+  //       window.data["schema"] = schema;
+  //       window.data["script"] = script;
+  //       }
+  // ).then($.ajax({ type: "POST",
+  //         url: window.location.origin + "/api/action/resource_update",
+  //         headers: {"X-CKAN-API-Key": '{{ api_key }}' },
+  //         data: window.data,
+  //         async: false,
+  //         cache: false,
+  //         timeout: 30000,
+  // })).done(function(){
+  //   console.log("Uploaded!");
+  // });
+};
+</script>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  	<title>LT Querybuilder</title>
+  	<meta charset="utf-8">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="node_modules/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+
+	<script src="node_modules/tabulator-tables/dist/js/tabulator.min.js" type="text/javascript"></script>
+   	<script src="node_modules/jquery/dist/jquery.min.js" type="text/javascript"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+
+
+  </head>
+  <body>
+  <div class="container">
+	<div>
+      <form action="/test" method="post">
+		
+		<h3>Laastutabloo Admin / Query Builder</h3>
+		<hr/>	
+
+		<div class="form-group">
+		  <label for="query_id">Query ID:</label>
+		  <input type="text" class="form-control" id="query_id">
+		</div>
+
+		<p>Unique name of the query preset. Lowercase a-z, no spaces.</p>
+		
+		<!-- //////////////////////////////////////////////////// -->
+
+		<hr/>	
+
+		<div class="form-group">
+		  <label for="uname_etsr">Name (Estonian):</label>
+		  <input type="text" class="form-control" id="name_et">
+		</div>
+
+		<div class="form-group">
+		  <label for="name_en">Name (English):</label>
+		  <input type="text" class="form-control" id="name_en">
+		</div>
+
+		<div class="form-group">
+		  <label for="name_ru">Name (Russian):</label>
+		  <input type="text" class="form-control" id="name_ru">
+		</div>
+
+		<p>Title of the slide appears on the display. If not filled, that language is not used.
+
+		<!-- //////////////////////////////////////////////////// -->
+
+		<hr/>
+
+		<h3>Query builder</h3>
+        <div class="col-xs-5">
+          <label for="all_classes">Select dataset</label>
+          <select class="form-control" id="all_classes">
+					<option disabled selected value> -- select a dataset -- </option>
+            {% for o in all_classes %}
+                    <option id="dataset_id" value="{{ o }}">{{ o }}</option>
+            {% endfor %}
+          </select>
+        </div>
+		<div><br><br><br>
+		<table border="0">
+  			<tr>
+    			<div class="col-xs-5">
+				<label for="all_entries">Select resource</label>
+				<select class="form-control" id="all_entries" disabled>
+					<option value="selectRecource" disabled selected value> -- select a resource -- </option>
+				{% for o in all_entries %}
+                    <option id="resource_id" value="{{ o }}">{{ o }}</option>
+				{% endfor %}
+				</select>
+				</div>
+        
+  			</tr><br><br><br><br>
+			{% for fieldValue in fieldValues %}
+			<tr>
+    				<td><input type="checkbox" name="checkbox" id="checkbox_id{{ loop.index0 }}" value="{{fieldValue}}"><input type="text" name="field{{ loop.index0 }}" value="{{fieldValue}}" id="field_id{{ loop.index0 }}" readonly></td>
+    				<td><form action=""><input type="radio" name="radio" id="radio_id{{ loop.index0 }}" value="DESC">desc <input type="radio" name="radio" id="radio_id{{ loop.index0 }}" value="ASC"> asc <input type="radio" name="radio" id="radio_id{{ loop.index0 }}" value="NONE">none</form></td>
+
+				<td>
+					<select name="modifier{{ loop.index0 }}">
+						{% for script in scripts%}
+    					<option value= "{{script}}">{{script}}</option>"
+    					{% endfor %}
+  					</select>
+				</td>
+				<td>
+					<select name="translated{{ loop.index0 }}">
+						{% for translation in translations%}
+    					<option value= "{{translation}}">{{translation}}</option>"
+    					{% endfor %}
+  					</select>
+				</td>
+			</tr>
+			{% endfor %}
+		</table>
+		</div><br><br><br><br>
+		
+		<h3>SQL <span id="hideSQL">(hide)</span><span id="showSQL" hidden>(show)</span></h3>
+		<p id="readSQLinfo">Resulting SQL from query builder, read.only</p>
+		<textarea readonly rows="6" cols="100%" name="readSQL" id="readSQL">
+SELECT name, date, lat, lon from resource_id
+		</textarea>
+
+		<h3>Custom SQL <span id="hideCSQL">(hide)</span><span id="showCSQL" hidden>(show)</span></h3>
+		<p id="readCSQLinfo">Overrides SQL in query builder</p>
+		<textarea rows="6" cols="100%" name="CustomSQL" id="CustomSQL">SELECT name, date, lat, lon from resource_name WHERE xxxx
+		</textarea>
+
+		<br/><br/>
+		<a href=# id="runQuery"><button class="btn">Test query</button></a>
+
+
+		<hr>
+		<h3>Table preview</h3>
+		<p>Results from SQL or Custom SQL</p>
+		<div id="tablepreview"></div>
+
+		<!-- //////////////////////////////////////////////////// -->
+
+		<hr>
+		<h3>Custom template <span id="hideTemp">(hide)</span><span id="showTemp" hidden>(show)</span></h3>
+		<p id="templateinfo">Formats text in specific way in python sandbox.</p>
+		<textarea rows="6" cols="100%" name="templateSQL" id="templateSQL">
+import time
+for d_in... etc
+		</textarea><br>
+
+		<!-- //////////////////////////////////////////////////// -->
+
+		<hr/>
+
+		<h3>Slide style</h3>
+		<p>How to format slide</p>
+		<p>Style:  <input type="radio" name="format" value="table">table <input type="radio" name="format" value="oneperpage">one per page 
+		&nbsp &nbsp Justified: <input type="radio" name="jformat" value="left">left <input type="radio" name="jformat" value="center">center 
+		<span style="float:right;">Number of pages: <input type="text" name="pages"></span></p>
+
+		<!-- //////////////////////////////////////////////////// -->
+
+		<hr/>
+
+		<a href=# id="previewButton"><button class="btn">Preview</button></a>
+		<a href=# id="saveButton"><button class="btn btn-success">Save query</button></a>
+
+		<!-- //////////////////////////////////////////////////// -->
+
+		<hr>
+		<h3>Local previews</h3>
+		<p>Shows formatted textslides of 8 localities</p>
+    </div>
+     <script type="text/javascript">
+		$(document).ready(function(){
+			$("#hideSQL").click(function(){
+				$(this).hide();
+				$('#readSQL').hide();
+				$('#readSQLinfo').hide();
+				$('#showSQL').show();
+			});
+		});
+		
+		$(document).ready(function(){
+			$("#showSQL").click(function(){
+				$(this).hide();
+				$('#readSQL').show();
+				$('#readSQLinfo').show();
+				$('#hideSQL').show();
+			});
+		});
+		
+		$(document).ready(function(){
+			$("#hideCSQL").click(function(){
+				$(this).hide();
+				$('#CustomSQL').hide();
+				$('#readCSQLinfo').hide();
+				$('#showCSQL').show();
+			});
+		});
+		
+		$(document).ready(function(){
+			$("#showCSQL").click(function(){
+				$(this).hide();
+				$('#CustomSQL').show();
+				$('#readCSQLinfo').show();
+				$('#hideCSQL').show();
+			});
+		});
+		
+		$(document).ready(function(){
+			$("#hideTemp").click(function(){
+				$(this).hide();
+				$('#templateSQL').hide();
+				$('#templateinfo').hide();
+				$('#showTemp').show();
+			});
+		});
+		
+		$(document).ready(function(){
+			$("#showTemp").click(function(){
+				$(this).hide();
+				$('#templateSQL').show();
+				$('#templateinfo').show();
+				$('#hideTemp').show();
+			});
+		});
+
+		$('#runQuery').click(function () {	
+
+			var test_query = $("#CustomSQL").val();
+			test_query = test_query + " limit 10"; 
+
+			console.log("Test query " + test_query);
+
+			// table.setData("tabulator_example.json", {key1:"value1", key2:"value2"});
+
+			$.getJSON('http://www.laastutabloo.ee:5000/save_query', {
+	            name:"avalik",
+    	        query:test_query
+          }).success(function(data) {
+          	console.log(data);
+    			// $('#all_entries').html(data.html_string_selected);
+				// $('#all_entries').val("");
+           });
+
+
+
+
+			table.setData("http://www.laastutabloo.ee:5000/run_query", {name:"avalik",query:test_query, val1:1586, lat:58.0987895, lon:26.5563315, radius:34});
+			// table.setData("http://www.laastutabloo.ee:5000/run_query", {query:test_query, lat:58.0987895, lon:26.5563315, radius:34});
+
+			var colDefs = table.getColumnDefinitions() //get column definition array
+
+			console.log(colDefs);
+
+			table.setColumns(colDefs) //overwrite existing columns with new columns definition array
+		} );
+		
+
+	</script>
+	
+	<script type="text/javascript">	
+		var myId = "";
+		var rList = "";
+		var sList = "";
+		var readSQLplaceholder = $('#readSQL').val();
+		
+		$("#all_classes").change(function() {
+			rList = "";
+			sList = "";
+			$('input[name="radio"]').removeAttr("checked");
+			$('input[name="checkbox"]').removeAttr("checked");			
+			$('#readSQL').val(readSQLplaceholder);
+			$("select[id='all_entries']").removeAttr("disabled");
+			$('#all_entries option:selected').hide();
+
+		});
+	
+		$("#all_entries").change(function() {
+			rList = "";
+			sList = "";
+			$('input[name="radio"]').removeAttr("checked");
+			$('input[name="checkbox"]').removeAttr("checked");	
+			myId = $("#all_entries option:selected").text();
+			updateReadSQL();		
+		});
+		
+		$('input[name="radio"]').click(function () {	
+			rList = "";
+			$('input[name="radio"]').each(function () {
+				var rThisVal = this.value;
+				if (this.checked && (rThisVal == "ASC" || rThisVal == "DESC")){
+					var rThisId = this.id;
+					var rSplitId = rThisId.split("_");
+					var textId = 'checkbox_'+rSplitId[1];
+					var rValue = $("#"+textId).val();
+					var rListAdd = rValue + " " + rThisVal;
+					rList += (rList=="" ? rListAdd : ", " + rListAdd);					
+				}				
+			});
+			updateReadSQL();
+
+		});
+		
+		$('input[name="checkbox"]').click(function () {
+			sList="";
+			$('input[type=checkbox]').each(function () {
+				if (this.checked) {				
+					var sThisVal = this.value;
+					sList += (sList=="" ? sThisVal : ", " + sThisVal);
+				}
+			});
+			updateReadSQL();
+		});	
+		
+		function updateReadSQL(){
+			if (myId != ""){
+				if (sList != "" && rList == ""){					
+					$('#readSQL').val('SELECT ' + sList + ' FROM ' + myId);		
+					return;
+				}
+				if (sList != "" && rList != ""){
+						$('#readSQL').val('SELECT ' + sList + ' FROM ' + myId + ' ORDER BY ' + rList);		
+						return;
+					}
+				if (sList == "" && rList != ""){
+						$('#readSQL').val('SELECT * FROM ' + myId + ' ORDER BY ' + rList);		
+						return;
+					}
+				
+				$('#readSQL').val('SELECT * FROM ' + myId);	
+			}
+			
+		}
+			
+	</script>
+	
+	
+	<script type="text/javascript">
+
+		var table = new Tabulator("#tablepreview", {
+ 	height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
+ 	// data:tabledata, //assign data to table
+ 	layout:"fitColumns", //fit columns to width of table (optional)
+ 	// columns:[ //Define Table Columns
+	 // 	{title:"Name", field:"name", width:150},
+	 // 	{title:"Age", field:"age", align:"left", formatter:"progress"},
+	 // 	{title:"Favourite Color", field:"col"},
+	 // 	{title:"Date Of Birth", field:"dob", sorter:"date", align:"center"},
+ 	// ],
+ 	autoColumns:true,
+ 	rowClick:function(e, row){ //trigger an alert message when the row is clicked
+ 		alert("Row " + row.getData().id + " Clicked!!!!");
+ 	},
+});
+
+
+      $(document).ready(function() {
+
+
+    //   	   $.getJSON('http://www.laastutabloo.ee:5000/_get_field_values', {
+    //         // selected_class: $('#all_classes').val()
+
+
+    //       }).success(function(data) {
+    //       	console.log(data);
+    // //             $('#all_entries').html(data.html_string_selected);
+				// // $('#all_entries').val("");
+    //        });
+
+
+          // Run query
+ 		
+
+
+        $('#all_classes').change(function(){
+	
+          $.getJSON('http://www.laastutabloo.ee:5000/_update_dropdown', {
+            selected_class: $('#all_classes').val()
+
+          }).success(function(data) {
+                $('#all_entries').html(data.html_string_selected);
+				$('#all_entries').val("");
+           })
+        });
+        $('#process_input').bind('click', function() {
+
+            /*$.getJSON('/_process_data', {
+                selected_class: $('#all_classes').val(),
+                selected_entry: $('#all_entries').val(),
+
+
+            }).success(function(data) {
+                $('#processed_results').text(data.random_text);
+            })*/
+          return false;
+
+        });
+      });
+    </script>
+  </body>
+</html>
