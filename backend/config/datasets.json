@@ -8,10 +8,25 @@
    },
    "datasets":[
       {
+         "id":"spordikoolid",
+         "url": "https://www.spordiregister.ee/opendata/files/spordikoolid.json",
+         "download":true,
+         "minimum_row_count":1000,
+         "converter_top_element":"",
+         "schema":[
+            {"field":"URI","column":"uri","type":"text"},
+            {"field":"epost","column":"epost","type":"text"},
+            {"field":"sport.spordiala_234","column":"randomsport","type":"text"}           
+         ],
+         "update_frequency":"weekly",
+         "type":"json",
+         "column_count":27
+      },{
          "id":"spordiorganisatsioonid",
          "url": "https://www.spordiregister.ee/opendata/files/spordiorganisatsioonid.json",
          "minimum_row_count":4,
          "update_frequency":"weekly",
+         "converter_top_element":"",
          "type":"json",
          "column_count":6
       },{
@@ -20,6 +35,7 @@
          "json_parser": "spordiehitised_parser",
          "minimum_row_count":1000,
          "update_frequency":"weekly",
+         "converter_top_element":"",
          "type":"json",
          "column_count":27
       },{
@@ -27,27 +43,11 @@
          "url": "https://www.spordiregister.ee/opendata/files/treenerid.json",
          "minimum_row_count":1000,
          "update_frequency":"weekly",
-         "type":"json",
-         "column_count":27
-      },{
-         "id":"spordikoolid",
-         "url": "https://www.spordiregister.ee/opendata/files/spordikoolid.json",
-         "minimum_row_count":1000,
-         "update_frequency":"weekly",
+         "converter_top_element":"",
          "type":"json",
          "column_count":27
       }
 
-   ],
-    "textviews":[
-      {
-         "id":"spordiorganisatsioonid",
-         "title":"Spordialad",
-         "required_field":"spordiala",
-         "display_fields":["distsipliin","harrastajaid_kokku"],
-         "pages":1
-
-      }
    ]
 },
 {
@@ -60,35 +60,22 @@
    },
    "datasets":[
       {
-         "id":"vara_1",
-         "url": "https://opendata.smit.ee/ppa/csv/vara_1.csv",
+         "id":"avalik_1",
+         "url": "https://opendata.smit.ee/ppa/csv/avalik_1.csv",
          "minimum_row_count":4,
+         "delimiter":"\t",
          "update_frequency":"weekly",
          "type":"csv",
+         "schema":[
+            {"column":"juhtum_id",     "type":"text",       "field":"JuhtumId"},
+            {"column":"syndmus_liik",  "type":"text",       "field":"SyndmusLiik"},
+            {"column":"_lat",          "type":"float",      "script":"ppa_lest_x"},
+            {"column":"_lon",          "type":"float",      "script":"ppa_lest_y"},
+            {"column":"_time",         "type":"timestamp",  "script":"ppa_timestamp"}
+          ],
          "column_count":6
       }
 
-   ],
-       "textviews":[
-      {
-         "id":"kriminaalteod",
-         "title":"Viimased kriminaalteod",
-         "title_en":"Last criminal incidents",
-         "order":14,
-         "required_field":"ToimKpv",
-         "display_fields":["str_date","ParagrahvEdit","lisainfo_soiduk","lisainfo_rikkuja","lisainfo"],
-         "pages":4
-
-      },
-      {
-         "id":"vaarteod",
-         "title":"Viimased väärteod",
-         "title_en":"Last misdeeds",
-         "order":15,
-         "required_field":"ToimKpv",
-         "display_fields":["str_date","ParagrahvEdit","lisainfo_soiduk","lisainfo_rikkuja","lisainfo"],
-         "pages":4
-      }
    ]
 },
 {
@@ -106,30 +93,18 @@
          "minimum_row_count":4,
          "update_frequency":"weekly",
          "type":"geojson",
-         "column_count":6
+         "column_count":6,
+         
+         "converter_top_element":"features",
+          "schema":[
+            {"column":"geom",    "type":"geom",       "field":"geometry"},
+            {"column":"name",    "type":"text",       "field":"properties.invent"},
+            {"column":"tyyp",    "type":"text",       "field":"properties.tyyp"}
+          ]
+         
+        
       }
 
-   ],
-       "textviews":[
-      {
-         "id":"kriminaalteod",
-         "title":"Viimased kriminaalteod",
-         "title_en":"Last criminal incidents",
-         "order":14,
-         "required_field":"ToimKpv",
-         "display_fields":["str_date","ParagrahvEdit","lisainfo_soiduk","lisainfo_rikkuja","lisainfo"],
-         "pages":4
-
-      },
-      {
-         "id":"vaarteod",
-         "title":"Viimased väärteod",
-         "title_en":"Last misdeeds",
-         "order":15,
-         "required_field":"ToimKpv",
-         "display_fields":["str_date","ParagrahvEdit","lisainfo_soiduk","lisainfo_rikkuja","lisainfo"],
-         "pages":4
-      }
    ]
 }
 

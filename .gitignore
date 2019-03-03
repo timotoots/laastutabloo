@@ -1,2 +1,3 @@
 lib/jQuery.mmenu
 backend/data/*
+backend/config/config.json

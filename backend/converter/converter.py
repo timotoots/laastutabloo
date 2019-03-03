@@ -1,14 +1,15 @@
 #!/usr/local/bin/python
 
 # Libraries
-import ujson, urllib3, certifi, pandas
-import json_schema_generator, threading 
+import ujson, urllib3, certifi, pandas, ijson
+import json_schema_generator, threading
 import xml.etree.ElementTree as ET
 from json_schema_generator.generator import SchemaGenerator
 from sqlalchemy import create_engine
 
 # Constants
-CONFIG_FILE = '../config/datasets.json'
+CONFIG_FILE = '../config/config.json'
+DATASETS_FILE = '../config/datasets.json'
 RAW_FILE_PATH = '../data/raw/'
 SCHEMA_FILE_PATH = '../data/schema/'
 
@@ -98,7 +99,7 @@ def schematize(f):
     print "Cannot schematize file", path, e 
 
 # Insert given file to postgreSQL
-def insert_database(f, engine):
+def convert_and_insert_DB(f, engine):
   # Construct path with file object
   filetype = f["type"]
   path = RAW_FILE_PATH + f["id"] + "." + filetype
@@ -107,28 +108,105 @@ def insert_database(f, engine):
   # Switch-case for file type differentiation, reading to pandas
   try:
     if filetype == 'json' or filetype == 'geojson':
-      data = pandas.read_json(open(path, 'rb'), encoding='utf-8', dtype='str')
+      # JSON stream parsing, going from schema given top element
+      objects = ijson.items(open(path), f["converter_top_element"])
+      
+      # Library specific loop
+      for o in objects:
+        first = True
+        counter = 0
+        
+        # Loop throught every record in the JSON
+        for record in o:
+          dictionary = {}       # will hold data from record in dict form
+          schema = f["schema"]  # Mapping for columns
+          
+          # Loop through every column to map
+          for k in schema:
+            
+            # If there is a field, keep the data
+            if "field" in k: 
+              # If field is separated by "." we recursively go in the tree of the record
+              if len(k["field"].split(".")) > 1:
+                tmp = record
+                fieldhierarchy = k["field"].split(".")
+                for i in fieldhierarchy:
+                  if i in tmp:
+                    tmp=tmp[i]
+
+                # If the type of the field is text, write content in field,
+                # either underlying JSON or text content and change column name
+                if k["type"] == 'text':
+                  dictionary[k["column"]] = [str(tmp)]
+              else:
+
+                # If field is without "." and contained in record,
+                # write it to dict and change column name
+                if k["field"] in record:
+                  dictionary[k["column"]] = [record[k["field"]]]
+                else:
+                  dictionary[k["column"]] = [""]
+            
+            # If there is no field, run given custom script to build it
+            else:
+              mod = __import__("scripts." + k["script"])
+              function = getattr(getattr(mod, k["script"]), k["script"])
+              field = function(record)
+              dictionary[k["column"]] = [field]
+
+          # Every 100 record, parse it to pandas dataframe
+          if counter != 100:
+            chunk = pandas.DataFrame.from_dict(dictionary)
+            data = pandas.concat([data, chunk], sort=False, join='outer')
+            counter += 1
+          
+          # Last record, parse rest of the data if there is some         
+          elif counter == len(o):
+            
+            # If total number of records is smaller than 100,
+            # first time writing to db has to replace table
+            if first:
+              data.to_sql(f["id"], engine, if_exists='replace', chunksize=10000)
+              first = False
+            
+            # Append dataframe to db
+            else:
+              data.to_sql(f["id"], engine, if_exists='append', chunksize=10000)
+          else:
+              
+            # First time writing to db has to replace table
+            if first:
+              data.to_sql(f["id"], engine, if_exists='replace', chunksize=10000) 
+              first = False
+            
+            # Append dataframe to db
+            else:
+              data.to_sql(f["id"], engine, if_exists='append', chunksize=10000)
+
     elif filetype == 'csv':
-      data = pandas.read_csv(open(path, 'rb'), encoding='utf-8', engine='python', sep=None)
+      # Read and add CSV to DB by chunks 
+      data = pandas.read_csv(open(path), encoding='utf-8', sep=f["delimiter"], chunksize=10000, iterator=True)
+      first = True
+      for i in data:
+        if first:
+          i.to_sql(f["id"], engine, if_exists='replace', chunksize=10000)
+          first = False
+        else:
+          i.to_sql(f["id"], engine, if_exists='append', chunksize=10000)
     elif filetype == 'xml':
       data = xml_to_pandas(open(path, 'rb'))
+      data.to_sql(f["id"], engine, if_exists='replace', chunksize=10000) 
     else:
       print "Bad file type", f["type"]
   except Exception as e:
     print "Cannot convert file", path, e
-  
-  # Write to postgreSQL
-  try:
-    data.to_sql(f["id"], engine, if_exists='replace', chunksize=100000)  
-  except Exception as e:
-    print "Cannot insert file into database", path, e 
-
+    pass
 
 # Run file through pipeline
 def pipeline(f, engine):
   fetch(f)
-  schematize(f)
-  insert_database(f, engine)
+  #schematize(f)
+  convert_and_insert_DB(f, engine)
 
 
 # Main function
@@ -137,18 +215,21 @@ if __name__ == '__main__':
   
   # Read config file and fetch file object for each dataset
   config = ujson.load(open(CONFIG_FILE))
+  dataset_json = ujson.load(open(DATASETS_FILE))
   datasets = []
-  for i in config:
+  for i in dataset_json:
     datasets.append(i['datasets'])
   
   # PostgreSQL engine
-  engine = create_engine("postgresql://datastore_default:laastu123@localhost/laastutabloo")
+  engine = create_engine("postgresql://" + config["database_user"] + ":" + config["database_password"] + "@localhost/" + config["database_name"])
+  
 
   # Spawn pipeline threads for each file
   threads = {}
   for ds in datasets: 
     for f in ds:
-      t = threading.Thread(target=pipeline, args=(f, engine))
+      # entry for the thread is the function pipeline(f, engine)
+      t = threading.Thread(target=pipeline, args=(f, engine)) 
       threads[f["id"]] = t
       t.start()
       print "Spawned thread for file", f["id"]
