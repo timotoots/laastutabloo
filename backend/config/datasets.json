@@ -97,9 +97,9 @@
          
          "converter_top_element":"features",
           "schema":[
-            {"column":"geom",    "type":"geom",       "field":"geometry"},
-            {"column":"name",    "type":"text",       "field":"properties.invent"},
-            {"column":"tyyp",    "type":"text",       "field":"properties.tyyp"}
+            {"column":"_geojson",   "type":"geojson",    "field":"geometry"},
+            {"column":"name",       "type":"text",       "field":"properties.invent"},
+            {"column":"tyyp",       "type":"text",       "field":"properties.tyyp"}
           ]
          
         
