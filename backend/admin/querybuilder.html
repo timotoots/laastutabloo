@@ -11,19 +11,36 @@
    	<script src="node_modules/jquery/dist/jquery.min.js" type="text/javascript"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
+ 	 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
+
+    <script type="text/javascript" src="http://gregallensworth.github.io/L.Control.BoxZoom/dist/leaflet-control-boxzoom.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://gregallensworth.github.io/L.Control.BoxZoom/dist/leaflet-control-boxzoom.css">
+
+<style type="text/css">
+	#map {
+		margin-top: 40px;
+			width: 100%;
+			height: 400px;
+		}
+
+	#tablepreview{
+		height: 400px;
+	}
+</style>
 
   </head>
   <body>
   <div class="container">
 	<div>
-      <form action="/test" method="post">
+      <form action="" method="post">
 		
 		<h3>Laastutabloo Admin / Query Builder</h3>
 		<hr/>	
 
 		<div class="form-group">
 		  <label for="query_id">Query ID:</label>
-		  <input type="text" class="form-control" id="query_id">
+		  <input type="text" class="form-control" id="query_id" value="avalik">
 		</div>
 
 		<p>Unique name of the query preset. Lowercase a-z, no spaces.</p>
@@ -34,7 +51,7 @@
 
 		<div class="form-group">
 		  <label for="uname_etsr">Name (Estonian):</label>
-		  <input type="text" class="form-control" id="name_et">
+		  <input type="text" class="form-control" id="name_et" value="Politsei">
 		</div>
 
 		<div class="form-group">
@@ -54,6 +71,7 @@
 		<hr/>
 
 		<h3>Query builder</h3>
+		<div id="query_list"></div>
         <div class="col-xs-5">
           <label for="all_classes">Select dataset</label>
           <select class="form-control" id="all_classes">
@@ -109,19 +127,23 @@ SELECT name, date, lat, lon from resource_id
 
 		<h3>Custom SQL <span id="hideCSQL">(hide)</span><span id="showCSQL" hidden>(show)</span></h3>
 		<p id="readCSQLinfo">Overrides SQL in query builder</p>
-		<textarea rows="6" cols="100%" name="CustomSQL" id="CustomSQL">SELECT name, date, lat, lon from resource_name WHERE xxxx
-		</textarea>
+		<textarea rows="6" cols="100%" name="CustomSQL" id="CustomSQL">SELECT * from avalik where ehak_akood = $1</textarea>
 
 		<br/><br/>
-		<a href=# id="runQuery"><button class="btn">Test query</button></a>
+		<button type="button" class="btn" onclick="saveQuery(1)">Test query</button>
 
 
 		<hr>
-		<h3>Table preview</h3>
+		<h3>Data preview</h3>
 		<p>Results from SQL or Custom SQL</p>
 		<div id="tablepreview"></div>
 
 		<!-- //////////////////////////////////////////////////// -->
+
+		<div id='map'></div>
+
+		<!-- //////////////////////////////////////////////////// -->
+
 
 		<hr>
 		<h3>Custom template <span id="hideTemp">(hide)</span><span id="showTemp" hidden>(show)</span></h3>
@@ -139,22 +161,100 @@ for d_in... etc
 		<p>How to format slide</p>
 		<p>Style:  <input type="radio" name="format" value="table">table <input type="radio" name="format" value="oneperpage">one per page 
 		&nbsp &nbsp Justified: <input type="radio" name="jformat" value="left">left <input type="radio" name="jformat" value="center">center 
-		<span style="float:right;">Number of pages: <input type="text" name="pages"></span></p>
+		<span style="float:right;">Number of pages: <input type="text" name="pages" id="meta_num_pages"></span></p>
 
 		<!-- //////////////////////////////////////////////////// -->
 
 		<hr/>
 
-		<a href=# id="previewButton"><button class="btn">Preview</button></a>
-		<a href=# id="saveButton"><button class="btn btn-success">Save query</button></a>
+		<button class="btn" type="button">Preview</button>
+		<button class="btn btn-success" type="button" onclick="saveQuery(0)">Save query</button>
 
 		<!-- //////////////////////////////////////////////////// -->
 
 		<hr>
 		<h3>Local previews</h3>
 		<p>Shows formatted textslides of 8 localities</p>
+   
+		<!-- //////////////////////////////////////////////////// -->
+
     </div>
+
+
      <script type="text/javascript">
+
+     	/////////////////////////////////////////////////////
+
+     	function listQueries(){
+
+
+		$.getJSON('http://www.laastutabloo.ee:5000/list_queries', function(data) {
+	          	console.log(data);
+	    			$('#query_list').html(data);
+
+	           });
+
+
+     	}
+    
+
+    	/////////////////////////////////////////////////////
+
+     	function saveQuery(test = 0){
+
+     		var query_id = $("#query_id").val();
+
+     		var query = $("#CustomSQL").val();
+     		query = query + " limit 10";
+
+     		var meta = {};
+     		meta.num_of_pages = $("#meta_num_pages").val();
+      		meta.name_et = $("#name_et").val();	
+      		meta.name_en = $("#name_en").val();	
+
+      		var data = {
+	            query_id:query_id,
+    	        query:query,
+    	        meta:meta,
+    	        test:test
+	        };
+
+     		$.getJSON('http://www.laastutabloo.ee:5000/save_query', data, function(data) {
+	          	console.log(data);
+	    			// $('#all_entries').html(data.html_string_selected);
+					// $('#all_entries').val("");
+					if (test==1){
+						console.log("run query");
+						runQuery();
+					}
+	           });
+
+     		console.log("Save query:");
+     		console.log(data);
+
+     	} // function saveQuery
+
+     	/////////////////////////////////////////////////////
+
+     	function runQuery(){
+
+     		var query_id = $("#query_id").val();
+
+			table.setData("http://www.laastutabloo.ee:5000/run_query", {query_id:query_id, test:1, val1:1586, lat:58.0987895, lon:26.5563315, radius:34});
+
+			var colDefs = table.getColumnDefinitions() //get column definition array
+
+			console.log(colDefs);
+
+			table.setColumns(colDefs) //overwrite existing columns with new columns definition array
+
+
+     	}
+
+     	/////////////////////////////////////////////////////
+
+
+
 		$(document).ready(function(){
 			$("#hideSQL").click(function(){
 				$(this).hide();
@@ -209,41 +309,10 @@ for d_in... etc
 			});
 		});
 
-		$('#runQuery').click(function () {	
 
-			var test_query = $("#CustomSQL").val();
-			test_query = test_query + " limit 10"; 
-
-			console.log("Test query " + test_query);
-
-			// table.setData("tabulator_example.json", {key1:"value1", key2:"value2"});
-
-			$.getJSON('http://www.laastutabloo.ee:5000/save_query', {
-	            name:"avalik",
-    	        query:test_query
-          }).success(function(data) {
-          	console.log(data);
-    			// $('#all_entries').html(data.html_string_selected);
-				// $('#all_entries').val("");
-           });
-
-
-
-
-			table.setData("http://www.laastutabloo.ee:5000/run_query", {name:"avalik",query:test_query, val1:1586, lat:58.0987895, lon:26.5563315, radius:34});
-			// table.setData("http://www.laastutabloo.ee:5000/run_query", {query:test_query, lat:58.0987895, lon:26.5563315, radius:34});
-
-			var colDefs = table.getColumnDefinitions() //get column definition array
-
-			console.log(colDefs);
-
-			table.setColumns(colDefs) //overwrite existing columns with new columns definition array
-		} );
+     ////////////////////////////////////////////////////
 		
 
-	</script>
-	
-	<script type="text/javascript">	
 		var myId = "";
 		var rList = "";
 		var sList = "";
@@ -316,31 +385,34 @@ for d_in... etc
 			}
 			
 		}
-			
-	</script>
-	
-	
-	<script type="text/javascript">
+
+	////////////////////////////////////////////////////
+
 
 		var table = new Tabulator("#tablepreview", {
- 	height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
- 	// data:tabledata, //assign data to table
- 	layout:"fitColumns", //fit columns to width of table (optional)
- 	// columns:[ //Define Table Columns
-	 // 	{title:"Name", field:"name", width:150},
-	 // 	{title:"Age", field:"age", align:"left", formatter:"progress"},
-	 // 	{title:"Favourite Color", field:"col"},
-	 // 	{title:"Date Of Birth", field:"dob", sorter:"date", align:"center"},
- 	// ],
- 	autoColumns:true,
- 	rowClick:function(e, row){ //trigger an alert message when the row is clicked
- 		alert("Row " + row.getData().id + " Clicked!!!!");
- 	},
-});
+ 	
+		 	height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
+		 	// data:tabledata, //assign data to table
+		 	// layout:"fitColumns", //fit columns to width of table (optional)
+		 	// columns:[ //Define Table Columns
+			 // 	{title:"Name", field:"name", width:150},
+			 // 	{title:"Age", field:"age", align:"left", formatter:"progress"},
+			 // 	{title:"Favourite Color", field:"col"},
+			 // 	{title:"Date Of Birth", field:"dob", sorter:"date", align:"center"},
+		 	// ],
+		 	autoColumns:true,
+		 	rowClick:function(e, row){ //trigger an alert message when the row is clicked
+		 		alert("Row " + row.getData().id + " Clicked!!!!");
+		 	},
+		});
+
+
+	////////////////////////////////////////////////////
 
 
       $(document).ready(function() {
 
+      	listQueries();
 
     //   	   $.getJSON('http://www.laastutabloo.ee:5000/_get_field_values', {
     //         // selected_class: $('#all_classes').val()
@@ -382,5 +454,7 @@ for d_in... etc
         });
       });
     </script>
+    <script type="text/javascript" src="js/map.js"></script>
+
   </body>
 </html>
