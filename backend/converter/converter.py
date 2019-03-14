@@ -1,10 +1,11 @@
 #!/usr/local/bin/python
 
 # Libraries
-import ujson, urllib3, certifi, pandas, sys, json, decimal
+import ujson, urllib3, certifi, pandas, sys, json, decimal, re, os
 import ijson.backends.yajl2_cffi as ijson
+from ijson.common import ObjectBuilder
 import json_schema_generator, threading
-import xml.etree.ElementTree as ET
+import xmltodict
 from json_schema_generator.generator import SchemaGenerator
 from sqlalchemy import create_engine
 from geoalchemy2 import Geometry, WKTElement
@@ -26,21 +27,6 @@ def fetch(f):
   data = r.data
   fd.write(data)
   fd.close()
-
-
-# Convert XML to pandas
-def xml_to_pandas(file_path):
-    tree = ET.parse(file_path)
-
-    data = []
-    tmp = {}
-    for i in tree.iterfind('./*'):
-        for j in i.iterfind('*'):
-            tmp[j.tag] = j.text
-        data.append(tmp)
-        tmp = {}
-
-    return pandas.DataFrame(data)
 
 
 # From stackoverflow
@@ -84,7 +70,7 @@ def schematize(f):
       generator = SchemaGenerator.from_json(open(path, 'rb').read())
       schema = generator.to_dict()
       delete_keys_from_dict(schema, ['$schema', 'id', 'required', 'type'])
-      data = ujson.dumps(recursive_iterdict(schema), indent=2)        
+      data = ujson.dumps(recursive_iterdict(schema), indent=2)
     elif filetype == 'csv':
       schema = open(path, 'rb').readline()
       schema = schema.split()  
@@ -93,7 +79,6 @@ def schematize(f):
         data.append({"text" : j})
       data = ujson.dumps(data, indent=2)
     elif filetype == 'xml':
-      #todo 
       pass
     else:
       print "Bad file type", f["type"]
@@ -131,6 +116,7 @@ def populate_dict_from_json(record, field_description, dictionary):
             text_value = tmp.encode("utf8")
           else:
             text_value= str(tmp).encode("utf-8")
+
           dictionary[field_description["column"]] = [text_value]
         except BaseException as e:
           print(e)
@@ -159,7 +145,7 @@ def handle_json_records(records, f, engine):
   data = pandas.DataFrame()
   first = True
   counter = 0
-
+  
   def write_pandas_df(data):
     if f["type"] == "geojson":
       def to_wkt(x):
@@ -176,10 +162,9 @@ def handle_json_records(records, f, engine):
     
   # Loop throught every record in the JSON
   for o in records:
-    print(counter)
     dictionary = {}       # will hold data from record in dict form
     schema = f["schema"]  # Mapping for columns
-
+    
     if f["type"] == "geojson":
       schema.append({"column": "geometry", "type" :"geojson", "field": "geometry"})
     # Loop through every column to map
@@ -234,8 +219,26 @@ def convert_and_insert_DB(f, engine):
         else:
           i.to_sql(f["id"], engine, if_exists='append', chunksize=10000)
     elif filetype == 'xml':
-      data = xml_to_pandas(open(path, 'rb'))
-      data.to_sql(f["id"], engine, if_exists='replace', chunksize=10000) 
+      dataset = open(path, "rb").read()
+      dictionary = xmltodict.parse(dataset)
+      data = {}
+      open("tmp.json","w").write(ujson.dumps(dictionary))
+      regex = re.compile("^" + f["converter_top_element"] + "$")
+      key = '-'
+      for prefix, event, value in ijson.parse(open("tmp.json", 'r')):
+        match = regex.match(prefix)
+        if match and event == 'map_key':  # found new object at the root
+          key = value  # mark the key value
+          builder = ObjectBuilder()
+        elif prefix.startswith(f["converter_top_element"] + "." + key):  # while at this key, build the object
+          builder.event(event, value)
+          if event == 'end_map':  # found the end of an object at the current key, yield
+            data[key] = builder.value
+
+      df = pandas.DataFrame.from_dict(data)
+      
+      # TODO insert in db      
+      #df.to_sql(f["id"], engine, if_exists='replace', chunksize=10000)
     else:
       print "Bad file type", f["type"]
   except Exception as e:
