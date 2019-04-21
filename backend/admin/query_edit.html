@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Laastutabloo Admin">
+    <meta name="author" content="Masinism">
+    <link rel="icon" href="images/favicon.png">
+    <title>Laastutabloo Admin</title>
+
+    <link type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+    <link type="text/css"  href="css/bootstyle.css" rel="stylesheet">
+
+    <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+    <script src="node_modules/urijs/src/URI.min.js"></script>
+    <link type="text/css" href="node_modules/alpaca/dist/alpaca/bootstrap/alpaca.min.css" rel="stylesheet"/>
+    <script src="node_modules/alpaca/dist/alpaca/bootstrap/alpaca.min.js"></script>
+    <script src="node_modules/timeago.js/dist/timeago.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript" src="js/admin.js"></script>
+
+    <!-- query_edit -->
+    <link href="node_modules/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+    <script src="node_modules/tabulator-tables/dist/js/tabulator.min.js" type="text/javascript"></script>
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
+    <script type="text/javascript" src="http://gregallensworth.github.io/L.Control.BoxZoom/dist/leaflet-control-boxzoom.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://gregallensworth.github.io/L.Control.BoxZoom/dist/leaflet-control-boxzoom.css">
+
+  </head>
+
+<body>
+        <nav class="navbar navbar-inverse navbar-fixed-top"></nav>
+
+
+  <div class="container">
+    <div>
+      <form action="" method="post">
+        
+        <h3>Query Builder</h3>
+        <hr/>   
+
+        <div class="form-group">
+          <label for="query_id">Query ID:</label>
+          <input type="text" class="form-control" id="query_id" value="avalik">
+        </div>
+
+        <p>Unique name of the query preset. Lowercase a-z, no spaces.</p>
+        
+        <!-- //////////////////////////////////////////////////// -->
+
+        <hr/>   
+
+        <div class="form-group">
+          <label for="uname_etsr">Name (Estonian):</label>
+          <input type="text" class="form-control" id="name_et" value="Politsei">
+        </div>
+
+        <div class="form-group">
+          <label for="name_en">Name (English):</label>
+          <input type="text" class="form-control" id="name_en">
+        </div>
+
+        <div class="form-group">
+          <label for="name_ru">Name (Russian):</label>
+          <input type="text" class="form-control" id="name_ru">
+        </div>
+
+        <p>Title of the slide appears on the display. If not filled, that language is not used.
+
+        <!-- //////////////////////////////////////////////////// -->
+
+        <hr/>
+
+        <h3>Query builder</h3>
+        <div id="query_list"></div>
+        <div class="col-xs-5">
+          <label for="all_classes">Select dataset</label>
+          <select class="form-control" id="all_classes">
+                    <option disabled selected value> -- select a dataset -- </option>
+            {% for o in all_classes %}
+                    <option id="dataset_id" value="{{ o }}">{{ o }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div><br><br><br>
+        <table border="0">
+            <tr>
+                <div class="col-xs-5">
+                <label for="all_entries">Select resource</label>
+                <select class="form-control" id="all_entries" disabled>
+                    <option value="selectRecource" disabled selected value> -- select a resource -- </option>
+                {% for o in all_entries %}
+                    <option id="resource_id" value="{{ o }}">{{ o }}</option>
+                {% endfor %}
+                </select>
+                </div>
+        
+            </tr><br><br><br><br>
+            {% for fieldValue in fieldValues %}
+            <tr>
+                    <td><input type="checkbox" name="checkbox" id="checkbox_id{{ loop.index0 }}" value="{{fieldValue}}"><input type="text" name="field{{ loop.index0 }}" value="{{fieldValue}}" id="field_id{{ loop.index0 }}" readonly></td>
+                    <td><form action=""><input type="radio" name="radio" id="radio_id{{ loop.index0 }}" value="DESC">desc <input type="radio" name="radio" id="radio_id{{ loop.index0 }}" value="ASC"> asc <input type="radio" name="radio" id="radio_id{{ loop.index0 }}" value="NONE">none</form></td>
+
+                <td>
+                    <select name="modifier{{ loop.index0 }}">
+                        {% for script in scripts%}
+                        <option value= "{{script}}">{{script}}</option>"
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <select name="translated{{ loop.index0 }}">
+                        {% for translation in translations%}
+                        <option value= "{{translation}}">{{translation}}</option>"
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        </div><br><br><br><br>
+        
+        <h3>SQL <span id="hideSQL">(hide)</span><span id="showSQL" hidden>(show)</span></h3>
+        <p id="readSQLinfo">Resulting SQL from query builder, read.only</p>
+        <textarea readonly rows="6" cols="100%" name="readSQL" id="readSQL">
+SELECT name, date, lat, lon from resource_id
+        </textarea>
+
+        <h3>Custom SQL <span id="hideCSQL">(hide)</span><span id="showCSQL" hidden>(show)</span></h3>
+        <p id="readCSQLinfo">Overrides SQL in query builder</p>
+        <textarea rows="6" cols="100%" name="CustomSQL" id="CustomSQL">SELECT * from avalik where ehak_akood = $1</textarea>
+
+        <br/><br/>
+        <button type="button" class="btn" onclick="saveQuery(1)">Test query</button>
+
+
+        <hr>
+        <h3>Data preview</h3>
+        <p>Results from SQL or Custom SQL</p>
+        <div id="tablepreview"></div>
+
+        <!-- //////////////////////////////////////////////////// -->
+
+        <div id='map'></div>
+
+        <!-- //////////////////////////////////////////////////// -->
+
+
+        <hr>
+        <h3>Custom template <span id="hideTemp">(hide)</span><span id="showTemp" hidden>(show)</span></h3>
+        <p id="templateinfo">Formats text in specific way in python sandbox.</p>
+        <textarea rows="6" cols="100%" name="templateSQL" id="templateSQL">
+import time
+for d_in... etc
+        </textarea><br>
+
+        <!-- //////////////////////////////////////////////////// -->
+
+        <hr/>
+
+        <h3>Slide style</h3>
+        <p>How to format slide</p>
+        <p>Style:  <input type="radio" name="format" value="table">table <input type="radio" name="format" value="oneperpage">one per page 
+        &nbsp &nbsp Justified: <input type="radio" name="jformat" value="left">left <input type="radio" name="jformat" value="center">center 
+        <span style="float:right;">Number of pages: <input type="text" name="pages" id="meta_num_pages"></span></p>
+
+        <!-- //////////////////////////////////////////////////// -->
+
+        <hr/>
+
+        <button class="btn" type="button">Preview</button>
+        <button class="btn btn-success" type="button" onclick="saveQuery(0)">Save query</button>
+
+        <!-- //////////////////////////////////////////////////// -->
+
+        <hr>
+        <h3>Local previews</h3>
+        <p>Shows formatted textslides of 8 localities</p>
+   
+        <!-- //////////////////////////////////////////////////// -->
+
+    </div>
+
+
+    <script type="text/javascript" src="js/query_edit.js"></script>
+    <script type="text/javascript" src="js/map.js"></script>
+
+  </body>
+</html>

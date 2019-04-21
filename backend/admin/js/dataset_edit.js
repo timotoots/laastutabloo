@@ -154,6 +154,19 @@ var formSchemaProperties = {
       }
   },
 
+  "username": {
+      "type": "string",
+      "title": "URL username",
+      "fieldOptions":{       
+      }
+  },
+
+  "password": {
+      "type": "string",
+      "title": "URL password",
+      "fieldOptions":{       
+      }
+  },
 
   "file_in_package": {
       "type": "string",
