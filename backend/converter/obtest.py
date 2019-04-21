@@ -1,26 +1,40 @@
 import ijson
 from ijson.common import ObjectBuilder
 
+from converter import iter_json_objects
 
-def objects(file):
-    key = '-'
-    for prefix, event, value in ijson.parse(file):
-        
-        print (prefix, event, value)
+control = [{'id': 1},
+           {'id': 2}]
 
-        if prefix == 'data' and event == 'map_key':  # found new object at the root
-            print "yes"
-            
-            key = value  # mark the key value
-            builder = ObjectBuilder()
-        elif prefix.startswith("data." + key):  # while at this key, build the object
-            builder.event(event, value)
-            if event == 'end_map':  # found the end of an object at the current key, yield
-                # print builder.value
-                print "end"
-                yield key, builder.value
+for i, value in enumerate(iter_json_objects(open('./test_object.json', 'rb'))):
+    assert control[i] == value
+assert i == 1
+
+control = [{'id': 1, 'type':3},
+           {'id': 2, 'asd': [1,2,3]} ]
+
+for i, value in enumerate(iter_json_objects(open('./test_array.json', 'rb'))):
+    assert control[i] == value
+assert i == 1
+    
+control = [{'id': 1},
+           {'id': 2, 'asd': [1,2,3]} ]
+
+i = 0
+for i, value in enumerate(iter_json_objects(open('./test3.json', 'rb'), root="data")):
+    assert control[i] == value
+assert i == 1
 
 
-for key, value in objects(open('./test2.json', 'rb')):
-    pass
-    # print(key, value)
+control = [{'id': 1},
+           {'id': 2}]
+
+i=0
+for i, value in enumerate(iter_json_objects(open('./test4.json', 'rb'), root="data")):
+    assert control[i] == value
+assert i == 1
+
+i=0
+for i, value in enumerate(iter_json_objects(open('./test5.json', 'rb'), root="data.data2")):
+    assert control[i] == value
+assert i == 1

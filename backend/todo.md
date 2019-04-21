@@ -11,6 +11,7 @@
 
 * convert
 	
+	- unzipping
 	- check unicode stuff
 	- csv reading with csv
 	- sql inserts with sqlalchemy

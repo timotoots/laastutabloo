@@ -22,6 +22,20 @@
          "type":"json",
          "column_count":27
       },{
+         "id":"spordikoolid_from_xml",
+         "url": "https://www.spordiregister.ee/opendata/files/spordikoolid.xml",
+         "download":true,
+         "minimum_row_count":1000,
+         "converter_top_element":"data",
+         "schema":[
+            {"field":"URI","column":"uri","type":"text"},
+            {"field":"epost","column":"epost","type":"text"},
+            {"field":"sport","column":"randomsport","type":"text"}           
+         ],
+         "update_frequency":"weekly",
+         "type":"xml",
+         "column_count":27
+      },{
          "id":"spordiorganisatsioonid",
          "url": "https://www.spordiregister.ee/opendata/files/spordiorganisatsioonid.json",
          "minimum_row_count":4,
@@ -45,11 +59,17 @@
          "update_frequency":"weekly",
          "converter_top_element":"",
          "type":"json",
-         "column_count":27
+         "column_count":27,
+         "schema":[
+            {"field":"URI","column":"uri","type":"text"},
+            {"field":"eesnimi","column":"eesnimi","type":"text"},
+            {"field":"perenimi","column":"perenimi","type":"text"}
+         ]
       }
 
    ]
 },
+
 {
    "id":"ppa",
    "meta":{
@@ -105,7 +125,112 @@
       }
 
    ]
+},{
+   "id":"gtfs",
+   "meta":{
+      "en":
+         {"name":"Peatus.ee","description":"Bus traffic","url":"https://www.peatus.ee/"},
+      "et":
+         {"name":"Peatus.ee","description":"Bussiajad","url":"https://www.peatus.ee/"}
+   },
+   "datasets":[
+      {
+         "id":"gtfs_stops",
+         "url": "http://www.peatus.ee/gtfs/gtfs.zip",
+         "file_in_package":"stops.txt",
+         "minimum_row_count":4,
+         "update_frequency":"weekly",
+         "type":"csv",
+         "delimiter":",",
+         "column_count":6,
+         "schema":[
+            {"column":"stop_id",       "type":"text",       "field":"stop_id"},
+            {"column":"stop_name",     "type":"text",       "field":"stop_name"},
+            {"column":"_lat",          "type":"float",      "field":"stop_lat"},
+            {"column":"_lon",          "type":"float",      "field":"stop_lon"}
+          ]
+         
+        
+      },
+       {
+         "id":"gtfs_routes",
+         "url": "http://www.peatus.ee/gtfs/gtfs.zip",
+         "file_in_package":"routes.txt",
+         "minimum_row_count":4,
+         "update_frequency":"weekly",
+         "type":"csv",
+         "delimiter":",",
+         "column_count":6,
+         "schema":[
+            {"column":"route_id",            "type":"text",       "field":"route_id"},
+            {"column":"route_long_name",     "type":"text",       "field":"route_long_name"}
+          ]
+         
+        
+      }
+
+   ]
+},{
+   "id":"ariregister",
+   "meta":{
+      "en":
+         {"name":"Business Registry","description":"Business","url":"https://avaandmed.rik.ee"},
+      "et":
+         {"name":"Äriregister","description":"Äri","url":"https://avaandmed.rik.ee"}
+   },
+   "datasets":[
+      {
+         "id":"ariregister_rekvisiidid",
+         "url": "https://avaandmed.rik.ee/andmed/ARIREGISTER/ariregister_csv.zip",
+         "file_in_package":"ettevotja_rekvisiidid_*.csv",
+         "minimum_row_count":4,
+         "update_frequency":"weekly",
+         "type":"csv",
+         "delimiter":";",
+         "column_count":6,
+         "schema":[
+            {"column":"nimi",       "type":"text",       "field":"nimi"},
+            {"column":"ariregistri_kood",     "type":"text",       "field":"ariregistri_kood"},
+            {"column":"_ehak",     "type":"text",       "field":"asukoha_ehak_kood"}
+          ]
+         
+        
+      }
+
+   ]
+},{
+   "id":"ilmateenistus",
+   "meta":{
+      "en":
+         {"name":"Weather","description":"Business","url":"https://avaandmed.rik.ee"},
+      "et":
+         {"name":"Äriregister","description":"Äri","url":"https://avaandmed.rik.ee"}
+   },
+   "datasets":[
+      {
+         "id":"observations",
+         "url": "http://www.ilmateenistus.ee/ilma_andmed/xml/observations.php",
+         "minimum_row_count":4,
+         "update_frequency":"weekly",
+         "download":true,
+         "type":"xml",
+         "delimiter":";",
+         "column_count":6,
+         "schema":[
+            {"column":"name",             "type":"text",       "field":"name"},
+            {"column":"wmocode",          "type":"text",       "field":"wmocode"},
+            {"column":"airtemperature",   "type":"text",       "field":"airtemperature"}
+          ]
+         
+        
+      }
+
+   ]
 }
+
+
+
+
 
 ]
 
