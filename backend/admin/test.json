@@ -1,0 +1,135 @@
+[
+  {
+    "text": "items",
+    "children": [
+      {
+        "text": "properties",
+        "children": [
+          {
+            "text": "pidajanimi"
+          },
+          {
+            "text": "kov"
+          },
+          {
+            "text": "staatus"
+          },
+          {
+            "text": "liik_syl_jur"
+          },
+          {
+            "text": "eokliige"
+          },
+          {
+            "text": "kaart_pikkus"
+          },
+          {
+            "text": "liik_svk"
+          },
+          {
+            "text": "maakond"
+          },
+          {
+            "text": "registrikood"
+          },
+          {
+            "text": "telefon"
+          },
+          {
+            "text": "vaikekoht"
+          },
+          {
+            "text": "liik_syl_tapsustus"
+          },
+          {
+            "text": "liik_syl_fyys"
+          },
+          {
+            "text": "registrisse_aasta"
+          },
+          {
+            "text": "aadress"
+          },
+          {
+            "text": "nimi"
+          },
+          {
+            "text": "liik_ms_tapsustus"
+          },
+          {
+            "text": "tms"
+          },
+          {
+            "text": "org_id"
+          },
+          {
+            "text": "esitatudkuupaev"
+          },
+          {
+            "text": "liik_ms"
+          },
+          {
+            "text": "koduleht"
+          },
+          {
+            "text": "asutatud"
+          },
+          {
+            "text": "URI"
+          },
+          {
+            "text": "vorm_id"
+          },
+          {
+            "text": "maakond_kood"
+          },
+          {
+            "text": "liik_sh"
+          },
+          {
+            "text": "epost"
+          },
+          {
+            "text": "pidajaregistrikood"
+          },
+          {
+            "text": "registreeritud"
+          },
+          {
+            "text": "korter"
+          },
+          {
+            "text": "tegutsemine_tapsustus"
+          },
+          {
+            "text": "kaart_laius"
+          },
+          {
+            "text": "asustus_kood"
+          },
+          {
+            "text": "maja"
+          },
+          {
+            "text": "ads_nimi"
+          },
+          {
+            "text": "kov_kood"
+          },
+          {
+            "text": "tegutsemine"
+          },
+          {
+            "text": "postiindeks"
+          },
+          {
+            "text": "asustusyksus"
+          },
+          {
+            "text": "esrliik"
+          }
+        ]
+      }
+    ]
+  }
+]

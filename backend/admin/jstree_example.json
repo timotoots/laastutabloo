@@ -1,0 +1,10 @@
+[
+	{"text":"Field 1"},
+	{"text":"Field 2"},
+	{"text":"Field 2","children":[
+		{"text":"Subfield 1"},
+		{"text":"Subfield 2"}
+		]}
+
+
+]
