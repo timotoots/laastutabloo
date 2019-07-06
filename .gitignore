@@ -1,4 +1,3 @@
-lib/jQuery.mmenu
 backend/data/*
 backend/config/config.json
-backend/admin/node_modules/*
+html/lib/node_modules/*

@@ -9,10 +9,18 @@ Released for self documenation and educational purposes.
 
 ## Install packages
 ```
-sudo apt install nano git postgis apache2
+sudo apt install nano git postgis apache2 npm
 sudo hostname laastutabloo
 
 ```
+
+## Install frontend JS requirements
+```
+cd /opt/laastutabloo/frontend/lib/
+npm i
+
+```
+
 ## Clone this repo
 ```
 sudo mkdir /opt/laastutabloo
