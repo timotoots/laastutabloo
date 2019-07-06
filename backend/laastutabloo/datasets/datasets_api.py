@@ -178,7 +178,7 @@ class DatasetResource(Resource):
             requests.put(API_URL + "/" + str(job_id), {'cron_minutes': ds.cron_minutes, 'cron_hour': ds.cron_hour,
                                                        'cron_day_of_month': ds.cron_day_of_month,
                                                        'cron_day_of_week': ds.cron_day_of_week, 'cron_month': ds.cron_month, })
-        if not ds.last_updated:
+        if not ds.last_updated or ds.last_updated.year == 1970:
             # run job
             requests.put(API_URL + "/" + str(job_id), data={ 'status': 'run',})
             
@@ -342,4 +342,7 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+  execute_from_command_line()
+  
+def execute_from_command_line():
+  app.run(debug=True, host='0.0.0.0')

@@ -9,10 +9,19 @@ engine = create_engine("postgresql://datastore_default:laastu123@localhost/laast
 
 def load_to_db():
     # df = pandas.read_json("/opt/laastutabloo/backend/config/datasets2.json", dtype={'devel':'bool'})
-    df = pandas.read_json("/opt/laastutabloo/backend/config/datasets2.json")
+    df = pandas.read_json("/opt/laastutabloo/backend/config/datasets2.json", convert_dates=['last_updated', 'remote_updated'])
+    
     df['devel'] = df['devel'].fillna(False)
     df['devel'] = df['devel'].astype('bool')
 
+    df['last_updated'] = df['last_updated'].fillna(pandas.Timestamp(0))
+    
+    df_auth = pandas.read_json("/opt/laastutabloo/backend/config/auth.json")
+    for auth in df_auth.itertuples():
+        df.loc[df['id'] == auth.id, 'username'] = auth.username
+        df.loc[df['id'] == auth.id, 'password'] = auth.password
+        
+    df['last_updated'] = df['last_updated'].fillna(pandas.Timestamp(0))
     df.to_sql("datasets2", engine, dtype={'schema':sqlalchemy.types.JSON,                                          
                                           'remote_updated':sqlalchemy.types.DateTime,
                                           'last_updated':sqlalchemy.types.DateTime,
