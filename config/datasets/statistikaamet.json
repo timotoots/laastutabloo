@@ -1,0 +1,27 @@
+[
+   {
+      "id":"brutotulu",
+      "provider":"statistikaamet",
+      "url": "https://www.stat.ee/public/data/erm/Palgatootaja_brutotulu.csv",
+      "type":"csv",
+      "update_frequency":"yearly",
+      "delimiter":";",
+      "schema":[
+         {"column":"ehak",                           "type":"text",       "field":"AKOOD"},
+         {"column":"brutotulu",          "type":"text",       "field":"Palgatöötaja_brutotulu"}
+       ]
+   },
+   {
+      "id":"rahvaarv",
+      "provider":"statistikaamet",
+      "url": "https://www.stat.ee/public/data/erm/Rahvaarv.csv",
+      "type":"csv",
+      "delimiter":";",
+      "update_frequency":"yearly",
+      "schema":[
+         {"column":"ehak",            "type":"text",       "field":"AKOOD"},
+         {"column":"total_male",          "type":"text",       "field":"M#TOTAL"},
+         {"column":"total_female",          "type":"text",       "field":"F#TOTAL"}
+       ]
+   }
+]

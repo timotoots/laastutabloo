@@ -1,0 +1,14 @@
+[
+   {
+      "id":"supluskohad_veeproovid",
+      "provider":"terviseamet",
+      "url": "http://vtiav.sm.ee/index.php/opendata/supluskoha_veeproovid.xml",
+      "type":"xml",
+      "update_frequency":"daily",
+      "converter_top_element":"supluskoha_veeproovid",
+      "schema":[
+         {"column":"ehak",                           "type":"text",       "field":"AKOOD"},
+         {"column":"brutotulu",          "type":"text",       "field":"Palgatöötaja_brutotulu"}
+       ]
+   }
+]

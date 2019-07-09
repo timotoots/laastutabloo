@@ -1,0 +1,31 @@
+[
+  {
+      "id":"basseinid",
+      "provider":"sotsiaalministeerium",
+      "url": "http://vtiav.sm.ee/index.php/opendata/basseinid.xml",
+      "type":"xml",
+      "update_frequency":"weekly",
+      "converter_top_element":"basseinid",
+      "schema":[
+         {"column":"id",             "type":"text",       "field":"id"}
+     
+       ]
+   },{
+      "id":"supluskohad",
+      "provider":"sotsiaalministeerium",
+      "url": "http://vtiav.sm.ee/index.php/opendata/supluskohad.xml",
+      "type":"xml",
+      "update_frequency":"weekly",
+      "converter_top_element":"supluskohad",
+      "schema":[
+         {"column":"nimetus",             "type":"text",       "field":"nimetus"}
+     
+       ],
+        "cron_minutes":"0",
+      "cron_hour":"0",
+      "cron_day_of_month":"*",
+      "cron_month":"*",
+      "cron_day_of_week":"THU",
+      "cron_custom":""
+   }
+ ]

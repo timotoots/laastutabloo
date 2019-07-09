@@ -1,0 +1,39 @@
+[{
+      "id":"ehitisregister_ehitised",
+      "provider":"ehitisregister",
+      "url": "https://avaandmed.ehr.ee/files/eh_ehitised_1994-01_2019-07-07.zip",
+      "type":"csv",
+      "update_frequency":"manual",
+
+      "file_in_package":"*.csv",
+      "delimiter":";",
+      "schema":[
+          {"column":"ehit_id",       "type":"text",       "field":"id"},
+          {"column":"seisund",       "type":"text",       "field":"seisund"},
+         {"column":"ehr_kood",     "type":"text",       "field":"ehr_kood"},
+         {"column":"nimetus",     "type":"text",       "field":"nimetus"},
+         {"column":"rajatis_hoone",     "type":"text",       "field":"rajatis_hoone"},
+         {"column":"ehitisalune_pind",     "type":"text",       "field":"ehitisalune_pind"},
+         {"column":"korgus",     "type":"text",       "field":"korgus"},
+         {"column":"esmane_kasutus",     "type":"text",       "field":"esmane_kasutus"},
+         {"column":"korgus",     "type":"text",       "field":"korgus"}
+       ]
+   },
+   {
+      "id":"ehitisregister_ruumikuju",
+      "provider":"ehitisregister",
+      "url": "https://avaandmed.ehr.ee/files/ehitise_ruumikuju_1994-01_2019-07-07.zip",
+      "type":"csv",
+      "update_frequency":"manual",
+
+      "file_in_package":"*.csv",
+      "delimiter":";",
+      "schema":[
+         {"column":"ehit_id",       "type":"text",       "field":"ehit_id"},
+         {"column":"geom",     "type":"text",       "field":"geometry"},
+         {"column":"lon",     "type":"text",       "field":"viitepunkt_X"},
+         {"column":"lat",     "type":"text",       "field":"viitepunkt_Y"}
+       ]
+   }
+
+]

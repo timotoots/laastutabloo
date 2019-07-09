@@ -1,0 +1,17 @@
+[
+   {
+      "id":"ariregister_rekvisiidid",
+      "provider":"ariregister",
+      "url": "https://avaandmed.rik.ee/andmed/ARIREGISTER/ariregister_csv.zip",
+      "type":"csv",
+      "update_frequency":"weekly",
+
+      "file_in_package":"ettevotja_rekvisiidid_*.csv",
+      "delimiter":";",
+      "schema":[
+         {"column":"nimi",       "type":"text",       "field":"nimi"},
+         {"column":"ariregistri_kood",     "type":"text",       "field":"ariregistri_kood"},
+         {"column":"_ehak",     "type":"text",       "field":"asukoha_ehak_kood"}
+       ]
+   }
+]

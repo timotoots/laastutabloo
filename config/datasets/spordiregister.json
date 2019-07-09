@@ -1,0 +1,80 @@
+[
+   {
+      "id":"spordikoolid",
+      "provider": "spordiregister",
+      "url": "https://www.spordiregister.ee/opendata/files/spordikoolid.json",
+      "type":"json",
+      "update_frequency":"weekly",
+      "converter_top_element":"",
+      "schema":[
+         {"field":"URI","column":"uri","type":"text"},
+         {"field":"epost","column":"epost","type":"text"},
+         {"field":"sport.spordiala_234","column":"randomsport","type":"text"}           
+      ],
+      "last_hash":"",
+      "remote_hash":"",
+      "remote_updated":"",
+      "last_updated":"",
+      "private":true,
+      "status_updater":"done",
+      "status_converter":"a",
+      "devel":false,
+      "dataset_files": "",
+      "encoding": "",
+       
+      "username":"",
+      "password":"",
+      "cron_minutes":"",
+      "cron_hour":"",
+      "cron_day_of_month":"",
+      "cron_day_of_week":"1",
+      "cron_month":"",
+      "cron_custom":""
+
+   },{
+      "id":"spordikoolid_from_xml",
+      "provider": "spordiregister",
+      "url": "https://www.spordiregister.ee/opendata/files/spordikoolid.xml",
+      "type":"xml",
+      "update_frequency":"weekly",
+      "converter_top_element":"data",
+      "schema":[
+         {"field":"URI","column":"uri","type":"text"},
+         {"field":"epost","column":"epost","type":"text"},
+         {"field":"sport.spordiala_234","column":"randomsport","type":"text"}           
+      ]
+   },{
+      "id":"spordiorganisatsioonid",
+      "provider": "spordiregister",
+      "url": "https://www.spordiregister.ee/opendata/files/spordiorganisatsioonid.json",
+      "type":"json",
+      "update_frequency":"weekly",
+
+      "converter_top_element":"",
+      
+      "cron_minutes":"0",
+      "cron_hour":"0",
+      "cron_day_of_month":"*",
+      "cron_month":"*",
+      "cron_day_of_week":"WED",
+      "cron_custom":""
+   },{
+      "id":"spordiehitised",
+      "provider": "spordiregister",
+      "url": "https://www.spordiregister.ee/opendata/files/spordiehitised.json",
+      "type":"json",
+      "json_parser": "spordiehitised_parser",
+      "update_frequency":"weekly",
+
+      "converter_top_element":""
+      
+   },{
+      "id":"treenerid",
+      "provider": "spordiregister",
+      "url": "https://www.spordiregister.ee/opendata/files/treenerid.json",
+      "type":"json",
+      "update_frequency":"weekly",
+      
+      "converter_top_element":""
+   }
+]

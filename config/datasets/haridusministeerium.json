@@ -1,0 +1,30 @@
+[
+   {
+      "id":"oppeasutused",
+      "provider":"haridusministeerium",
+      "url": "http://enda.ehis.ee/avaandmed/rest/oppeasutused/-/Kool/E/-/-/-/-/-/-/0/0/JSON",
+      "type":"json",
+      "update_frequency":"weekly",
+      "converter_top_element":"body.oppeasutused.oppeasutus",
+      "schema":[
+         {"column":"nimetus",             "type":"text",       "field":"nimetus"},
+         {"column":"_adr",             "type":"text",          "field":"juriidilineAadress.adrId"}
+
+     
+       ]
+   },
+    {
+      "id":"oppeasutused_kaart",
+      "provider":"haridusministeerium",
+      "url": "https://koolikaart.hm.ee/kml_koolid.php?t=3",
+      "type":"xml",
+      "update_frequency":"weekly",
+      "converter_top_element":"kml.Document",
+      "schema":[
+         {"column":"name",             "type":"text",       "field":"name"},
+         {"column":"_latlon",          "type":"text",       "field":"Point.coordinates"}
+
+     
+       ]
+   }
+]

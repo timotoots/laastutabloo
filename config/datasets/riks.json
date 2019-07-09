@@ -1,0 +1,14 @@
+[
+   {
+      "id":"raamatukogud",
+      "provider":"riks",
+      "url": "http://live.webriks.ee/egov/?query=2",
+      "type":"json",
+      "update_frequency":"daily",
+      "schema":[
+         {"column":"nimi",       "type":"text",       "field":"nimi"},
+         {"column":"ariregistri_kood",     "type":"text",       "field":"ariregistri_kood"},
+         {"column":"_ehak",     "type":"text",       "field":"asukoha_ehak_kood"}
+       ]
+   }
+]

@@ -1,0 +1,29 @@
+[
+	{
+      "id":"ads",
+      "provider":"maaamet",
+      "url": "http://xgis.maaamet.ee/adsavalik/xads?FLsMCTuF",
+      "type":"csv",
+      "update_frequency":"minute",
+      "schema":[
+         {"column":"ads_oid",             "type":"text",       "field":"ADS_OID"},
+         {"column":"aadress",               "type":"text",       "field":"LAHIAADRESS"},
+         {"column":"x",               "type":"text",       "field":"VIITEPUNKT_X"},
+         {"column":"y",         "type":"text",       "field":"VIITEPUNKT_Y"}
+       ]
+   },
+   {
+      "id":"shapefile_test",
+      "provider":"maaamet",
+      "url": "https://geoportaal.maaamet.ee/docs/haldus_asustus/asustusyksus_shp.zip",
+      "type":"shapefile",
+      "file_in_package": "asustusyksus_*.*", 
+      "update_frequency":"monthly",
+      "schema":[
+         {"column":"total",             "type":"text",       "field":"TOTAL#TOTAL"},
+         {"column":"_ehak",          "type":"text",       "field":"AKOOD"}
+
+     
+       ]
+   }
+]

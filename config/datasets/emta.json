@@ -1,0 +1,14 @@
+[{
+      "id":"tasutud_maksud",
+      "provider":"emta",
+      "url": "https://www.emta.ee/sites/default/files/kontaktid-ja-ametist/maksulaekumine-statistika/tasutud-maksud/tasutud_maksud_2019_i_kvartal.ods",
+      "type":"ods",
+      "update_frequency":"manual",
+      "delimiter":",",
+      "schema":[
+         {"column":"nimi",       "type":"text",       "field":"nimi"},
+         {"column":"ariregistri_kood",     "type":"text",       "field":"ariregistri_kood"},
+         {"column":"_ehak",     "type":"text",       "field":"asukoha_ehak_kood"}
+       ]
+   }
+]

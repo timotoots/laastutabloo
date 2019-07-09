@@ -1,0 +1,16 @@
+[
+	{
+      "id":"airports",
+      "provider":"github_mwgg",
+      "url": "https://raw.githubusercontent.com/mwgg/Airports/master/airports.json",
+      "type":"json",
+      "update_frequency":"weekly",
+      "converter_top_element":"",
+      "schema":[
+         {"column":"icao",             "type":"text",       "field":"icao"},
+         {"column":"name",             "type":"text",       "field":"name"},
+         {"column":"_lat",   "type":"float",       "field":"lat"},
+         {"column":"_lon",   "type":"float",       "field":"lon"}
+       ]
+   }
+]

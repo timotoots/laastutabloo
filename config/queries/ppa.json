@@ -1,0 +1,20 @@
+[
+	{
+		"query_id":"avalik",
+		"sql":"SELECT * from avalik where ehak_akood = $1",
+		"meta":{
+			"name_et":"Avalikud rikkumised",
+			"name_en":"Public crimes",
+			"name_ru":"Public crimes"
+		},
+		"style":{
+			"template":"table",
+			"num_of_pages":4,
+			"align":"center"
+		},
+		"columns":[
+			{"name":"col1","width":5,"align":"left","wrap":"truncate"},
+			{"name":"col2","width":15,"align":"right","wrap":"wrap"}
+		]
+	}
+]

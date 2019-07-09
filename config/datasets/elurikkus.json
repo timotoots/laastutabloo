@@ -1,0 +1,16 @@
+[{
+      "id":"loodusvaatlused",
+      "provider":"elurikkus",
+      "url": "https://elurikkus.ee/biocache-service/occurrences/index/download?q=*:*&fq=basis_of_record:'HumanObservation'&fq=country:'Estonia'&fq=geospatial_kosher:'true'&fq=occurrence_date:[2018-01-01T00:00:00Z TO 2018-12-31T00:00:00Z]&email=info@timo.ee&sourceTypeId=&reasonTypeId=10&file=data",
+      "type":"csv",
+      "update_frequency":"manual",
+
+      "file_in_package":"*.csv",
+      "delimiter":",",
+      "schema":[
+         {"column":"nimi",       "type":"text",       "field":"nimi"},
+         {"column":"ariregistri_kood",     "type":"text",       "field":"ariregistri_kood"},
+         {"column":"_ehak",     "type":"text",       "field":"asukoha_ehak_kood"}
+       ]
+   }
+]

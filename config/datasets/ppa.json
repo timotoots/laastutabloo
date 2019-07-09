@@ -1,0 +1,139 @@
+[{
+      "id":"avalik_1",
+      "provider":"ppa",
+      "url": "https://opendata.smit.ee/ppa/csv/avalik_1.csv",
+      "type":"csv",
+      "update_frequency":"weekly",
+
+      "cron_minutes":"0",
+      "cron_hour":"0",
+      "cron_day_of_month":"*",
+      "cron_month":"*",
+      "cron_day_of_week":"FRI",
+      "cron_custom":"",
+
+      "delimiter":"\t",
+      "schema":[
+         {"column":"juhtum_id",     "type":"text",       "field":"JuhtumId"},
+         {"column":"syndmus_liik",  "type":"text",       "field":"SyndmusLiik"},
+         {"column":"_lat",          "type":"float",      "script":"ppa_lest_x"},
+         {"column":"_lon",          "type":"float",      "script":"ppa_lest_y"},
+         {"column":"_time",         "type":"timestamp",  "script":"ppa_timestamp"}
+       ]
+   },{
+      "id":"avalik_2",
+      "provider":"ppa",
+      "url": "https://opendata.smit.ee/ppa/csv/avalik_2.csv",
+      "type":"csv",
+      "update_frequency":"weekly",
+
+      "cron_minutes":"0",
+      "cron_hour":"0",
+      "cron_day_of_month":"*",
+      "cron_month":"*",
+      "cron_day_of_week":"FRI",
+      "cron_custom":"",
+
+      "delimiter":"\t",
+      "schema":[
+         {"column":"juhtum_id",     "type":"text",       "field":"JuhtumId"},
+         {"column":"syndmus_liik",  "type":"text",       "field":"SyndmusLiik"},
+         {"column":"_lat",          "type":"float",      "script":"ppa_lest_x"},
+         {"column":"_lon",          "type":"float",      "script":"ppa_lest_y"},
+         {"column":"_time",         "type":"timestamp",  "script":"ppa_timestamp"}
+       ]
+   },{
+      "id":"avalik_merged",
+      "provider":"ppa",
+      "tables":["avalik_1","avalik_2"]
+   },{
+      "id":"liiklusjarelevalve_1.csv",
+      "provider":"ppa",
+      "url": "https://opendata.smit.ee/ppa/csv/liiklusjarelevalve_1.csv",
+      "type":"csv",
+      "update_frequency":"weekly",
+
+      "cron_minutes":"0",
+      "cron_hour":"0",
+      "cron_day_of_month":"*",
+      "cron_month":"*",
+      "cron_day_of_week":"FRI",
+      "cron_custom":"",
+
+      "delimiter":"\t",
+      "schema":[
+         {"column":"juhtum_id",     "type":"text",       "field":"JuhtumId"},
+         {"column":"syndmus_liik",  "type":"text",       "field":"SyndmusLiik"},
+         {"column":"_lat",          "type":"float",      "script":"ppa_lest_x"},
+         {"column":"_lon",          "type":"float",      "script":"ppa_lest_y"},
+         {"column":"_time",         "type":"timestamp",  "script":"ppa_timestamp"}
+       ]
+   },{
+      "id":"liiklusjarelevalve_2.csv",
+      "provider":"ppa",
+      "url": "https://opendata.smit.ee/ppa/csv/liiklusjarelevalve_2.csv",
+      "type":"csv",
+      "update_frequency":"weekly",
+
+      "cron_minutes":"0",
+      "cron_hour":"0",
+      "cron_day_of_month":"*",
+      "cron_month":"*",
+      "cron_day_of_week":"FRI",
+      "cron_custom":"",
+
+      "delimiter":"\t",
+      "schema":[
+         {"column":"juhtum_id",     "type":"text",       "field":"JuhtumId"},
+         {"column":"syndmus_liik",  "type":"text",       "field":"SyndmusLiik"},
+         {"column":"_lat",          "type":"float",      "script":"ppa_lest_x"},
+         {"column":"_lon",          "type":"float",      "script":"ppa_lest_y"},
+         {"column":"_time",         "type":"timestamp",  "script":"ppa_timestamp"}
+       ]
+   },{
+      "id":"vara_1.csv",
+      "provider":"ppa",
+      "url": "https://opendata.smit.ee/ppa/csv/vara_1.csv",
+      "type":"csv",
+      "update_frequency":"weekly",
+
+      "cron_minutes":"0",
+      "cron_hour":"0",
+      "cron_day_of_month":"*",
+      "cron_month":"*",
+      "cron_day_of_week":"FRI",
+      "cron_custom":"",
+
+      "delimiter":"\t",
+      "schema":[
+         {"column":"juhtum_id",     "type":"text",       "field":"JuhtumId"},
+         {"column":"syndmus_liik",  "type":"text",       "field":"SyndmusLiik"},
+         {"column":"_lat",          "type":"float",      "script":"ppa_lest_x"},
+         {"column":"_lon",          "type":"float",      "script":"ppa_lest_y"},
+         {"column":"_time",         "type":"timestamp",  "script":"ppa_timestamp"}
+       ]
+   },{
+      "id":"vara_2.csv",
+      "provider":"ppa",
+      "url": "https://opendata.smit.ee/ppa/csv/vara_2.csv",
+      "type":"csv",
+      "update_frequency":"weekly",
+
+      "cron_minutes":"0",
+      "cron_hour":"0",
+      "cron_day_of_month":"*",
+      "cron_month":"*",
+      "cron_day_of_week":"FRI",
+      "cron_custom":"",
+
+      "delimiter":"\t",
+      "schema":[
+         {"column":"juhtum_id",     "type":"text",       "field":"JuhtumId"},
+         {"column":"syndmus_liik",  "type":"text",       "field":"SyndmusLiik"},
+         {"column":"_lat",          "type":"float",      "script":"ppa_lest_x"},
+         {"column":"_lon",          "type":"float",      "script":"ppa_lest_y"},
+         {"column":"_time",         "type":"timestamp",  "script":"ppa_timestamp"}
+       ]
+   }
+
+]

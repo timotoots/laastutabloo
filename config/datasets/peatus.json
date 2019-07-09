@@ -1,0 +1,44 @@
+[
+	{
+      "id":"gtfs_stops",
+      "provider":"gtfs",
+      "url": "http://www.peatus.ee/gtfs/gtfs.zip",
+      "type":"csv",
+      "update_frequency":"daily",
+
+      "file_in_package":"stops.txt",
+      "delimiter":",",
+      "schema":[
+         {"column":"stop_id",       "type":"text",       "field":"stop_id"},
+         {"column":"stop_name",     "type":"text",       "field":"stop_name"},
+         {"column":"_lat",          "type":"float",      "field":"stop_lat"},
+         {"column":"_lon",          "type":"float",      "field":"stop_lon"}
+       ],
+      "cron_minutes":"0",
+      "cron_hour":"0",
+      "cron_day_of_month":"*",
+      "cron_month":"*",
+      "cron_day_of_week":"*",
+      "cron_custom":""
+   },
+   {
+      "id":"gtfs_routes",
+      "provider":"gtfs",
+      "url": "http://www.peatus.ee/gtfs/gtfs.zip",
+      "type":"csv",
+      "update_frequency":"daily",
+
+      "file_in_package":"routes.txt",
+      "delimiter":",",
+      "schema":[
+         {"column":"route_id",            "type":"text",       "field":"route_id"},
+         {"column":"route_long_name",     "type":"text",       "field":"route_long_name"}
+       ],
+      "cron_minutes":"0",
+      "cron_hour":"0",
+      "cron_day_of_month":"*",
+      "cron_month":"*",
+      "cron_day_of_week":"*",
+      "cron_custom":""
+   }
+]

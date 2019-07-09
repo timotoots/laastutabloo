@@ -1,0 +1,14 @@
+[
+   {
+      "id":"veiste_laktatsioon",
+      "provider":"epj",
+      "private":true,
+      "type":"csv",
+      "update_frequency":"monthly",
+      "schema":[
+         {"column":"name",             "type":"text",       "field":"RALLI"},
+         {"column":"kyla",          "type":"text",       "field":"Aarna küla"}
+    
+       ]
+   }
+]

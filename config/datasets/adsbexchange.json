@@ -1,0 +1,24 @@
+[
+	{
+      "id":"aircrafts",
+      "provider":"adsbexchange",
+      "url": "http://public-api.adsbexchange.com/VirtualRadar/AircraftList.json?lat=58.8863558&lng=25.4984873&fDstL=0&fDstU=400",
+      "type":"json",
+      "update_frequency":"minutely",
+      "converter_top_element":"acList",
+      "schema":[
+         {"column":"from",             "type":"text",       "field":"From"},
+         {"column":"to",               "type":"text",       "field":"To"},
+         {"column":"altitude",         "type":"text",       "field":"Altitude"},
+         {"column":"airplane_year",    "type":"text",       "field":"Year"},
+         {"column":"_lat",   "type":"float",       "field":"Lat"},
+         {"column":"_lon",   "type":"float",       "field":"Long"}
+       ],
+      "cron_minutes":"*",
+      "cron_hour":"*",
+      "cron_day_of_month":"*",
+      "cron_month":"*",
+      "cron_day_of_week":"*",
+      "cron_custom":""
+   }
+]

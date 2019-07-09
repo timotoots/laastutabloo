@@ -1,0 +1,28 @@
+[
+   {
+      "id":"observations",
+      "provider":"ilmateenistus",
+      "url": "http://www.ilmateenistus.ee/ilma_andmed/xml/observations.php",
+      "type":"xml",
+      "update_frequency":"weekly",
+      "delimiter":";",
+      "schema":[
+         {"column":"name",             "type":"text",       "field":"name"},
+         {"column":"wmocode",          "type":"text",       "field":"wmocode"},
+         {"column":"airtemperature",   "type":"text",       "field":"airtemperature"}
+       ]
+   },
+  
+    {
+      "id":"forecast",
+      "provider":"ilmateenistus",
+      "url": " http://www.ilmateenistus.ee/wp-content/themes/emhi2013/meteogram.php/?locationId=__EHAK__",
+      "type":"json",
+      "update_frequency":"live",
+      "schema":[
+         {"column":"name",             "type":"text",       "field":"name"},
+         {"column":"wmocode",          "type":"text",       "field":"wmocode"},
+         {"column":"airtemperature",   "type":"text",       "field":"airtemperature"}
+       ]
+   }
+]
