@@ -1,5 +1,4 @@
-  var uri = new URI();
-  params = uri.search(true);
+
 
 
 
@@ -34,7 +33,7 @@ function buttonSave() {
         delete val.last_updated;
         console.log("Valid value: " + JSON.stringify(val, null, "  "));
 
-        $.ajax('http://www.laastutabloo.ee:5000/dataset/spordikoolid', {
+        $.ajax(backend_server + '/dataset/spordikoolid', {
           contentType: "application/json",
           type: "POST",
           data: JSON.stringify(val)

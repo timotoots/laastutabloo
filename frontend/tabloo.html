@@ -10,21 +10,26 @@
 		<script type="text/javascript" src="lib/fit.min.js"></script>
 		<script type="text/javascript" src="js/tabloo_fit.js"></script>
 
+		<script src="lib/node_modules/jquery/dist/jquery.min.js"></script>
+
+
 		<!-- WebGL -->
 		<script src="lib/node_modules/three/build/three.js"></script>
 		<script src="lib/node_modules/three/examples/js/controls/OrbitControls.js"></script>
 		<script src="lib/node_modules/three/examples/js/libs/stats.min.js"></script>
+		<script src="js/tabloocontrol_webgl.js"></script>
+		<script src="js/tabloodata.js"></script>
 
 	</head>
 
 <body id="body">
 
 	<div id="controls">
-		<a href="javascript://" onclick="rotateLaast(4,5,1080,1,5000);">RO1</a>
-		<a href="javascript://" onclick="rotateLaast(4,5,-1080,-1,5000);">RO2</a>
-		<a href="javascript://" onclick="rotateRow(1,1080,1)">ROW</a>
-		<a href="javascript://" onclick="changeLetter(10,10,2)">L2</a>
-		<a href="javascript://" onclick="changeLetter(10,10,3)">L3</a>
+		<a href="javascript://" onclick="tc.rotateLaast(4,5,1080,1,5000);">RO1</a>
+		<a href="javascript://" onclick="tc.rotateLaast(4,5,-1080,-1,5000);">RO2</a>
+		<a href="javascript://" onclick="td.rotateRow(1,1080,1)">ROW</a>
+		<a href="javascript://" onclick="tc.changeLetter(10,10,2)">L2</a>
+		<a href="javascript://" onclick="tc.changeLetter(10,10,3)">L3</a>
 	</div>
 
 	<div id="content">
@@ -32,7 +37,18 @@
 	</div>
 
 	<!-- Run script -->
-	<script src="js/tabloo_webgl.js"></script>
+	<!-- <script src="js/tabloo_webgl.js"></script> -->
+	<script type="text/javascript">
+
+		 var params = {
+	      laastX: 27, // number of shingles X
+	      laastY: 12 // number of shingles Y
+	    };
+
+		var tc = new TablooControl(params);
+		var td = new TablooData({"runInBrowser":1});
+
+	</script>
 
 </body>
 </html>

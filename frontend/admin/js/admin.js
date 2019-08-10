@@ -1,3 +1,29 @@
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+// Laastutabloo Ohjur common functions
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+// URLs
+
+var backend_server = "http://laastutabloo.erm.ee:5000";
+
+// Live version
+var datasets_url = backend_server + "/datasets";
+var providers_url = backend_server + "/list_providers";
+
+// Testing version
+// var datasets_url = "http://laastutabloo.erm.ee/admin/js/datasets_example.json";
+// var providers_url = "http://laastutabloo.erm.ee/admin/js/providers_example.json";
+
+var server = "http://laastutabloo.erm.ee";
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+// Icons 
+
 var icons = {};
 
 icons.unlocked = '<svg role="img" xmlns="http://www.w3.org/2000/svg" width="48px" height="48px" viewBox="0 0 24 24" aria-labelledby="lockAltOpenIconTitle lockAltOpenIconDesc" stroke="#000000" stroke-width="1" stroke-linecap="square" stroke-linejoin="miter" fill="none" color="#000000"><path d="M7,7.625 L7,7 C7,4.23857625 9.23857625,2 12,2 L12,2 C14.7614237,2 17,4.23857625 17,7 L17,11"/> <rect width="14" height="10" x="5" y="11"/> <circle cx="12" cy="16" r="1"/> </svg>';
@@ -12,25 +38,10 @@ icons.update = '<svg role="img" xmlns="http://www.w3.org/2000/svg" width="48px" 
 
 icons.converter = '<svg role="img" xmlns="http://www.w3.org/2000/svg" width="48px" height="48px" viewBox="0 0 24 24" aria-labelledby="shuffleIconTitle shuffleIconDesc" stroke="#000000" stroke-width="1" stroke-linecap="square" stroke-linejoin="miter" fill="none" color="#000000"> <path d="M21,8 L17.7707324,8 C15.816391,8 13.9845112,8.95183403 12.8610966,10.5510181 L10.7972528,13.4889058 C9.67383811,15.0880899 7.84195835,16.0399239 5.88761696,16.0399239 L2,16.0399239"/> <path d="M21,16.0399239 L17.7707324,16.0399239 C15.816391,16.0399239 13.9845112,15.0880899 12.8610966,13.4889058 L10.7972528,10.5510181 C9.67383811,8.95183403 7.84195835,8 5.88761696,8 L3,8"/> <polyline points="20 6 22 8 20 10 20 10"/> <polyline points="20 14 22 16 20 18 20 18"/> </svg>';
 
-  // var datasets_url = '../config/datasets2.json';
-  var datasets_url = "http://www.laastutabloo.ee:5000/datasets";
-  var providers_url = "../config/providers.json";
-  var server = "http://www.laastutabloo.ee";
 
+/////////////////////////////////////////////////////////////////////////////////////
 
-
-
-  ////////////////////////////////
-
-  function apiCall(port, endpoint, data){
-
-    $.getJSON(server + ":"+port,function(returned_data) {
-
-      console.log(returned_data);
-
-    });
-
-  }
+// Colorful icons
 
 function getIcon(id,color,tooltip){
 
@@ -46,23 +57,86 @@ function getIcon(id,color,tooltip){
 
   return icon;
 
+} // function
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+  function testApiCall(endpoint, data){
+
+    $.getJSON(backend_server + "/" + endpoint,function(returned_data) {
+
+      console.log(returned_data);
+
+    });
+
+  }
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+function triggerUpdater(dataset_id){
+
+  console.log(dataset_id);
+  // testApiCall("trigger_updater?dataset=" + dataset_id, "");
+
 }
 
+/////////////////////////////////////////////////////////////////////////////////////
 
 function create_header(){
 
-    var html = [];
-    html.push('<img src="images/logo.png" style="width: 80%;"/>');
+  var html = [];
+  html.push('<img src="images/logo.png" style="width: 80%;"/>');
 
-	$("#header").html(html);
+  $("#header").html(html);
 
 }
 
 
+/////////////////////////////////////////////////////////////////////////////////////
+
+// URI Params
+
+var uri = new URI();
+params = uri.search(true);
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+// Human readable time ago
+
+var locale = function(number, index, total_sec) {
+  // number: the timeago / timein number;
+  // index: the index of array below;
+  // total_sec: total seconds between date to be formatted and today's date;
+  return [
+    ['just now', 'right now'],
+    ['%s seconds ago', '%s seconds'],
+    ['1 minute ago', '1 minute'],
+    ['%s minutes ago', '%s minutes'],
+    ['1 hour ago', '1 hour'],
+    ['%s hours ago', '%s hours'],
+    ['1 day ago', '1 day'],
+    ['%s days ago', '%s days'],
+    ['1 week ago', '1 week'],
+    ['%s weeks ago', '%s weeks'],
+    ['1 month ago', '1 month'],
+    ['%s months ago', '%s months'],
+    ['1 year ago', '1 year'],
+    ['%s years ago', '%s years']
+  ][index];
+};
+timeago.register('custom', locale);
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+// Load
+
 $( document ).ready(function() {
 
-	$(".navbar").load("nav.html"); 
+  $(".navbar").load("nav.html"); 
 
 });
 
+/////////////////////////////////////////////////////////////////////////////////////
 

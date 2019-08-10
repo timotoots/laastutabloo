@@ -3,7 +3,7 @@
      	function listQueries(){
 
 
-		$.getJSON('http://www.laastutabloo.ee:5000/list_queries', function(data) {
+		$.getJSON(backend_server + '/list_queries', function(data) {
 	          	console.log(data);
 	    			$('#query_list').html(data);
 
@@ -34,7 +34,7 @@
     	        test:test
 	        };
 
-     		$.getJSON('http://www.laastutabloo.ee:5000/save_query', data, function(data) {
+     		$.getJSON(backend_server + '/save_query', data, function(data) {
 	          	console.log(data);
 	    			// $('#all_entries').html(data.html_string_selected);
 					// $('#all_entries').val("");
@@ -55,7 +55,7 @@
 
      		var query_id = $("#query_id").val();
 
-			table.setData("http://www.laastutabloo.ee:5000/run_query", {query_id:query_id, test:1, val1:1586, lat:58.0987895, lon:26.5563315, radius:34});
+			table.setData(backend_server + "/run_query", {query_id:query_id, test:1, val1:1586, lat:58.0987895, lon:26.5563315, radius:34});
 
 			var colDefs = table.getColumnDefinitions() //get column definition array
 
@@ -229,7 +229,7 @@
 
       	listQueries();
 
-   		loadGeoJson("http://www.laastutabloo.ee:5000/run_query_geojson?query_id=geojson_from_avalik&val1='SyndmusLiik,JuhtumId'&val2=8151");
+   		loadGeoJson(backend_server + "/run_query_geojson?query_id=geojson_from_avalik&val1='SyndmusLiik,JuhtumId'&val2=8151");
 
 
     //   	   $.getJSON('http://www.laastutabloo.ee:5000/_get_field_values', {
@@ -249,7 +249,7 @@
 
         $('#all_classes').change(function(){
 	
-          $.getJSON('http://www.laastutabloo.ee:5000/_update_dropdown', {
+          $.getJSON(backend_server + '/_update_dropdown', {
             selected_class: $('#all_classes').val()
 
           }).success(function(data) {

@@ -25,10 +25,41 @@ var laastud = [];
 params.renderW = window.innerWidth;
 params.renderH = window.innerWidth/160*100;
 
+if(params.renderW > 1920){
+	params.textureSize = 200;
+} else if(params.renderW > 1000){
+	params.textureSize = 100;
+} else {
+	params.textureSize = 50;
+}
+
 init();
 animate();
 
+
+
+ 
+
+function getLetters(){
+
+	$.getJSON( "json/letters.json", function( data ) {
+
+		for (var i = 0; i < data.length; i++) {
+			
+			var id = data[i].letter;
+			
+			letters[id] = data[i];
+			letters[id].texture = new THREE.TextureLoader().load( 'letters2/jpg'+ params.textureSize +'/letter_'+ data[i].filename +'.jpg' );
+			letters[id].material = new THREE.MeshBasicMaterial( { map: letters[id].texture } );
+
+		}
+	});
+
+}
+
 function init() {
+
+	getSlides();
 
 	// Camera
 	camera = new THREE.PerspectiveCamera( 40, params.renderW / params.renderH, 1, 10000 );
@@ -87,15 +118,21 @@ function init() {
 	///////////////////////////////
 	// Load letters as textures
 
-	for (var i = 0; i < 9; i++) {
-		
-		letters[i] = {};
-		letters[i].texture = new THREE.TextureLoader().load( 'letters/letter_'+ i +'.jpg' );
-		letters[i].material = new THREE.MeshBasicMaterial( { map: letters[i].texture } );
+	// for (var i = 0; i < Things.length; i++) {
+	// 	Things[i]
+	// }
 
-	}
+	// for (var i = 0; i < 9; i++) {
+		
+	// 	letters[i] = {};
+	// 	letters[i].texture = new THREE.TextureLoader().load( 'letters/letter_'+ i +'.jpg' );
+	// 	letters[i].material = new THREE.MeshBasicMaterial( { map: letters[i].texture } );
+
+	// }
+
+	getLetters();
 	
-	var default_texture = new THREE.TextureLoader().load( 'images/wood.jpg' );
+	var default_texture = new THREE.TextureLoader().load( 'letters2/jpg'+ params.textureSize +'/letter_tyhik.jpg' );
 	var default_material = new THREE.MeshBasicMaterial( { map: default_texture } );
 
 	///////////////////////////////
@@ -130,6 +167,47 @@ function init() {
 	// window.addEventListener( 'resize', onWindowResize, false );
 
 }
+
+/////////////////////////////////////////////////////////////
+
+var nextSlides = [];
+
+function parseSlides(slides){
+
+	var newSlides = [];
+
+	for (var i = 0; i < slides.queries.length; i++) {
+
+		if(slides.queries[i].pages){
+
+				for (var j = 0; j < slides.queries[i].pages.length; j++) {
+
+					newSlides.push(slides.queries[i].pages[j]);
+
+				}
+
+
+		}
+	}
+
+	nextSlides = newSlides;
+	changeSlide();
+
+	console.log(nextSlides);
+
+}
+
+/////////////////////////////////////////////////////////////
+
+function getSlides(ehak,queries,language){
+
+	$.getJSON( "json/slides.json", function( data ) {
+
+		parseSlides(data);
+
+	});
+
+} // function
 
 /////////////////////////////////////////////////////////////
 
@@ -169,6 +247,25 @@ function changeLetter(x,y,letter){
 
 }
 
+function changeSlide(){
+
+	for (var y = 0; y < nextSlides[0].length; y++) {
+		for(var x = 0; x < params.laastX; x++){
+			if(nextSlides[0][y][x] == " "){
+				laastud[x][y].newLetter = "tyhik";
+
+			} else {
+				laastud[x][y].newLetter = nextSlides[0][y][x].toUpperCase();
+			}
+		}
+
+
+	}
+
+
+
+}
+
 /////////////////////////////////////////////////////////////
 
 function animate() {
@@ -178,7 +275,7 @@ function animate() {
 		/////////////////////////////////////////////////////////////
 		// Timing and speed
 
-	time = clock.getElapsedTime();
+		time = clock.getElapsedTime();
 		delta = clock.getDelta();
 		if(time - lastTime > 1){
 			// console.log(time);
@@ -193,6 +290,8 @@ function animate() {
 
 			///////////////////////////////
 			// Change letter textures
+
+			
 
 			if(laastud[x][y].currentLetter != laastud[x][y].newLetter){
 

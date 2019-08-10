@@ -1,26 +1,4 @@
 
-var locale = function(number, index, total_sec) {
-  // number: the timeago / timein number;
-  // index: the index of array below;
-  // total_sec: total seconds between date to be formatted and today's date;
-  return [
-    ['just now', 'right now'],
-    ['%s seconds ago', '%s seconds'],
-    ['1 minute ago', '1 minute'],
-    ['%s minutes ago', '%s minutes'],
-    ['1 hour ago', '1 hour'],
-    ['%s hours ago', '%s hours'],
-    ['1 day ago', '1 day'],
-    ['%s days ago', '%s days'],
-    ['1 week ago', '1 week'],
-    ['%s weeks ago', '%s weeks'],
-    ['1 month ago', '1 month'],
-    ['%s months ago', '%s months'],
-    ['1 year ago', '1 year'],
-    ['%s years ago', '%s years']
-  ][index];
-};
-timeago.register('custom', locale);
 
 
 
@@ -88,13 +66,13 @@ $.getJSON(providers_url,function(providers) {
 
 
       // $(div_id + " .name").append('<a href="'+ provider.meta.et.url +'">_</a>');
-      if(typeof provider.wms != "undefined"){
-        wms_url = provider.wms[0] + provider.wms[1];
+      // if(typeof provider.wms != "undefined"){
+      //   wms_url = provider.wms[0] + provider.wms[1];
 
-        $(div_id + " .name").append(' / Browse: <a href="wms_browser.php?wms_url='+ wms_url +'&wms_service=wms">WMS</a>');
-        $(div_id + " .name").append(' <a href="wms_browser.php?wms_url='+ provider.meta.et.url +'&wms_service=wfs">WFS</a>'); 
+      //   $(div_id + " .name").append(' / Browse: <a href="wms_browser.php?wms_url='+ wms_url +'&wms_service=wms">WMS</a>');
+      //   $(div_id + " .name").append(' <a href="wms_browser.php?wms_url='+ provider.meta.et.url +'&wms_service=wfs">WFS</a>'); 
 
-      }
+      // }
  
   }
 
@@ -107,9 +85,13 @@ $.getJSON(providers_url,function(providers) {
          // console.log("No provider found: " + provider_id + ", put to unsorted;");
          provider_id = "unsorted";
         }
+        
+
+    var pattern = /[^A-Za-z0-9]+/g;
+      var dataset_id = dataset.id.replace(pattern, "");
 
        // Check already have the div
-       var div_id = "#provider_" + provider_id + " #dataset_"+dataset.id;
+       var div_id = "#provider_" + provider_id + " #dataset_"+dataset_id;
        if($(div_id).length){
         return;
 
@@ -117,9 +99,9 @@ $.getJSON(providers_url,function(providers) {
 
       var html = [];
 
-      html.push('<div class="row" style="border-bottom: 0px solid black;padding:0.5rem 0 0.5rem 0" id="dataset_'+ dataset.id +'">');
+      html.push('<div class="row" style="border-bottom: 0px solid black;padding:0.5rem 0 0.5rem 0" id="dataset_'+ dataset_id +'">');
 
-        html.push(' <div class="col-md-4"><span class="dataset_status_private"></span> <span class="dataset_edit_button"></span> <span class="dataset_remote_button"></span> <b class="dataset_name">a</b> </div>');
+        html.push(' <div class="col-md-4"><span class="dataset_status_private"></span> <span class="dataset_edit_button"></span> <span class="dataset_remote_button"></span> <b class="dataset_name">row</b> </div>');
 
         // html.push(' <div class="one columns"><span class="dataset_status_updater">updater</span></div>');
         html.push(' <div class="col-md-2"><span class="dataset_update_button"></span> <span class="dataset_updated">updated</span></div>');
@@ -138,13 +120,18 @@ $.getJSON(providers_url,function(providers) {
 
   function updateDatasetRow(provider_id, dataset){
 
-      var div_id = "#dataset_" + dataset.id; 
+      var pattern = /[^A-Za-z0-9]+/g;
+      var dataset_id = dataset.id.replace(pattern, "");
+
+      
+
+      var div_id = "#dataset_" + dataset_id; 
 
       if(!$(div_id).length){
         createDatasetRow(provider_id, dataset);
       } 
 
-      $(div_id + " .dataset_name").html( '<a href="dataset_edit.html?id='+ dataset.id +'" >' + dataset.id + "</a>");
+      $(div_id + " .dataset_name").html( '<a href="dataset_edit.html?id='+ dataset_id +'" >' + dataset.id + "</a>");
       $(div_id + " .dataset_url").attr("href", dataset.url);
 
       //////////////////////////
@@ -176,17 +163,17 @@ $.getJSON(providers_url,function(providers) {
       var danger = 0;
 
       if(dataset.status_updater=="done"){
-        $(div_id + " .dataset_update_button").html('<a href="javascript://" onclick="triggerUpdater()" >' + getIcon('update','green','Download done') + "</a>");
+        $(div_id + " .dataset_update_button").html('<a href="javascript://" onclick="triggerUpdater('+ dataset.id +')" >' + getIcon('update','green','Download done') + "</a>");
         $(div_id + " .dataset_update_button svg").removeClass("rotater");
       } else if(dataset.status_updater=="started"){
         $(div_id + " .dataset_update_button").html( getIcon('update','blue','Downloading'));
         $(div_id + " .dataset_update_button svg").addClass("rotater");
       } else if(dataset.status_updater=="failed"){
-        $(div_id + " .dataset_update_button").html('<a href="javascript://" onclick="triggerUpdater()" >' + getIcon('update','red','Download failed') + "</a>");
+        $(div_id + " .dataset_update_button").html('<a href="javascript://" onclick="triggerUpdater('+ dataset.id +')" >' + getIcon('update','red','Download failed') + "</a>");
         $(div_id + " .dataset_update_button svg").removeClass("rotater");
         danger = 1;
        }else {
-        $(div_id + " .dataset_update_button").html('<a href="javascript://" onclick="triggerUpdater()" >' + getIcon('update','yellow',dataset.status_updater) + "</a>");
+        $(div_id + " .dataset_update_button").html('<a href="javascript://" onclick="triggerUpdater('+ dataset.id +')" >' + getIcon('update','yellow',dataset.status_updater) + "</a>");
         $(div_id + " .dataset_update_button svg").removeClass("rotater");
         danger = 1;
        }

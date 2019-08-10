@@ -39,8 +39,8 @@ window.addEventListener("load", function(){
 						title:"Laastutabloo"
 					},  
 					hooks: {
-            "openPanel:start": function( $panel ) {
-            	if($panel.attr( "id" )=="panel-menu"){
+            "openPanel:start": function( panel ) {
+            	if(panel.id=="panel-menu"){
             		console.log("Main menu");
             		 $(".breadcrumb_first").show();
             		 $(".mm-navbar__breadcrumbs").css("margin-left",0);
@@ -50,10 +50,10 @@ window.addEventListener("load", function(){
 					 $(".mm-navbar__breadcrumbs").css("margin-left",0);
 
             	}
-               console.log( "This panel is now opening: #" + $panel.attr( "id" ) );
+               console.log( "This panel is now opening: #" + panel.id );
             },
-            "closePanel:before": function( $panel ) {
-               console.log( "This panel closes now: #" + $panel.attr( "id" ) );
+            "closePanel:before": function( panel ) {
+               console.log( "This panel closes now: #" + panel.id );
             }
          },
 					// iconbar		: {
@@ -244,8 +244,8 @@ function panelHooks(){
 
 		var params_out = params;
 
-		params_out.sources = params_out.sources.join(",");
-		params_out.include_ehak = params_out.include_ehak.join(",");
+		// params_out.sources = params_out.sources.join(",");
+		// params_out.include_ehak = params_out.include_ehak.join(",");
 
 		/////////////////////
 		// Create nice URL from existing URL
@@ -557,7 +557,7 @@ var selectedTerms = {};
 
 		var html = [];
 
-		var url = "http://data.laastutabloo.ee/api/3/action/organization_list?all_fields=true&include_extras=true&rand=1";
+		var url = "admin/js/providers_example.json";
 
 		$.getJSON( url, function( data ) {
 
@@ -594,16 +594,16 @@ var selectedTerms = {};
 
 		var html = [];
 
-		var url = "http://data.laastutabloo.ee/api/3/action/ckanext_pages_list?i=2";
+		var url = "admin/js/texts.json";
 
 		$.getJSON( url, function( data ) {
 
 			 $.each( data.result, function( i, val ) {
 
 			 	if(val.name=="laastutabloost"){
-			 		 $("#laastutabloost").html(val.content);
+			 		 $("#laastutabloost").html(val.title_et);
 			 	} else if(val.name=="about_museum"){
-			 		 $("#about_museum").html(val.content);
+			 		 $("#about_museum").html(val.title_et);
 			 	}
 
 			 });
