@@ -1,0 +1,346 @@
+[
+   {
+      "id":"spordikoolid",
+      "provider": "spordiregister",
+      "url": "https://www.spordiregister.ee/opendata/files/spordikoolid.json",
+      "type":"json",
+      "update_frequency":"weekly",
+      "converter_top_element":"",
+      "schema":[
+         {"field":"URI","column":"uri","type":"text"},
+         {"field":"epost","column":"epost","type":"text"},
+         {"field":"sport.spordiala_234","column":"randomsport","type":"text"}           
+      ],
+      "last_hash":"",
+      "remote_hash":"",
+      "remote_updated":"",
+      "last_updated":"",
+      "private":true,
+      "status_updater":"done",
+      "status_converter":"a",
+      "devel":false,
+      "dataset_files": "",
+      "encoding": "",
+       
+      "username":"",
+      "password":"",
+      "cron_minutes":"",
+      "cron_hour":"",
+      "cron_day_of_month":"",
+      "cron_day_of_week":"1",
+      "cron_month":"",
+      "cron_custom":""
+
+   },{
+      "id":"spordikoolid_from_xml",
+      "provider": "spordiregister",
+      "url": "https://www.spordiregister.ee/opendata/files/spordikoolid.xml",
+      "type":"xml",
+      "update_frequency":"weekly",
+      "converter_top_element":"data",
+      "schema":[
+         {"field":"URI","column":"uri","type":"text"},
+         {"field":"epost","column":"epost","type":"text"},
+         {"field":"sport.spordiala_234","column":"randomsport","type":"text"}           
+      ]
+   },{
+      "id":"spordiorganisatsioonid",
+      "provider": "spordiregister",
+      "url": "https://www.spordiregister.ee/opendata/files/spordiorganisatsioonid.json",
+      "type":"json",
+      "update_frequency":"weekly",
+
+      "converter_top_element":"",
+      
+      "cron_minutes":"0",
+      "cron_hour":"0",
+      "cron_day_of_month":"*",
+      "cron_month":"*",
+      "cron_day_of_week":"WED",
+      "cron_custom":""
+   },{
+      "id":"spordiehitised",
+      "provider": "spordiregister",
+      "url": "https://www.spordiregister.ee/opendata/files/spordiehitised.json",
+      "type":"json",
+      "json_parser": "spordiehitised_parser",
+      "update_frequency":"weekly",
+
+      "converter_top_element":""
+      
+   },{
+      "id":"treenerid",
+      "provider": "spordiregister",
+      "url": "https://www.spordiregister.ee/opendata/files/treenerid.json",
+      "type":"json",
+      "update_frequency":"weekly",
+
+      "converter_top_element":""
+   },{
+      "id":"avalik_1",
+      "provider":"ppa",
+      "url": "https://opendata.smit.ee/ppa/csv/avalik_1.csv",
+      "type":"csv",
+      "update_frequency":"weekly",
+
+      "cron_minutes":"0",
+      "cron_hour":"0",
+      "cron_day_of_month":"*",
+      "cron_month":"*",
+      "cron_day_of_week":"FRI",
+      "cron_custom":"",
+
+      "delimiter":"\t",
+      "schema":[
+         {"column":"juhtum_id",     "type":"text",       "field":"JuhtumId"},
+         {"column":"syndmus_liik",  "type":"text",       "field":"SyndmusLiik"},
+         {"column":"_lat",          "type":"float",      "script":"ppa_lest_x"},
+         {"column":"_lon",          "type":"float",      "script":"ppa_lest_y"},
+         {"column":"_time",         "type":"timestamp",  "script":"ppa_timestamp"}
+       ]
+   },{
+      "id":"eelis_pk_objekt_metsas",
+      "provider":"kem-gsavalik",
+      "url": "https://gsavalik.envir.ee/geoserver/eelis/ows?service=WMS&version=1.3.0&request=GetMap&layers=eelis:pk_objekt_metsas&styles=&bbox=57.47267905667945,21.45187502623414,59.84501069564773,28.45838952388184&width=1200&height=300&srs=EPSG:4326&format=application/json;type=geojson&feature_count=10",
+      "type":"geojson",
+      "update_frequency":"weekly",
+
+      "converter_top_element":"features",
+      "schema":[
+         {"column":"name",       "type":"text",       "field":"properties.invent"},
+         {"column":"tyyp",       "type":"text",       "field":"properties.tyyp"}
+       ] 
+   },{
+      "id":"gtfs_stops",
+      "provider":"gtfs",
+      "url": "http://www.peatus.ee/gtfs/gtfs.zip",
+      "type":"csv",
+      "update_frequency":"daily",
+
+      "file_in_package":"stops.txt",
+      "delimiter":",",
+      "schema":[
+         {"column":"stop_id",       "type":"text",       "field":"stop_id"},
+         {"column":"stop_name",     "type":"text",       "field":"stop_name"},
+         {"column":"_lat",          "type":"float",      "field":"stop_lat"},
+         {"column":"_lon",          "type":"float",      "field":"stop_lon"}
+       ],
+      "cron_minutes":"0",
+      "cron_hour":"0",
+      "cron_day_of_month":"*",
+      "cron_month":"*",
+      "cron_day_of_week":"*",
+      "cron_custom":""
+   },{
+      "id":"gtfs_routes",
+      "provider":"gtfs",
+      "url": "http://www.peatus.ee/gtfs/gtfs.zip",
+      "type":"csv",
+      "update_frequency":"daily",
+
+      "file_in_package":"routes.txt",
+      "delimiter":",",
+      "schema":[
+         {"column":"route_id",            "type":"text",       "field":"route_id"},
+         {"column":"route_long_name",     "type":"text",       "field":"route_long_name"}
+       ],
+      "cron_minutes":"0",
+      "cron_hour":"0",
+      "cron_day_of_month":"*",
+      "cron_month":"*",
+      "cron_day_of_week":"*",
+      "cron_custom":""
+   },{
+      "id":"ariregister_rekvisiidid",
+      "provider":"ariregister",
+      "url": "https://avaandmed.rik.ee/andmed/ARIREGISTER/ariregister_csv.zip",
+      "type":"csv",
+      "update_frequency":"weekly",
+
+      "file_in_package":"ettevotja_rekvisiidid_*.csv",
+      "delimiter":";",
+      "schema":[
+         {"column":"nimi",       "type":"text",       "field":"nimi"},
+         {"column":"ariregistri_kood",     "type":"text",       "field":"ariregistri_kood"},
+         {"column":"_ehak",     "type":"text",       "field":"asukoha_ehak_kood"}
+       ]
+   },{
+      "id":"observations",
+      "provider":"ilmateenistus",
+      "url": "http://www.ilmateenistus.ee/ilma_andmed/xml/observations.php",
+      "type":"xml",
+      "update_frequency":"weekly",
+      "delimiter":";",
+      "schema":[
+         {"column":"name",             "type":"text",       "field":"name"},
+         {"column":"wmocode",          "type":"text",       "field":"wmocode"},
+         {"column":"airtemperature",   "type":"text",       "field":"airtemperature"}
+       ]
+   },{
+      "id":"airports",
+      "provider":"github_mwgg",
+      "url": "https://raw.githubusercontent.com/mwgg/Airports/master/airports.json",
+      "type":"json",
+      "update_frequency":"weekly",
+      "converter_top_element":"",
+      "schema":[
+         {"column":"icao",             "type":"text",       "field":"icao"},
+         {"column":"name",             "type":"text",       "field":"name"},
+         {"column":"_lat",   "type":"float",       "field":"lat"},
+         {"column":"_lon",   "type":"float",       "field":"lon"}
+       ]
+   },{
+      "id":"aircrafts",
+      "provider":"adsbexchange",
+      "url": "https://adsbexchange.com/api/aircraft/json/lat/58.6469769/lon/26.0547971/dist/400/",
+      "type":"json",
+      "update_frequency":"minutely",
+      "converter_top_element":"acList",
+      "schema":[
+         {"column":"from",             "type":"text",       "field":"From"},
+         {"column":"to",               "type":"text",       "field":"To"},
+         {"column":"altitude",         "type":"text",       "field":"Altitude"},
+         {"column":"airplane_year",    "type":"text",       "field":"Year"},
+         {"column":"_lat",   "type":"float",       "field":"Lat"},
+         {"column":"_lon",   "type":"float",       "field":"Long"}
+       ],
+      "cron_minutes":"*",
+      "cron_hour":"*",
+      "cron_day_of_month":"*",
+      "cron_month":"*",
+      "cron_day_of_week":"*",
+      "cron_custom":""
+   },{
+      "id":"ads",
+      "provider":"maaamet",
+      "url": "http://xgis.maaamet.ee/adsavalik/xads?FLsMCTuF",
+      "type":"csv",
+      "update_frequency":"minute",
+      "schema":[
+         {"column":"ads_oid",             "type":"text",       "field":"ADS_OID"},
+         {"column":"aadress",               "type":"text",       "field":"LAHIAADRESS"},
+         {"column":"x",               "type":"text",       "field":"VIITEPUNKT_X"},
+         {"column":"y",         "type":"text",       "field":"VIITEPUNKT_Y"}
+       ]
+   },{
+      "id":"basseinid",
+      "provider":"sotsiaalministeerium",
+      "url": "http://vtiav.sm.ee/index.php/opendata/basseinid.xml",
+      "type":"xml",
+      "update_frequency":"weekly",
+      "converter_top_element":"basseinid",
+      "schema":[
+         {"column":"id",             "type":"text",       "field":"id"}
+     
+       ]
+   },{
+      "id":"supluskohad",
+      "provider":"sotsiaalministeerium",
+      "url": "http://vtiav.sm.ee/index.php/opendata/supluskohad.xml",
+      "type":"xml",
+      "update_frequency":"weekly",
+      "converter_top_element":"supluskohad",
+      "schema":[
+         {"column":"nimetus",             "type":"text",       "field":"nimetus"}
+     
+       ],
+        "cron_minutes":"0",
+      "cron_hour":"0",
+      "cron_day_of_month":"*",
+      "cron_month":"*",
+      "cron_day_of_week":"THU",
+      "cron_custom":""
+   },{
+      "id":"oppeasutused",
+      "provider":"haridusministeerium",
+      "url": "http://enda.ehis.ee/avaandmed/rest/oppeasutused/-/Kool/E/-/-/-/-/-/-/0/0/JSON",
+      "type":"json",
+      "update_frequency":"weekly",
+      "converter_top_element":"body.oppeasutused.oppeasutus",
+      "schema":[
+         {"column":"nimetus",             "type":"text",       "field":"nimetus"},
+         {"column":"_adr",             "type":"text",          "field":"juriidilineAadress.adrId"}
+
+     
+       ]
+   },
+
+   {
+      "id":"oppeasutused_kaart",
+      "provider":"haridusministeerium",
+      "url": "https://koolikaart.hm.ee/kml_koolid.php?t=3",
+      "type":"xml",
+      "update_frequency":"weekly",
+      "converter_top_element":"kml.Document",
+      "schema":[
+         {"column":"name",             "type":"text",       "field":"name"},
+         {"column":"_latlon",          "type":"text",       "field":"Point.coordinates"}
+
+     
+       ]
+   },
+
+   {
+      "id":"brutotulu",
+      "provider":"statistikaamet",
+      "url": "https://www.stat.ee/public/data/erm/Palgatootaja_brutotulu.csv",
+      "type":"csv",
+      "update_frequency":"yearly",
+      "schema":[
+         {"column":"brutotulu",             "type":"text",       "field":"Palgatöötaja_brutotulu"},
+         {"column":"_ehak",          "type":"text",       "field":"AKOOD"}
+
+     
+       ]
+   },
+
+   {
+      "id":"rahvaarv",
+      "provider":"statistikaamet",
+      "url": "https://www.stat.ee/public/data/erm/Rahvaarv.csv",
+      "type":"csv",
+      "update_frequency":"yearly",
+      "schema":[
+         {"column":"total",             "type":"text",       "field":"TOTAL#TOTAL"},
+         {"column":"_ehak",          "type":"text",       "field":"AKOOD"}
+
+     
+       ]
+   },
+   {
+      "id":"shapefile_test",
+      "provider":"maaamet",
+      "url": "https://geoportaal.maaamet.ee/docs/haldus_asustus/asustusyksus_shp.zip",
+      "type":"shapefile",
+      "file_in_package": "asustusyksus_*.*", 
+      "update_frequency":"monthly",
+      "schema":[
+         {"column":"total",             "type":"text",       "field":"TOTAL#TOTAL"},
+         {"column":"_ehak",          "type":"text",       "field":"AKOOD"}
+
+     
+       ]
+   },
+    {
+      "id":"veiste_laktatsioon",
+      "provider":"epj",
+      "private":true,
+      "url": "",
+      "type":"csv",
+      "update_frequency":"monthly",
+      "schema":[
+         {"column":"name",             "type":"text",       "field":"RALLI"},
+         {"column":"kyla",          "type":"text",       "field":"Aarna küla"}
+    
+       ]
+   }
+
+    
+
+   
+
+
+
+   
+
+]
