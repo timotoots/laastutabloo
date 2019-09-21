@@ -28,7 +28,7 @@ $.getJSON(providers_url,function(providers) {
         } // for
 
         setTimeout(function(){
-          // apiUpdateDatasets();
+           apiUpdateDatasets();
         },1000);
     });
 
@@ -87,7 +87,7 @@ $.getJSON(providers_url,function(providers) {
         }
         
 
-    var pattern = /[^A-Za-z0-9]+/g;
+    var pattern = /[^A-Za-z0-9\d_\d-]+/g;
       var dataset_id = dataset.id.replace(pattern, "");
 
        // Check already have the div
@@ -108,6 +108,7 @@ $.getJSON(providers_url,function(providers) {
 
         html.push(' <div class="col-md-1"><span class="dataset_status_converter"></span></div>');
         html.push(' <div class="col-md-1"><span class="dataset_status_rows">rows</span></div>');
+        html.push(' <div class="col-md-1"><span class="dataset_update_frequency"></span></div>');
         html.push(' <div class="col-md-1"></div>');
 
        html.push('</div>');
@@ -120,9 +121,8 @@ $.getJSON(providers_url,function(providers) {
 
   function updateDatasetRow(provider_id, dataset){
 
-      var pattern = /[^A-Za-z0-9]+/g;
+      var pattern = /[^A-Za-z0-9\d_\d-]+/g;
       var dataset_id = dataset.id.replace(pattern, "");
-
       
 
       var div_id = "#dataset_" + dataset_id; 
@@ -131,7 +131,7 @@ $.getJSON(providers_url,function(providers) {
         createDatasetRow(provider_id, dataset);
       } 
 
-      $(div_id + " .dataset_name").html( '<a href="dataset_edit.html?id='+ dataset_id +'" >' + dataset.id + "</a>");
+      $(div_id + " .dataset_name").html( '<a href="?p=dataset&id='+ dataset_id +'" >' + dataset.id + "</a>");
       $(div_id + " .dataset_url").attr("href", dataset.url);
 
       //////////////////////////
@@ -149,7 +149,7 @@ $.getJSON(providers_url,function(providers) {
 
       $(div_id + " .dataset_remote_button").html('<a href="'+ dataset.url +'" >' + getIcon('remote','black','Remote file') + "</a>");
 
-      if(typeof dataset.last_updated === "undefined" || dataset.last_updated=="" || dataset.last_updated==null){
+      if(typeof dataset.last_updated === "undefined" || dataset.last_updated=="" || dataset.last_updated==null || dataset.last_updated=="Thu, 01 Jan 1970 00:00:00 GMT"){
         $(div_id + " .dataset_updated").html("Never");
 
       } else {
@@ -163,33 +163,36 @@ $.getJSON(providers_url,function(providers) {
       var danger = 0;
 
       if(dataset.status_updater=="done"){
-        $(div_id + " .dataset_update_button").html('<a href="javascript://" onclick="triggerUpdater('+ dataset.id +')" >' + getIcon('update','green','Download done') + "</a>");
+        $(div_id + " .dataset_update_button").html('<a href="javascript://" id="'+dataset_id+'_updateButton"  >' + getIcon('update','green','Download done') + "</a>");
         $(div_id + " .dataset_update_button svg").removeClass("rotater");
       } else if(dataset.status_updater=="started"){
         $(div_id + " .dataset_update_button").html( getIcon('update','blue','Downloading'));
         $(div_id + " .dataset_update_button svg").addClass("rotater");
       } else if(dataset.status_updater=="failed"){
-        $(div_id + " .dataset_update_button").html('<a href="javascript://" onclick="triggerUpdater('+ dataset.id +')" >' + getIcon('update','red','Download failed') + "</a>");
+        $(div_id + " .dataset_update_button").html('<a href="javascript://" id="'+dataset_id+'_updateButton" >' + getIcon('update','red','Download failed') + "</a>");
         $(div_id + " .dataset_update_button svg").removeClass("rotater");
         danger = 1;
        }else {
-        $(div_id + " .dataset_update_button").html('<a href="javascript://" onclick="triggerUpdater('+ dataset.id +')" >' + getIcon('update','yellow',dataset.status_updater) + "</a>");
+        $(div_id + " .dataset_update_button").html('<a href="javascript://" id="'+dataset_id+'_updateButton"  >' + getIcon('update','yellow',dataset.status_updater) + "</a>");
         $(div_id + " .dataset_update_button svg").removeClass("rotater");
         danger = 1;
        }
+
+      $('#'+dataset_id+'_updateButton').click(dataset_id,triggerUpdater);
+
 
       //////////////////////////
       // Converter
 
       if(dataset.status_converter=="done"){
-           $(div_id + " .dataset_status_converter").html('<a href="javascript://" onclick="triggerUpdater()" >' + getIcon('converter','green','Conversion done') + "</a>");
+           $(div_id + " .dataset_status_converter").html('<a href="javascript://" >' + getIcon('converter','green','Conversion done') + "</a>");
       } else if(dataset.status_converter=="running"){
            $(div_id + " .dataset_status_converter").html( getIcon('converter','yellow','Converting'));
       } else if(dataset.status_converter=="failed"){
-           $(div_id + " .dataset_status_converter").html('<a href="javascript://" onclick="triggerUpdater()" >' + getIcon('converter','red','Conversion failed') + "</a>");
+           $(div_id + " .dataset_status_converter").html('<a href="javascript://"  >' + getIcon('converter','red','Conversion failed') + "</a>");
            // danger = 1;
        }else {
-           $(div_id + " .dataset_status_converter").html('<a href="javascript://" onclick="triggerUpdater()" >' + getIcon('converter','blue',dataset.status_converter) + "</a>");
+           $(div_id + " .dataset_status_converter").html('<a href="javascript://"  >' + getIcon('converter','blue',dataset.status_converter) + "</a>");
            // danger = 1;
        }
 
@@ -198,6 +201,13 @@ $.getJSON(providers_url,function(providers) {
        } else {
           $(div_id).removeClass("bg-danger");
        }
+
+       if(dataset.update_frequency){
+             $(div_id + " .dataset_update_frequency").html(dataset.update_frequency);
+      
+       }
+
+
 
   } // function
 

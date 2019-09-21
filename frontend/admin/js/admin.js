@@ -20,6 +20,20 @@ var providers_url = backend_server + "/list_providers";
 var server = "http://laastutabloo.erm.ee";
 
 
+function loadJS(file) {
+    // DOM: Create the script element
+    var jsElm = document.createElement("script");
+    // set the type attribute
+    jsElm.type = "application/javascript";
+    // make the script element load file
+    jsElm.src = file;
+    // finally insert the element to the body element in order to load the script
+    document.body.appendChild(jsElm);
+}
+
+
+
+
 /////////////////////////////////////////////////////////////////////////////////////
 
 // Icons 
@@ -74,10 +88,16 @@ function getIcon(id,color,tooltip){
 
 /////////////////////////////////////////////////////////////////////////////////////
 
-function triggerUpdater(dataset_id){
+function triggerUpdater(clickHandler){
 
-  console.log(dataset_id);
-  // testApiCall("trigger_updater?dataset=" + dataset_id, "");
+  var dataset_id = clickHandler.data;
+
+    $.getJSON(backend_server + "/run_updater?dataset_id=" + dataset_id,function(returned_data) {
+
+      console.log(returned_data);
+
+    });
+  
 
 }
 
@@ -130,13 +150,47 @@ timeago.register('custom', locale);
 
 /////////////////////////////////////////////////////////////////////////////////////
 
-// Load
+// Load specific scripts
+
+
+function loadHtml(url){
+
+    $.ajax({url: url,
+        type: 'GET',
+        async: true,
+        success: function (result) {
+        $("body").append(result);
+   }});
+
+}
 
 $( document ).ready(function() {
 
-  $(".navbar").load("nav.html"); 
+  var page = "404";
+
+  if(typeof params.p==="undefined"){
+    page = "front_page"
+  } else if ( params.p=="dataset" || params.p=="query" || params.p=="provider"){
+
+    if(typeof params.id === "undefined"){
+       page = params.p + "_list";
+    } else {
+       page = params.p + "_edit";
+    }
+
+  }
+
+    loadHtml("html/" + page + ".html"); 
+
+    if(page != "404"){
+        loadJS("js/" + page + ".js");
+    }
+
+
 
 });
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////
 
