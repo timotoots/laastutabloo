@@ -9,7 +9,7 @@ Released for self documenation and educational purposes.
 
 ## Install packages
 ```
-sudo apt install nano git postgis apache2 npm
+sudo apt install nano git postgis apache2 npm python3-virtualenv virtualenvwrapper python3-scrapy python3-ujson python3-ijson python3-cffi libyajl2
 sudo hostname laastutabloo
 
 ```
@@ -28,4 +28,25 @@ sudo chown laastutabloo:laastutabloo /opt/laastutabloo
 cd /opt && git clone git@github.com:timotoots/laastutabloo.git
 ```
 
-##
+## Prepare database
+```
+sudo mkdir /opt/laastutabloo
+sudo chown laastutabloo:laastutabloo /opt/laastutabloo 
+cd /opt && git clone git@github.com:timotoots/laastutabloo.git
+CREATE EXTENSION postgis;
+
+```
+
+
+
+## Setup up scrapy
+```
+sudo pip3 install scrapyd-client flask_cors 
+
+```
+
+## Setup up scrapy
+```
+sudo pip3 install scrapyd-client flask_cors 
+cd /opt/laastutabloo/backend/laastutabloo/scrapy_updater/; scrapyd-deploy -p Laastutabloo
+```
