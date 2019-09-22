@@ -3,15 +3,26 @@
       <div class="row">
 
         <div class="col-sm-3 col-md-2 sidebar">
-          <ul class="nav nav-sidebar">
+          <a href="?p=dataset&id=new">
+           <button type="button" class="btn btn-default sidebar-btn">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true" style="color:#2cff00;"></span> Add new dataset
+          </button>
+        </a>
+
+        <hr/>
+        
+        <p>Filter datasets:</p>
+        
+       
+        <ul class="nav nav-sidebar">
+
             <li class="active"><a href="#">All <span class="sr-only">(current)</span></a></li>
-            <li><a href="#">Failed</a></li>
             <li><a href="#">Done</a></li>
             <li><a href="#">Export</a></li>
           </ul>
-          <ul class="nav nav-sidebar">
-            <li><a href="">Updater</a></li>
-            <li><a href="">Done</a></li>
+          <ul class="nav nav-sidebar filter-options">
+            <li data-group="private"><a href="javascript://">Private</a></li>
+            <li data-group="public"><a href="javascript://">Public</a></li>
             <li><a href="">Running</a></li>
             <li><a href="">Failed</a></li>
           </ul>
@@ -25,7 +36,7 @@
 
 
 
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main container">
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main container" id="shuffle-container">
           <h1 class="page-header">Datasets</h1>
 
           <div class="row" id="form1">
@@ -37,4 +48,11 @@
         </div>
       </div>
     </div>
+
+
+
+
+
+
+
 

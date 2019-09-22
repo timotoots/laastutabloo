@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "jquery-quicksand": "^1.6.0"
+    "jquery-quicksand": "^1.6.0",
+    "shufflejs": "^5.2.3"
   }
 }

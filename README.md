@@ -1,7 +1,7 @@
 # laastutabloo
 Source code for art installation Laastutabloo in Estonian National Museum.
 
-Released for self documenation and educational purposes.
+Released here for self documentation and educational purposes.
 
 # Software
 

@@ -12,7 +12,7 @@ var backend_server = "http://laastutabloo.erm.ee:5000";
 // Live version
 var datasets_url = backend_server + "/datasets";
 var providers_url = backend_server + "/list_providers";
-
+var dataset_log_url = backend_server + "/get_log";
 // Testing version
 // var datasets_url = "http://laastutabloo.erm.ee/admin/js/datasets_example.json";
 // var providers_url = "http://laastutabloo.erm.ee/admin/js/providers_example.json";
@@ -153,13 +153,25 @@ timeago.register('custom', locale);
 // Load specific scripts
 
 
-function loadHtml(url){
+function loadHtmlWithScript(page){
+
+  var url = "html/" + page + ".html"
 
     $.ajax({url: url,
         type: 'GET',
         async: true,
         success: function (result) {
+
         $("body").append(result);
+        if(page != "404"){
+          loadJS("js/" + page + ".js");
+        }
+        if(page=="dataset_list"){
+          // setTimeout(function(){
+          //   loadJS("devel/shufflejs.js");
+          // },5000);
+          
+        }
    }});
 
 }
@@ -170,6 +182,9 @@ $( document ).ready(function() {
 
   if(typeof params.p==="undefined"){
     page = "front_page"
+  } if(params.p=="shufflejs"){
+    page = "../devel/" + params.p;
+
   } else if ( params.p=="dataset" || params.p=="query" || params.p=="provider"){
 
     if(typeof params.id === "undefined"){
@@ -180,12 +195,7 @@ $( document ).ready(function() {
 
   }
 
-    loadHtml("html/" + page + ".html"); 
-
-    if(page != "404"){
-        loadJS("js/" + page + ".js");
-    }
-
+    loadHtmlWithScript(page); 
 
 
 });

@@ -1,0 +1,83 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <script type="text/javascript" src="../node_modules/shufflejs/dist/shuffle.min.js"></script>
+
+</head>
+<body>
+ -->
+
+<div class="container">
+
+  <div class="row">
+    <div class="col-4@sm col-3@md">
+      <div class="filters-group">
+        <label for="filters-search-input" class="filter-label">Search</label>
+        <input class="textfield filter__search js-shuffle-search" type="search" id="filters-search-input" />
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12@sm filters-group-wrap">
+      <div class="filters-group">
+        <p class="filter-label">Filter</p>
+        <div class="btn-group filter-options">
+          <button class="btn btn--primary" data-group="space">Space</button>
+          <button class="btn btn--primary" data-group="nature">Nature</button>
+          <button class="btn btn--primary" data-group="animal">Animal</button>
+          <button class="btn btn--primary" data-group="city">City</button>
+        </div>
+      </div>
+      <fieldset class="filters-group">
+        <legend class="filter-label">Sort</legend>
+        <div class="btn-group sort-options">
+          <label class="btn active">
+            <input type="radio" name="sort-value" value="dom" checked /> Default
+          </label>
+          <label class="btn">
+            <input type="radio" name="sort-value" value="title" /> Title
+          </label>
+          <label class="btn">
+            <input type="radio" name="sort-value" value="date-created" /> Date Created
+          </label>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div id="shuffle-container" class="row shuffle-container">
+
+    <div class="shuffle-row" data-groups='["nature"]' data-date-created="2017-04-30" data-title="Lake Walchen">
+    	<div class="dataset_name">A</div>
+    </div>
+    <div class="shuffle-row" data-groups='["city"]' data-date-created="2016-07-01" data-title="Golden Gate Bridge">
+     <div class="dataset_name">B</div>
+    </div>
+    <div class="shuffle-row" data-groups='["animal"]' data-date-created="2016-08-12" data-title="Crocodile">
+    <div class="dataset_name">C</div>
+    </div>
+    <div class="shuffle-row" data-groups='["space"]' data-date-created="2016-03-07" data-title="SpaceX">
+     <div class="dataset_name">D</div>
+    </div>
+    <div class="shuffle-row" data-groups='["city"]' data-date-created="2016-06-09" data-title="Crossroads">
+<div class="dataset_name">E</div>
+    </div>
+    <div class="shuffle-row" data-groups='["space","nature"]' data-date-created="2016-06-29" data-title="Milky Way">
+<div class="dataset_name">F</div>
+    </div>
+    <div class="shuffle-row" data-groups='["space"]' data-date-created="2015-11-06" data-title="Earth">
+     <div class="dataset_name">G</div>
+    </div>
+    <div class="shuffle-row" data-groups='["animal"]' data-date-created="2015-07-23" data-title="Turtle">
+   <div class="dataset_name">H</div>
+      </div>
+    </div>
+   
+  </div>
+</div>
+
+<!-- <script type="text/javascript" src="shufflejs.js"></script> -->
