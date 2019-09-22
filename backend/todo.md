@@ -1,28 +1,55 @@
 
-* updater
+Querybuilder:
+?
 
-	- manual trigger
-	- logging and alterting broken links
-	- file comparison
-	- file updated comparison
-	- timers
-	- live api parameters
+Updater:
+* live api parameters
+* get file preview with truncate function (after unzipping)
+* alerting CRITICAL to e-mail
+
+Converter:
+* GRIB parser - ilmateenistus
+* XLS parser
+* converter validate data
+* converter check unicode stuff
+* merging tables as sql views
+* join tables as sql views (elurikkus - itis)
+
+Database:
+* postgres internal tables to "internal" schema
+* import should remove all tables in "internal"
 
 
-* convert
-	
-	- unzipping
-	- check unicode stuff
-	- csv reading with csv
-	- sql inserts with sqlalchemy
-	- geom, latlon, geojson conversion
-	- csv column names
-	- xml to json
-	- shp parser
-	- xls parser
-	- append tables
-	- logging
-	- alerting
-	- validate
-	- manual trigger by id
-	- refactor, comment, clean, security
+Backend:
+* backend admin functions behind auth
+
+
+
+Curator:
+?
+
+Other:
+* prefix_suffix translation
+
+
+Later:
+* refactor, comment, clean, security
+* export should re-create dataset json files (using provider id as filenames)
+* export should re-create provider json files (using provider id as filenames)
+* export should re-create query json files (using query id as filenames)
+
+
+
+DONE: 
+* logimise api
+* updater manual trigger
+* logging broken links
+* updater file comparison
+* updater file updated comparison
+* updater timers
+* converter geom, latlon, geojson conversion
+* converter csv column names
+* converter manual trigger by id
+* scrapy run nupp ei tööta
+* api call get_updater_log?dataset_id=avalik_1
+* api call run_updater?dataset_id=avalik_1
