@@ -13,6 +13,9 @@ var backend_server = "http://laastutabloo.erm.ee:5000";
 var datasets_url = backend_server + "/datasets";
 var providers_url = backend_server + "/list_providers";
 var dataset_log_url = backend_server + "/get_log";
+var dataset_preview_url = backend_server + "/dataset_preview";
+
+
 // Testing version
 // var datasets_url = "http://laastutabloo.erm.ee/admin/js/datasets_example.json";
 // var providers_url = "http://laastutabloo.erm.ee/admin/js/providers_example.json";
@@ -123,6 +126,7 @@ function changeIconColor(element, color){
      $(element).removeClass("icon-blue");
      $(element).removeClass("icon-green");
      $(element).removeClass("icon-red");
+     $(element).removeClass("icon-transparent");
 
      $(element).addClass("icon-"+color);
 
@@ -131,6 +135,44 @@ function changeIconColor(element, color){
 
   
 
+
+}
+
+
+function createTabulator(url, data, element){
+
+  // Create table if not exists
+
+  if(!$(element+" .tabulator-tableHolder").length){
+
+    // $(element).html('<div class="tabulator"></table>');
+
+    var table = new Tabulator(element, {
+  
+      height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
+      // data:tabledata, //assign data to table
+      // layout:"fitColumns", //fit columns to width of table (optional)
+      // columns:[ //Define Table Columns
+       //   {title:"Name", field:"name", width:150},
+       //   {title:"Age", field:"age", align:"left", formatter:"progress"},
+       //   {title:"Favourite Color", field:"col"},
+       //   {title:"Date Of Birth", field:"dob", sorter:"date", align:"center"},
+      // ],
+      autoColumns:true,
+      rowClick:function(e, row){ //trigger an alert message when the row is clicked
+        alert("Row " + row.getData().id + " Clicked!!!!");
+      },
+    });
+
+  }
+
+    table.setData(url, data);
+
+    var colDefs = table.getColumnDefinitions() //get column definition array
+
+    console.log(colDefs);
+
+    table.setColumns(colDefs) //overwrite existing columns with new columns definition array
 
 }
 
@@ -151,23 +193,38 @@ var locale = function(number, index, total_sec) {
   // index: the index of array below;
   // total_sec: total seconds between date to be formatted and today's date;
   return [
-    ['just now', 'right now'],
-    ['%s seconds ago', '%s seconds'],
-    ['1 minute ago', '1 minute'],
-    ['%s minutes ago', '%s minutes'],
-    ['1 hour ago', '1 hour'],
-    ['%s hours ago', '%s hours'],
-    ['1 day ago', '1 day'],
-    ['%s days ago', '%s days'],
-    ['1 week ago', '1 week'],
-    ['%s weeks ago', '%s weeks'],
-    ['1 month ago', '1 month'],
-    ['%s months ago', '%s months'],
-    ['1 year ago', '1 year'],
-    ['%s years ago', '%s years']
+    ['now!', 'right now'],
+    ['%ss', '%s seconds'],
+    ['1m', '1 minute'],
+    ['%sm', '%s minutes'],
+    ['1h', '1 hour'],
+    ['%sh', '%s hours'],
+    ['1d', '1 day'],
+    ['%sd', '%s days'],
+    ['1w', '1 week'],
+    ['%sw', '%s weeks'],
+    ['1month', '1 month'],
+    ['%smonths', '%s months'],
+    ['1y', '1 year'],
+    ['%sy', '%s years']
   ][index];
 };
 timeago.register('custom', locale);
+
+    // ['just now', 'right now'],
+    // ['%s seconds ago', '%s seconds'],
+    // ['1 minute ago', '1 minute'],
+    // ['%s minutes ago', '%s minutes'],
+    // ['1 hour ago', '1 hour'],
+    // ['%s hours ago', '%s hours'],
+    // ['1 day ago', '1 day'],
+    // ['%s days ago', '%s days'],
+    // ['1 week ago', '1 week'],
+    // ['%s weeks ago', '%s weeks'],
+    // ['1 month ago', '1 month'],
+    // ['%s months ago', '%s months'],
+    // ['1 year ago', '1 year'],
+    // ['%s years ago', '%s years']
 
 
 /////////////////////////////////////////////////////////////////////////////////////

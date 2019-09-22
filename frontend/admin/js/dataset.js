@@ -91,17 +91,18 @@ function pollDatasets(){
 
          }
 
-
       for (var id in datasets_info){
 
         if(typeof datasets_states[id] === "undefined"){
 
-             var pattern = /[^A-Za-z0-9\d_\d-]+/g;
+            var pattern = /[^A-Za-z0-9\d_\d-]+/g;
 
             datasets_states[id] = {};
             datasets_states[id].id = id;
             datasets_states[id].div_id = id.replace(pattern, "");
             datasets_states[id].show_log = 0;
+            datasets_states[id].show_tabulator = 0;
+
             datasets_states[id].last_log = [];
 
         }
@@ -123,8 +124,6 @@ function pollDatasets(){
 
 function updateDatasetRow(dataset){
 
-       
-
       var dataset_id = datasets_states[dataset.id].div_id;
 
       var div_id = "#dataset_" + dataset_id; 
@@ -133,33 +132,31 @@ function updateDatasetRow(dataset){
         createDatasetRow(dataset);
       } 
 
-
-
       $(div_id + " .dataset_name").html( '<a href="?p=dataset&id='+ dataset.id +'" >' + dataset.id + "</a>");
       $(div_id + " .dataset_url").attr("href", dataset.url);
-
-
 
       //////////////////////////
       // Public-private
 
       if(dataset.private == true){
-         $(div_id + " .dataset_status_private").html(getIcon('locked','red','Private dataset'));
+         // $(div_id + " .dataset_status_private").html(getIcon('locked','red','Private dataset'));
+         $(div_id + " .dataset_status_private").html('<span class="glyphicon glyphicon-briefcase icon-black" aria-hidden="true" ></span>');
+
        //  addToDataGroups(div_id, "private");
 
       } else {
-        $(div_id + " .dataset_status_private").html(getIcon('unlocked','white','Public dataset'));
+                 $(div_id + " .dataset_status_private").html('<span class="glyphicon glyphicon-eye-open icon-transparent" aria-hidden="true" ></span>');
+
+        // $(div_id + " .dataset_status_private").html(getIcon('unlocked','white','Public dataset'));
      //   addToDataGroups(div_id, "public");
 
       }
-
-
 
       //////////////////////////
       // Edit
       // $(div_id + " .dataset_edit_button").html('<a href="dataset_edit.html?id='+ dataset.id +'" >' + getIcon('edit','black','Edit dataset') + "</a>");
 
-      $(div_id + " .dataset_remote_button").html('<a href="'+ dataset.url +'" >' + getIcon('remote','black','Remote file') + "</a>");
+      $(div_id + " .dataset_remote_button").html('<a href="'+ dataset.url +'" >' + '<span class="glyphicon glyphicon-link icon-black" aria-hidden="true" ></span>'+ "</a>");
 
       if(typeof dataset.last_updated === "undefined" || dataset.last_updated=="" || dataset.last_updated==null || dataset.last_updated=="Thu, 01 Jan 1970 00:00:00 GMT"){
         $(div_id + " .dataset_updated").html("Never");
@@ -226,6 +223,12 @@ function updateDatasetRow(dataset){
              $(div_id + " .dataset_update_frequency").html(dataset.update_frequency);
       
        }
+
+       if(dataset.data_count){
+             $(div_id + " .dataset_status_rows").html(dataset.data_count + "");
+      
+       }
+       
 
 
 
@@ -401,6 +404,7 @@ var last_log = [];
             <li class="dataset_status_updater"><div><span class="glyphicon glyphicon-repeat icon-gray" aria-hidden="true"></span> Updater</div></li>
             <li class="dataset_status_converter"><div><span class="glyphicon glyphicon-refresh icon-gray" aria-hidden="true" ></span> Converter</div></li>
             <li class="dataset_status_converter"><div>Updated: <span class="dataset_updated">updated</span></div></li>
+            <li class="dataset_status_converter"><div>Rows: <span class="dataset_status_rows"></span></div></li>
             </ul>
 
           <hr>
@@ -418,9 +422,9 @@ var last_log = [];
             <ul class="nav nav-sidebar">
             <li class="dataset_status_updater"><div><b>Debug:</b></div></li>
 
-            <li ><a href="#log_display" class="btn-show-log"> <span class="glyphicon glyphicon-align-left icon-black btn-show-log" aria-hidden="true"></span> Show log</a></li>
-            <li><a href="#"> <span class="glyphicon glyphicon-arrow-right icon-black " aria-hidden="true"></span> Preview input</a></li>
-            <li><a href="#"> <span class="glyphicon glyphicon-arrow-left icon-black " aria-hidden="true"></span> Preview output</a></li>
+            <li><a href="#log_display" class="btn-show-log"> <span class="glyphicon glyphicon-align-left icon-black btn-show-log" aria-hidden="true"></span> Show log</a></li>
+            <li><a href="#log_display" class="btn-show-raw"> <span class="glyphicon glyphicon-arrow-right icon-black " aria-hidden="true"></span> Preview raw</a></li>
+            <li><a href="#log_display" class="btn-show-table"> <span class="glyphicon glyphicon-arrow-left icon-black " aria-hidden="true"></span> Preview converted</a></li>
 
           </ul>
 
@@ -433,6 +437,10 @@ var last_log = [];
         // Show log button logic
         $('#dataset_'+dataset_id+" .btn-show-log").click(dataset_id,showLogButtonHandler);
         $('#dataset_'+dataset_id+' .btn-run-updater').click(dataset_id,triggerUpdater);
+        $('#dataset_'+dataset_id+' .btn-show-table').click(dataset_id,showTabulatorHandler);
+        $('#dataset_'+dataset_id+' .btn-show-raw').click(dataset_id,showRawHandler);
+
+
 
 
       } else {
@@ -443,25 +451,27 @@ var last_log = [];
 
         html.push('<div class="row shuffle-row" style="border-bottom: 0px solid black;padding:0.5rem 0 0.5rem 0; width:100%" id="dataset_'+ dataset_id +'" data-groups="[]" data-private="" data-status="">');
 
-        html.push(' <div class="col-md-4"><span class="dataset_status_private"></span> <span class="dataset_edit_button"></span> <span class="dataset_remote_button"></span> <b class="dataset_name">row</b> </div>');
+        html.push(' <div class="col-md-4 col-sm-4 col-xs-4"><span class="dataset_status_private"></span> <span class="dataset_edit_button"></span> <span class="dataset_remote_button"></span> <b class="dataset_name">row</b> </div>');
 
         // html.push(' <div class="one columns"><span class="dataset_status_updater">updater</span></div>');
-        html.push(' <div class="col-md-1"><span class="dataset_update_button"></span> <span class="dataset_updated">updated</span></div>');
+        html.push(' <div class="col-md-1 col-sm-1  col-xs-1"><span class="dataset_update_button"></span> <span class="dataset_updated">updated</span></div>');
 
-        html.push(` <div class="col-md-1">
-            <span class="dataset_status_updater"><span class="glyphicon glyphicon-refresh icon-gray" aria-hidden="true" ></span></span> 
-            <span class="dataset_status_converter"><span class="glyphicon glyphicon-retweet icon-gray" aria-hidden="true" ></span></span>
+        html.push(` <div class="col-md-1 col-sm-1 col-xs-1">
+            <span class="dataset_status_updater"><span class="glyphicon glyphicon-repeat icon-gray" aria-hidden="true" ></span></span> 
+            <span class="dataset_status_converter"><span class="glyphicon glyphicon-refresh icon-gray" aria-hidden="true" ></span></span>
           </div>`);
-        html.push(' <div class="col-md-1"><span class="dataset_status_rows">rows</span></div>');
-        html.push(' <div class="col-md-1"><span class="dataset_update_frequency">.</span></div>');
-        html.push(` <div class="col-md-3">
+        html.push(' <div class="col-md-1 col-sm-1  col-xs-1"><span class="dataset_status_rows"></span></div>');
+        html.push(' <div class="col-md-1 col-sm-1 col-xs-1"><span class="dataset_update_frequency">.</span></div>');
+        html.push(` <div class="col-md-4 col-sm-1 col-xs-1" style="text-align:right">
 
-          <button type="button" class="btn btn-default sidebar-btn btn-show-log">
-            <span class="glyphicon glyphicon-align-left icon-green" aria-hidden="true"></span> Log
-          </button>
+
 
           <button type="button" class="btn btn-default sidebar-btn btn-run-updater">
             <span class="glyphicon glyphicon-refresh icon-blue" aria-hidden="true"></span> Update
+          </button>
+
+          <button type="button" class="btn btn-default sidebar-btn btn-show-log">
+            <span class="glyphicon glyphicon-align-left icon-black" aria-hidden="true"></span> Log
           </button>
 
           </div>
@@ -475,6 +485,7 @@ var last_log = [];
 
         $('#dataset_'+dataset_id+" .btn-show-log").click(dataset_id,showLogButtonHandler);
         $('#dataset_'+dataset_id+' .btn-run-updater').click(dataset_id,triggerUpdater);
+        $('#dataset_'+dataset_id+' .btn-show-table').click(dataset_id,showTabulatorHandler);
 
       }
 
@@ -496,6 +507,7 @@ function showLogButtonHandler(event){
           var selector = ".log_display";
         }
 
+        $(selector).html();
         if(datasets_states[event.data].show_log==0){
           datasets_states[event.data].show_log = 1;
           console.log(datasets_states[event.data]);
@@ -509,6 +521,42 @@ function showLogButtonHandler(event){
 
 
 }
+
+function showTabulatorHandler(event){
+
+        if(!params.id){
+          var selector =  "#dataset_" + datasets_states[event.data].div_id+" .log_display";
+        } else {
+          var selector = ".log_display";
+        }
+
+        $(selector).html();
+
+
+         if(datasets_states[event.data].show_tabulator==0){
+          datasets_states[event.data].show_tabulator = 1;
+          var url =  dataset_preview_url+"?dataset_id=" + event.data+"&limit=10";
+          console.log(url);
+          // url = "data_examples/tabulator_example.json";
+          createTabulator(url, "", selector);
+          $( selector).show();
+        } else {
+          datasets_states[event.data].show_tabulator = 0;
+          //$(selector).hide();
+
+        }
+
+}
+
+
+function showRawHandler(event){
+
+  console.log("raw button");
+  console.log(event);
+  
+
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -868,25 +916,13 @@ console.log("Form loaded.");
 
   "buttons_updater":{
       "type":"any",
-      "title":"Testing",
+      "title":"Testing area",
       "fieldOptions":{
         "fieldClass":"customSubTitle",
         "buttons":{
               "save":{
-                  "title": "Save",
+                  "title": '<span class="glyphicon glyphicon-ok icon-green" aria-hidden="true" ></span> Save dataset',
                   "click": buttonSave
-              },
-               "preview":{
-                  "title": "Preview",
-                  "click": buttonPreview
-              },
-              "run_updater":{
-                  "title": "Run updater",
-                  "click": buttonSave
-              },
-               "run_converter":{
-                  "title": "Run converter",
-                  "click": buttonPreview
               }
               
           }
