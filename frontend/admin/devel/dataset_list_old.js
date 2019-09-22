@@ -11,11 +11,8 @@ $.getJSON(providers_url,function(providers_data) {
   for (var i = 0; i < providers_data.length; i++) {
 
     providers[providers_data[i].id] = providers_data[i];
-    // addProvider( providers[i]);
-    // updateProvider(providers[i]);
   }
   
-  // console.log(providers);
   apiUpdateDatasets();
 
 
@@ -120,25 +117,8 @@ apiUpdateLog("aircrafts","#dataset_aircrafts .log_display");
 
   }
 
-///////////////////////////////////////////////////////////////////////////////////////
-
-  function updateProvider(provider){
-
-    var div_id = "#provider_" + provider.id + " ";
-
-    $(div_id + " .name b").html( provider.meta.et.name + " ");
 
 
-      // $(div_id + " .name").append('<a href="'+ provider.meta.et.url +'">_</a>');
-      // if(typeof provider.wms != "undefined"){
-      //   wms_url = provider.wms[0] + provider.wms[1];
-
-      //   $(div_id + " .name").append(' / Browse: <a href="wms_browser.php?wms_url='+ wms_url +'&wms_service=wms">WMS</a>');
-      //   $(div_id + " .name").append(' <a href="wms_browser.php?wms_url='+ provider.meta.et.url +'&wms_service=wfs">WFS</a>'); 
-
-      // }
- 
-  }
 
   ///////////////////////////////////////////////////////////////////////////////////////
   // Dataset rows

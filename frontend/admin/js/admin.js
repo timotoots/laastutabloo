@@ -112,6 +112,28 @@ function create_header(){
 
 }
 
+function changeIconColor(element, color){
+
+  if($(element).hasClass("icon-"+color)){
+    return true;
+  } else {
+      // remove styles
+     $(element).removeClass("icon-black");
+     $(element).removeClass("icon-gray");
+     $(element).removeClass("icon-blue");
+     $(element).removeClass("icon-green");
+     $(element).removeClass("icon-red");
+
+     $(element).addClass("icon-"+color);
+
+  }
+ 
+
+  
+
+
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////
 
@@ -152,6 +174,11 @@ timeago.register('custom', locale);
 
 // Load specific scripts
 
+function loadJson(url) {
+  return fetch(url)
+    .then(response => response.json());
+}
+
 
 function loadHtmlWithScript(page){
 
@@ -163,7 +190,9 @@ function loadHtmlWithScript(page){
         success: function (result) {
 
         $("body").append(result);
-        if(page != "404"){
+        if(page=="dataset_list" || page=="dataset_edit"){
+          loadJS("js/dataset.js");
+        } else if(page != "404"){
           loadJS("js/" + page + ".js");
         }
         if(page=="dataset_list"){
@@ -193,7 +222,7 @@ $( document ).ready(function() {
        page = params.p + "_edit";
     }
 
-  }
+  } 
 
     loadHtmlWithScript(page); 
 

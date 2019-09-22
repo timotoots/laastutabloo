@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "alpaca": "^1.5.27",
+    "handlebars": "^4.2.1",
     "jquery-quicksand": "^1.6.0",
     "shufflejs": "^5.2.3"
   }

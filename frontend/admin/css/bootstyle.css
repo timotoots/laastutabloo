@@ -55,7 +55,13 @@ body {
   margin-bottom: 20px;
   margin-left: -20px;
 }
+
 .nav-sidebar > li > a {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.nav-sidebar > li > div {
+  padding: 10px 15px;
   padding-right: 20px;
   padding-left: 20px;
 }
@@ -142,3 +148,22 @@ body {
   #tablepreview{
     height: 400px;
   }
+
+
+.icon-red{
+  color: red;
+}
+
+.icon-green{
+  color: #2cff00;
+}
+
+.icon-blue{
+  color: #238DD1;
+}
+.icon-black{
+  color: #000000;
+}
+.icon-gray{
+  color: #CCCCCC;
+}
