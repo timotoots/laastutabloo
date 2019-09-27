@@ -15,6 +15,30 @@ var providers_url = backend_server + "/list_providers";
 var dataset_log_url = backend_server + "/get_log";
 var dataset_preview_url = backend_server + "/dataset_preview";
 
+var queries_url = backend_server + "/list_queries";
+var query_preview_url = backend_server + "/run_query";
+var render_query = backend_server + "/render_query"; //?query_id=avalik&ehak=1234
+
+var save_query_url = backend_server + "/query";
+
+
+var form_lang_choices = {
+  "et":{
+    "type":"string",
+    "title":"Estonian"
+    },
+    "en":{
+    "type":"string",
+    "title":"English"
+    },
+    "ru":{
+    "type":"string",
+    "title":"Russian"
+    }
+};
+
+
+
 
 // Testing version
 // var datasets_url = "http://laastutabloo.erm.ee/admin/js/datasets_example.json";
@@ -114,6 +138,18 @@ function create_header(){
   $("#header").html(html);
 
 }
+
+function getFormData($form){
+    var unindexed_array = $form.serializeArray();
+    var indexed_array = {};
+
+    $.map(unindexed_array, function(n, i){
+        indexed_array[n['name']] = n['value'];
+    });
+
+    return indexed_array;
+}
+
 
 function changeIconColor(element, color){
 
@@ -246,9 +282,12 @@ function loadHtmlWithScript(page){
         async: true,
         success: function (result) {
 
+
         $("body").append(result);
         if(page=="dataset_list" || page=="dataset_edit"){
           loadJS("js/dataset.js");
+        } else if(page=="query_list" || page=="query_edit"){
+          loadJS("js/query.js");
         } else if(page != "404"){
           loadJS("js/" + page + ".js");
         }

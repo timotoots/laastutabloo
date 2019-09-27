@@ -658,6 +658,7 @@ console.log("Form loaded.");
   "id": { 
       "type": "string", 
       "title": "Unique ID",
+      "pattern":"^[a-z]+$",
       "fieldOptions":{
         "disallowEmptySpaces":true
       }

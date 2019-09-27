@@ -1,154 +1,25 @@
+    <div class="container-fluid">
+      <div class="row">
 
-
-  <div class="container">
-    <div>
-      <form action="" method="post">
-        
-        <h3>Query Builder</h3>
-        <hr/>   
-
-        <div class="form-group">
-          <label for="query_id">Query ID:</label>
-          <input type="text" class="form-control" id="query_id" value="avalik">
+        <div class="col-sm-3 col-md-2 sidebar" id="sidebar">         
         </div>
 
-        <p>Unique name of the query preset. Lowercase a-z, no spaces.</p>
-        
-        <!-- //////////////////////////////////////////////////// -->
 
-        <hr/>   
 
-        <div class="form-group">
-          <label for="uname_etsr">Name (Estonian):</label>
-          <input type="text" class="form-control" id="name_et" value="Politsei">
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header">Edit Query</h1>
+
+          <div class="row" id="form1">
+          
+
+          </div>
+          <div id="log_display" class="log_display" style="display:none">Aa</div>
+
+          <div id='map'></div>
+
+
+
         </div>
-
-        <div class="form-group">
-          <label for="name_en">Name (English):</label>
-          <input type="text" class="form-control" id="name_en">
-        </div>
-
-        <div class="form-group">
-          <label for="name_ru">Name (Russian):</label>
-          <input type="text" class="form-control" id="name_ru">
-        </div>
-
-        <p>Title of the slide appears on the display. If not filled, that language is not used.
-
-        <!-- //////////////////////////////////////////////////// -->
-
-        <hr/>
-
-        <h3>Query builder</h3>
-        <div id="query_list"></div>
-        <div class="col-xs-5">
-          <label for="all_classes">Select dataset</label>
-          <select class="form-control" id="all_classes">
-                    <option disabled selected value> -- select a dataset -- </option>
-            {% for o in all_classes %}
-                    <option id="dataset_id" value="{{ o }}">{{ o }}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div><br><br><br>
-        <table border="0">
-            <tr>
-                <div class="col-xs-5">
-                <label for="all_entries">Select resource</label>
-                <select class="form-control" id="all_entries" disabled>
-                    <option value="selectRecource" disabled selected value> -- select a resource -- </option>
-                {% for o in all_entries %}
-                    <option id="resource_id" value="{{ o }}">{{ o }}</option>
-                {% endfor %}
-                </select>
-                </div>
-        
-            </tr><br><br><br><br>
-            {% for fieldValue in fieldValues %}
-            <tr>
-                    <td><input type="checkbox" name="checkbox" id="checkbox_id{{ loop.index0 }}" value="{{fieldValue}}"><input type="text" name="field{{ loop.index0 }}" value="{{fieldValue}}" id="field_id{{ loop.index0 }}" readonly></td>
-                    <td><form action=""><input type="radio" name="radio" id="radio_id{{ loop.index0 }}" value="DESC">desc <input type="radio" name="radio" id="radio_id{{ loop.index0 }}" value="ASC"> asc <input type="radio" name="radio" id="radio_id{{ loop.index0 }}" value="NONE">none</form></td>
-
-                <td>
-                    <select name="modifier{{ loop.index0 }}">
-                        {% for script in scripts%}
-                        <option value= "{{script}}">{{script}}</option>"
-                        {% endfor %}
-                    </select>
-                </td>
-                <td>
-                    <select name="translated{{ loop.index0 }}">
-                        {% for translation in translations%}
-                        <option value= "{{translation}}">{{translation}}</option>"
-                        {% endfor %}
-                    </select>
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-        </div><br><br><br><br>
-        
-        <h3>SQL <span id="hideSQL">(hide)</span><span id="showSQL" hidden>(show)</span></h3>
-        <p id="readSQLinfo">Resulting SQL from query builder, read.only</p>
-        <textarea readonly rows="6" cols="100%" name="readSQL" id="readSQL">
-SELECT name, date, lat, lon from resource_id
-        </textarea>
-
-        <h3>Custom SQL <span id="hideCSQL">(hide)</span><span id="showCSQL" hidden>(show)</span></h3>
-        <p id="readCSQLinfo">Overrides SQL in query builder</p>
-        <textarea rows="6" cols="100%" name="CustomSQL" id="CustomSQL">SELECT * from avalik where ehak_akood = $1</textarea>
-
-        <br/><br/>
-        <button type="button" class="btn" onclick="saveQuery(1)">Test query</button>
-
-
-        <hr>
-        <h3>Data preview</h3>
-        <p>Results from SQL or Custom SQL</p>
-        <div id="tablepreview"></div>
-
-        <!-- //////////////////////////////////////////////////// -->
-
-        <div id='map'></div>
-
-        <!-- //////////////////////////////////////////////////// -->
-
-
-        <hr>
-        <h3>Custom template <span id="hideTemp">(hide)</span><span id="showTemp" hidden>(show)</span></h3>
-        <p id="templateinfo">Formats text in specific way in python sandbox.</p>
-        <textarea rows="6" cols="100%" name="templateSQL" id="templateSQL">
-import time
-for d_in... etc
-        </textarea><br>
-
-        <!-- //////////////////////////////////////////////////// -->
-
-        <hr/>
-
-        <h3>Slide style</h3>
-        <p>How to format slide</p>
-        <p>Style:  <input type="radio" name="format" value="table">table <input type="radio" name="format" value="oneperpage">one per page 
-        &nbsp &nbsp Justified: <input type="radio" name="jformat" value="left">left <input type="radio" name="jformat" value="center">center 
-        <span style="float:right;">Number of pages: <input type="text" name="pages" id="meta_num_pages"></span></p>
-
-        <!-- //////////////////////////////////////////////////// -->
-
-        <hr/>
-
-        <button class="btn" type="button">Preview</button>
-        <button class="btn btn-success" type="button" onclick="saveQuery(0)">Save query</button>
-
-        <!-- //////////////////////////////////////////////////// -->
-
-        <hr>
-        <h3>Local previews</h3>
-        <p>Shows formatted textslides of 8 localities</p>
-   
-        <!-- //////////////////////////////////////////////////// -->
-
+      </div>
     </div>
-
-
-    <script type="text/javascript" src="js/map.js"></script>
 

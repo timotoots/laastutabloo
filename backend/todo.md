@@ -1,10 +1,10 @@
 
-Querybuilder:
-?
+Query:
+* output=geojson
 
 Updater:
 * live api parameters
-* get file preview with truncate function (after unzipping)
+* get file preview with truncate function (after unzipping), api endpoint: /get_dataset_raw
 * alerting CRITICAL to e-mail
 
 Converter:
