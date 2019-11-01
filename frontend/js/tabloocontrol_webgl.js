@@ -296,11 +296,17 @@ function init() {
 
 				if(laastud[x][y].currentLetter != laastud[x][y].newLetter){
 
-					// console.log("Change letter to " + laastud[x][y].newLetter);
+					if(typeof  letters[laastud[x][y].newLetter] === "undefined"){
+						// console.log("No letter texture for " + laastud[x][y].newLetter);
 
-					meshes[x][y].material = letters[laastud[x][y].newLetter].material;
-					laastud[x][y].newLetter = laastud[x][y].currentLetter;
-				}
+					} else {
+
+						meshes[x][y].material = letters[laastud[x][y].newLetter].material;
+						laastud[x][y].newLetter = laastud[x][y].currentLetter;
+		
+					}
+
+						}
 
 
 				///////////////////////////////
