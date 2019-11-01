@@ -40,12 +40,14 @@
 	<!-- Run script -->
 	<script type="text/javascript">
 
-		var letters, ta, tc;
+		var  ta, tc;
+		var letters = {};
 
 		var params = {
 	      laastX: 27, // number of shingles X
 	      laastY: 12 // number of shingles Y
 	    };
+
 	    function promiseLoadJson(url) {
       return fetch(url)
         .then(response => response.json());
@@ -55,13 +57,15 @@
 		promiseLoadJson("json/letters.json")
 			.then(data => new Promise(function(resolve, reject) {
 		   		console.log("Letters loaded");
-		   		letters = data;
-		        resolve(true);
+		   		for (var i = 0; i < data.length; i++) {
+				        letters[data[i].letter] = true;
+				      }
+		        resolve(data);
 		    }))
-		   .then(a => new Promise(function(resolve, reject){
-		   		ta = new TablooAnim({"runInBrowser":1});
+		   .then(letters_mapping => new Promise(function(resolve, reject){
+		   		ta = new TablooAnim({"runInBrowser":1,"letters":letters});
 		   		tc = new TablooControl(params);
-		   		tc.loadLetters(letters);
+		   		tc.loadLetters(letters_mapping);
 		   		console.log("Libraries loaded");
 		   		resolve(true);
 		   } )).then(a => new Promise(function(resolve, reject){
@@ -69,7 +73,6 @@
 		   		start();
 		   		resolve(true);
 		   } ));
-
 
 			function start(){
 				getQueries();
@@ -80,6 +83,8 @@
 
 	  /////////////////////////////////////////////////////////////
 
+	  var animations;
+
 	  function getQueries(ehak,queries,language){
 
 	    var url = "json/slides.json";
@@ -87,7 +92,11 @@
 
 	    $.getJSON( url, function( data ) {
 
-	      ta.parseQueries(data);
+	      animations = ta.animateQueries(data);
+
+	      for (var i = 0; i < animations.length; i++) {
+	      	setTimeout(function(queue){ tc.runQueue(queue)}, 5000*i,animations[i]);
+	      }
 
 	    });
 

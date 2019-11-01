@@ -13,6 +13,8 @@
 
 	// Constructor function
 
+
+
     var TablooControl = function(params_in) {
       	
       	console.log("Start TablooControl WebGL!");
@@ -22,6 +24,7 @@
 		params.laastH = 295; // height of a shingle
 		params.laastD = 10; // depth of a shingle
 		params.margin = 50; // margins around a shingle
+		
 
       	init();
 	  	animate();
@@ -35,10 +38,10 @@
 	var camera, scene, renderer, controls, stats;
 	var mesh;
 	var meshes = [];
+	var letters = {};
 
 	var clock;
 
-	var letters = {};
 	var lastTime = 0;
 
 	var laastud = [];
@@ -222,7 +225,7 @@ function init() {
 
 	function runQueue(queue){
 
-      console.log("Run Queue");
+      // console.log("Run Queue");
 
         for(var x = 0; x < params.laastX; x++){
           for (var y = 0; y < params.laastY; y++) {

@@ -5,10 +5,11 @@
 // Node modules
 var request = require("request");
 var fetch = require('node-fetch');
+var letters = {};
 
 // Our libraries
 var animator = require('./lib_animator.js');
-
+  var ta;
 
 function promiseLoadJson(url) {
   return fetch(url)
@@ -20,12 +21,14 @@ function promiseLoadJson(url) {
 promiseLoadJson("http://laastutabloo.erm.ee/json/letters.json")
 	.then(data => new Promise(function(resolve, reject) {
    		console.log("Letters loaded");
-   		letters = data;
+      for (var i = 0; i < data.length; i++) {
+        letters[data[i].letter] = true;
+      }
         resolve(true);
     }))
    .then(a => new Promise(function(resolve, reject){
    		console.log("Libraries loaded");
-   		var ta = new animator({"runInBrowser":0});
+   		ta = new animator({"runInBrowser":0,"letters":letters});
    		resolve(true);
    } )).then(a => new Promise(function(resolve, reject){
    		console.log("Start!");
@@ -40,8 +43,8 @@ function start(){
 
 	promiseLoadJson(url)
 		.then(data => new Promise(function(resolve, reject) {
-			 console.log(data);
-			 ta.parseQueries()
+			 //console.log(data);
+			 ta.animateQueries(data)
 			 resolve(true);
 		}));
 

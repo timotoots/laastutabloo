@@ -16,63 +16,76 @@
     };
 
     var table;
+      // console.log(letters);
+      var letters;
 
     // Module init
     var TablooAnim = function(options) {
       console.log("Start TablooAnim!");
+      letters = options.letters;
       table = require("table");
-      init();
     };
 
+/////////////////////////////////////////////////////////////
 
-    var queue;
-    
-
-    function init(){
-
-      emptyQueue();
-        
-
+  String.prototype.centerJustify = function( length, char ) {
+    var i=0;
+    var str= this;
+    var toggle= true;
+    while ( i + this.length < length ) {
+      i++;
+    if(toggle)
+      str = str+ char;
+    else
+      str = char+str;
+    toggle = !toggle;
     }
+    return str;
+}
 
-    /////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 
-    function emptyQueue() {
+  function setCharAt(str,index,chr) {
+      if(index > str.length-1) return str;
+      return str.substr(0,index) + chr + str.substr(index+1);
+}
 
-      queue = {};
-    
+/////////////////////////////////////////////////////////////
+
+    function makeEmptyQueue(){
+
+      var emptyQueue = [];
       for(var x = 0; x < params.laastX; x++){
-        queue[x] = {};
+        emptyQueue[x] = [];
         for (var y = 0; y < params.laastY; y++) {
-          queue[x][y] = [];
+          emptyQueue[x][y] = [];
          }
       }
-
-    } // emptyQueue
-
-
-
-    /////////////////////////////////////////////////////////////
-    
-    function rotateRow(x,deg,dir){
-
-      for (var i = 0; i < params.laastX; i++) {
-        setTimeout(function(i,x,dir){
-          tc.rotateLaast(i,x,deg,dir,0);
-        },Math.random()*1000,i,x,dir);
-        
-      }
+      return emptyQueue;
 
     }
 
-    /////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 
+    var emptySlide = [];
+    for (var y = 0; y < params.laastY; y++) {
+        emptySlide.push("".centerJustify(params.laastX," "));
+    }
 
-    function addToQueue(x,y,time,parameter,value=0, value2=0){
+    var headerLine = "".centerJustify(params.laastX,"*");
 
-      if(parameter == "letter" && value ==" "){
+/////////////////////////////////////////////////////////////
+
+   function newQueueElement(time,parameter,value=0, value2=0){
+
+      if(parameter == "letter" && value){
+        value = value.toUpperCase();
+      }
+
+      if(parameter == "letter" && value == " "){
         value = "tyhik";
       }
+
 
       var msg = {};
       msg.time = time;
@@ -80,15 +93,14 @@
       msg.value = value;
       msg.value2 = value2;
      
-      queue[x][y].push(msg);
+      return msg;
 
     }
 
-    /////////////////////////////////////////////////////////////
 
+/////////////////////////////////////////////////////////////
 
-
-    function effect(id){
+    function createTransition(id){
 
 
       ///////////////////////////////
@@ -112,17 +124,19 @@
 
       } else if(id=="random2"){
 
+        var slideQueue = makeEmptyQueue();
+
         dir = 1;
-        deg = 3600;
+        deg = 360;
 
         for (var y = 0; y < params.laastY; y++) {
           for(var x = 0; x < params.laastX; x++){
 
-          addToQueue(x,y,Math.random()*500 + y*500+100,"delay",0);
-          addToQueue(x,y,5000,"rotate",deg,dir);
+          slideQueue[x][y].push(newQueueElement(Math.random()*100 + y*200+100,"rotate",deg,dir) );
 
           } // for
         } // for
+        return slideQueue;
 
       } else {
         return false;
@@ -131,76 +145,106 @@
       ///////////////////////////////
 
 
-
-
     } //   function effect
 
+///////////////////////////////////////////////////////////////
 
-  String.prototype.centerJustify = function( length, char ) {
-    var i=0;
-    var str= this;
-    var toggle= true;
-    while ( i + this.length < length ) {
-      i++;
-    if(toggle)
-      str = str+ char;
-    else
-      str = char+str;
-    toggle = !toggle;
-    }
-    return str;
-}
+    function cleanSlide(slide){
 
+      // check if slides has lines
+      if(!slide.lines && !slide.preset){
+        return false;
 
+      } else if (slide.lines){
 
-    ///////////////////////////////////////////////////////////////
-    
-    function changeSlide(){
+        // check if has all lines
+        for (var y = 0; y < params.laastY; y++) {
+          if(!slide.lines[y]){
+            slide.lines[y] = "".centerJustify(params.laastX," ");
+          } else {
 
-      effect("random2");
+            // check if has all columns
+             for(var x = 0; x < params.laastX; x++){
+                if(!slide.lines[y][x]){
+                  slide.lines[y] = setCharAt(slide.lines[y],x," ");
+                } else {
+                  // Convert to uppercase
+                  slide.lines[y] = setCharAt(slide.lines[y],x,slide.lines[y][x].toUpperCase());
+                }
 
-      for (var y = 0; y < nextSlides[0].length; y++) {
-
-        // put
-        if(typeof nextSlides[0][y] === "string"){
-          console.log("string");
-          var a = nextSlides[0][y];
-
-          nextSlides[0][y] =  {};
-          nextSlides[0][y]["et"] = a;
-
-        } 
-
-        console.log("Next slides:");
-        console.log(nextSlides);
-
-        for(var x = 0; x < params.laastX; x++){
-          if(typeof nextSlides[0][y]["et"] != "undefined"){
-             addToQueue(x,y,10,"letter",nextSlides[0][y]["et"][x].toUpperCase())
+                // Find not defined characters
+                if(!letters[slide.lines[y][x]] && slide.lines[y][x]!=" "){
+                  console.log("Character not found. Make one: " + slide.lines[y][x]);
+                  slide.lines[y] = setCharAt(slide.lines[y],x,".");
+                }
+              } // for
           }
+
+        } // for
+
+    }
+
+    return slide;
+
+  } // function
+
+
+
+///////////////////////////////////////////////////////////////
+    
+    function animateSlides(slides){
+
+      // console.log("Animate clean slides:");
+
+
+      var previousSlide = emptySlide;
+
+      var playlist = [];
+
+      for(var i in slides){
+
+        // console.log("Slide:" + i);
+
+        var slideQueue = makeEmptyQueue(); 
+
+        slides[i] = cleanSlide(slides[i]);
+
+        // console.log(slides[i]);
+        
+        if(slides[i].lines) {
+
+            for (var y = 0; y < params.laastY; y++) {
+              for(var x = 0; x < params.laastX; x++){
+                if(slides[i].lines[y][x]){
+                  slideQueue[x][y].push(newQueueElement(10,"rotate",slides[i].lines[y][x]));
+                  slideQueue[x][y].push(newQueueElement(10,"letter",slides[i].lines[y][x]));
+                }
+              } 
+            }
+
         }
 
+        playlist.push(slideQueue);
+
+        playlist.push(createTransition("random2"));
+
+      } // for all slides
+
+      return playlist;
 
 
-
-      }
-
+    }
 
 
-      tc.runQueue(queue);
-      emptyQueue();
-
-    } 
-
-    /////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
 
 
-    function createDistrictHeader(queries){
+    function formatDistrictHeader(district){
 
-        var districtName = queries.district.name;
+        var districtName = district.name;
         var line = {};
 
-        var titles = queries.district.type;
+        var titles = district.type;
 
         // Remove too long translations
         for(lang in titles){
@@ -222,23 +266,22 @@
           line[lang] = titles[lang].centerJustify(params.laastX,"*");
         }
 
-        console.log(line);
         return line;
-
-     
 
     }
 
-  /////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
 
-  function createSlideTitle(query){
+  function formatSlideTitle(name){
 
-     for(lang in query.name){
-          query.name[lang] = query.name[lang].centerJustify(params.laastX,"*");
+     for(lang in name){
+          name[lang] = name[lang].centerJustify(params.laastX,"*");
         }
-        return query.name;
+        return name;
 
   }
+
+///////////////////////////////////////////////////////////////
 
   function formatToTable(query){
 
@@ -322,7 +365,7 @@
 
         var output = table.table(table_data,options);
 
-        console.log(output);
+      //  console.log(output);
 
 
         return output;
@@ -330,7 +373,7 @@
 
   }
 
-/////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
 
 function countQueryColumn(query){
 
@@ -377,7 +420,7 @@ function countQueryColumn(query){
 
 
  
-    console.log( query.config.columns[j]);
+   // console.log( query.config.columns[j]);
 
   }
 
@@ -386,7 +429,7 @@ function countQueryColumn(query){
    for (var j = 0 ;j < query.config.columns.length; j++){
     total_width = total_width + query.config.columns[j].text_supermax;
    }
-       console.log(total_width);
+     //  console.log(total_width);
 
 
    if(total_width > params.laastX){
@@ -400,7 +443,7 @@ function countQueryColumn(query){
 
 }
 
-/////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
 
 function splitPages(text){
 
@@ -433,20 +476,23 @@ function splitPages(text){
   }
   
       pages[currentPage] = pages[currentPage].concat(currentElementLines);
-      console.log("Pages:");
-     console.log(pages);
+    
+     //  console.log("Pages:");
+     // console.log(pages);
 
   return pages;
 
 }
 
-/////////////////////////////////////////////////////////////
-
-    var nextSlides = [];
-
-function parseQueries(queries){
+///////////////////////////////////////////////////////////////
 
 
+function animateQueries(queries){
+
+
+      var nextSlides = [];
+
+      /*
       let data,
           output;
 
@@ -460,119 +506,55 @@ function parseQueries(queries){
 
       console.log(output);
 
+*/
 
-      var districtHeader = createDistrictHeader(queries);
-
-      var headerLine = "".centerJustify(params.laastX,"*");
-
-      var lines = [];
-
-      lines.push(districtHeader);
-      lines.push(headerLine);
-
-
+      var districtHeaders = formatDistrictHeader(queries.district);
 
       var newSlides = [];
-       
 
 
       for(var query_id in queries.queries){
 
-        var slideLines = lines;
-
-
-
+        // Query metadata
         queries.queries[query_id] = countQueryColumn(queries.queries[query_id]);
-
         var query = queries.queries[query_id];
+        var queryTitle  = formatSlideTitle(query.config.name);
 
-        var queryTitle  = createSlideTitle(query);
-
+        // Format data
         var text = formatToTable(query);
-
         var pages = splitPages(text);
 
+        // Create slides from pages
         for (var i = 0; i < pages.length; i++) {
-          newSlides.push(slideLines.concat(pages[i]))
-        }
+
+            var slideLines = [];
+
+            slideLines.push(districtHeaders["et"]);
+            slideLines.push(queryTitle["et"]);
+            slideLines.push(headerLine);
+            slideLines = slideLines.concat(pages[i]);
+            newSlides.push({"lines":slideLines});
+
+        } // for pages
         
 
 
       }
 
-        console.log("New slides:");
+        var playlist = animateSlides(newSlides)
 
-        console.log(newSlides);
+        // console.log("New playlist:");
+        // console.log(playlist);
 
-      // for (var i = 0; i < slides.queries.length; i++) {
-
-      //   if(slides.queries[i].data){
-
-
-      //     if()
-
-      //       for (var j = 0; j < slides.queries[i].pages.length; j++) {
-
-      //         newSlides.push(slides.queries[i].pages[j]);
-
-      //       }
-
-
-      //   }
-      // }
-
-      nextSlides = newSlides;
-      changeSlide();
-
+        return playlist;
 
     }
 
-  /////////////////////////////////////////////////////////////
-
-  
-/////////////////////////////////////////////////////////////
-  function loadJSON(path, success_func, error_func){
-
-    if (typeof window === 'undefined'){
-
-      require("request")(
-        {url: path,json: true}, 
-        function (error, response, body) {
-          if (!error && response.statusCode === 200) {
-              success_func(body);
-          } else if(error_func) {
-              error_func(body);
-          }
-        });
-    
-
-    } else {
-
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function(){
-
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    if (success_func)
-                        success_func(JSON.parse(xhr.responseText));
-                } else {
-                    if (error)
-                        error_func(xhr);
-                }
-            }
-        };
-        xhr.open("GET", path, true);
-        xhr.send();
-    }
-
-  }
 
 
+///////////////////////////////////////////////////////////////
 
-  /////////////////////////////////////////////////////////////
-
-    TablooAnim.prototype.rotateRow = rotateRow;
-    TablooAnim.prototype.parseQueries = parseQueries;
+    TablooAnim.prototype.animateQueries = animateQueries;
 
     return TablooAnim;
 
