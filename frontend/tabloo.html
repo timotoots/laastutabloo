@@ -18,7 +18,7 @@
 		<script src="lib/node_modules/three/examples/js/controls/OrbitControls.js"></script>
 		<script src="lib/node_modules/three/examples/js/libs/stats.min.js"></script>
 		<script src="js/tabloocontrol_webgl.js"></script>
-		<script src="js/tablooanim.js"></script>
+		<script src="js/lib_animator.js"></script>
 		<script src="lib/bundle.min.js"></script>
 
 	</head>
@@ -40,15 +40,61 @@
 	<!-- Run script -->
 	<script type="text/javascript">
 
-		 var params = {
+		var letters, ta, tc;
+
+		var params = {
 	      laastX: 27, // number of shingles X
 	      laastY: 12 // number of shingles Y
 	    };
+	    function promiseLoadJson(url) {
+      return fetch(url)
+        .then(response => response.json());
+    }
+	
 
-		var tc = new TablooControl(params);
-		var ta = new TablooAnim({"runInBrowser":1});
+		promiseLoadJson("json/letters.json")
+			.then(data => new Promise(function(resolve, reject) {
+		   		console.log("Letters loaded");
+		   		letters = data;
+		        resolve(true);
+		    }))
+		   .then(a => new Promise(function(resolve, reject){
+		   		ta = new TablooAnim({"runInBrowser":1});
+		   		tc = new TablooControl(params);
+		   		tc.loadLetters(letters);
+		   		console.log("Libraries loaded");
+		   		resolve(true);
+		   } )).then(a => new Promise(function(resolve, reject){
+		   		console.log("Start!");
+		   		start();
+		   		resolve(true);
+		   } ));
 
 
+			function start(){
+				getQueries();
+			}
+
+
+
+
+	  /////////////////////////////////////////////////////////////
+
+	  function getQueries(ehak,queries,language){
+
+	    var url = "json/slides.json";
+	    url =  "http://laastutabloo.erm.ee:5000/render_query?query_id=avalik&ehak=446";
+
+	    $.getJSON( url, function( data ) {
+
+	      ta.parseQueries(data);
+
+	    });
+
+	  } // function
+
+
+	  /////////////////////////////////////////////////////////////
 
 	</script>
 

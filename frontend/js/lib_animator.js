@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
 //
-//  TablooAnim - downloading and displaying data on the screen
+//  ANIMATOR library - creates animations based on data
 // 
-//  For both web and museum versions
+//  Used for both web and museum versions
 //
 ///////////////////////////////////////////////////////////////////////////
 
@@ -10,28 +10,17 @@
 (function() {
   var TablooAnim= (function() {
 
-
-
-
-
-
     var params = {
       laastX: 27, // number of shingles X
       laastY: 12 // number of shingles Y
     };
 
-
-
-    console.log(queue);
     var table;
 
     // Module init
     var TablooAnim = function(options) {
       console.log("Start TablooAnim!");
       table = require("table");
-
-      getLetters();
-      getQueries();
       init();
     };
 
@@ -42,8 +31,6 @@
     function init(){
 
       emptyQueue();
-      // setTimeout(function(){ effect("random"); },3000);
-      // setTimeout(function(){ effect("random2"); },14000);
         
 
     }
@@ -63,18 +50,7 @@
 
     } // emptyQueue
 
-    /////////////////////////////////////////////////////////////
 
-
-    function getLetters(){
-
-      loadJSON( "json/letters.json", function( data ) {
-        tc.loadLetters(data);
-
-      });
-
-
-    }
 
     /////////////////////////////////////////////////////////////
     
@@ -208,6 +184,7 @@
 
 
       }
+
 
 
       tc.runQueue(queue);
@@ -552,45 +529,50 @@ function parseQueries(queries){
 
   /////////////////////////////////////////////////////////////
 
+  
+/////////////////////////////////////////////////////////////
+  function loadJSON(path, success_func, error_func){
 
-  function loadJSON(path, success, error){
+    if (typeof window === 'undefined'){
 
-      var xhr = new XMLHttpRequest();
-      xhr.onreadystatechange = function(){
-
-          if (xhr.readyState === XMLHttpRequest.DONE) {
-              if (xhr.status === 200) {
-                  if (success)
-                      success(JSON.parse(xhr.responseText));
-              } else {
-                  if (error)
-                      error(xhr);
-              }
+      require("request")(
+        {url: path,json: true}, 
+        function (error, response, body) {
+          if (!error && response.statusCode === 200) {
+              success_func(body);
+          } else if(error_func) {
+              error_func(body);
           }
-      };
-      xhr.open("GET", path, true);
-      xhr.send();
+        });
+    
+
+    } else {
+
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function(){
+
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    if (success_func)
+                        success_func(JSON.parse(xhr.responseText));
+                } else {
+                    if (error)
+                        error_func(xhr);
+                }
+            }
+        };
+        xhr.open("GET", path, true);
+        xhr.send();
+    }
 
   }
 
-  /////////////////////////////////////////////////////////////
 
-  function getQueries(ehak,queries,language){
-
-    var url = "json/slides.json";
-    url =  "http://laastutabloo.erm.ee:5000/render_query?query_id=avalik&ehak=446";
-
-    loadJSON( url, function( data ) {
-
-      parseQueries(data);
-
-    });
-
-  } // function
 
   /////////////////////////////////////////////////////////////
 
     TablooAnim.prototype.rotateRow = rotateRow;
+    TablooAnim.prototype.parseQueries = parseQueries;
 
     return TablooAnim;
 
