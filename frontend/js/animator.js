@@ -26,9 +26,10 @@ promiseLoadJson("http://laastutabloo.erm.ee/json/letters.json")
       }
         resolve(true);
     }))
-   .then(a => new Promise(function(resolve, reject){
+   .then(a => promiseLoadJson("http://laastutabloo.erm.ee/json/bigfont.json"))
+   .then(bigfont => new Promise(function(resolve, reject){
    		console.log("Libraries loaded");
-   		ta = new animator({"runInBrowser":0,"letters":letters});
+   		ta = new animator({"runInBrowser":0,"letters":letters,"bigfont":bigfont});
    		resolve(true);
    } )).then(a => new Promise(function(resolve, reject){
    		console.log("Start!");
@@ -40,6 +41,7 @@ promiseLoadJson("http://laastutabloo.erm.ee/json/letters.json")
 function start(){
 
 	var url = "http://laastutabloo.erm.ee:5000/render_query?query_id=avalik&ehak=446";
+  var url = "http://laastutabloo.erm.ee/json/query.json";
 
 	promiseLoadJson(url)
 		.then(data => new Promise(function(resolve, reject) {

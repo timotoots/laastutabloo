@@ -209,6 +209,12 @@ function init() {
 
 	function rotateLaast(x,y,deg,dir,time){
 
+		if(dir=="F"){
+			dir = 1;
+		} else {
+			dir = -1;
+		}
+
 		laastud[x][y].rotateDirection = dir;
 		laastud[x][y].targetRotation = deg;
 
@@ -226,37 +232,37 @@ function init() {
 	function runQueue(queue){
 
       // console.log("Run Queue");
+      console.log(queue);
 
         for(var x = 0; x < params.laastX; x++){
           for (var y = 0; y < params.laastY; y++) {
            
-          	queue[x][y].laastTime = 0;
+          	// queue[x][y].laastTime = 0;
 
             for (var i in queue[x][y]){
 
               var msg = queue[x][y][i];
 
 
-              if(msg.parameter == "delay"){
+              if(msg.cmd == "rotate"){
 
-                queue[x][y].laastTime += msg.time;
-
-              } else if(msg.parameter == "rotate"){
-
-                queue[x][y].laastTime += msg.time;
+                // queue[x][y].laastTime += msg.delay;
 
                 setTimeout(function(x,y,deg,dir){
                    rotateLaast(x,y,deg,dir,0);
-                 },queue[x][y].laastTime,x,y,msg.value,msg.value2,0);
+                 },msg.delay,x,y,msg.degree,msg.direction,0);
 
 
-              } else if(msg.parameter == "letter"){
+              } else if(msg.cmd == "change_letter"){
+
 
                 setTimeout(function(x,y,letter){
                    changeLetter(x,y,letter);
-                 },queue[x][y].laastTime,x,y,msg.value);
+                 },msg.delay,x,y,msg.letter);
 
-                queue[x][y].laastTime += msg.time;
+                 // queue[x][y].laastTime += msg.delay;
+
+
               }
 
             }

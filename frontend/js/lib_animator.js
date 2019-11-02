@@ -17,12 +17,24 @@
 
     var table;
       // console.log(letters);
-      var letters;
+    var letters;
+    var bigfont = {};
+
+    const monthNames = {};
+
+    monthNames["en"] = ["January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    monthNames["et"] = ["Jaanuar", "Veebruar", "Märts", "Aprill", "Mai", "Juuni",
+      "Juuli", "August", "September", "Oktoober", "November", "Detsember"
+    ];
 
     // Module init
     var TablooAnim = function(options) {
       console.log("Start TablooAnim!");
       letters = options.letters;
+      bigfont = options.bigfont;
+
       table = require("table");
     };
 
@@ -76,24 +88,55 @@
 
 /////////////////////////////////////////////////////////////
 
-   function newQueueElement(time,parameter,value=0, value2=0){
-
-      if(parameter == "letter" && value){
-        value = value.toUpperCase();
-      }
-
-      if(parameter == "letter" && value == " "){
-        value = "tyhik";
-      }
-
+   function newQueueElement(delay, cmd, value1 = false, value2 = false, value3 = false){
 
       var msg = {};
-      msg.time = time;
-      msg.parameter = parameter;
-      msg.value = value;
-      msg.value2 = value2;
-     
-      return msg;
+      msg.delay = delay;
+      msg.cmd = cmd;
+
+      ///////////////
+
+      if(cmd == "change_letter" && value1){
+
+         value1 = value1.toUpperCase();
+         if(value1 == " "){
+          value1 = "tyhik";
+         }
+
+         msg.letter = value1;
+         return msg;
+
+      }
+
+      ///////////////
+
+      if(cmd == "flip" && value1 != 0 && (value2 == "F" || value2 == "B") && value3 > 0){
+
+        msg.rotations = value1;
+        msg.direction = value2;
+        msg.speed = value3;
+
+        return msg;
+
+      } 
+
+      ///////////////
+
+      if(cmd == "rotate" && value1 != false && (value2 == "F" || value2 == "B") && value3 > 0){
+
+        msg.degree = value1;
+        msg.direction = value2;
+        msg.speed = value3;
+        return msg;
+
+      } 
+
+      ///////////////
+      
+      console.error("Queue element not made");
+      console.error(msg);   
+      
+      return false;
 
     }
 
@@ -107,14 +150,14 @@
 
       if(id=="random"){
 
-        dir = 1;
+        dir = "F";
         deg = 1080;
 
         for (var y = 0; y < params.laastY; y++) {
           for(var x = 0; x < params.laastX; x++){
 
            addToQueue(x,y,Math.random()*1000+2000,"delay",0);
-           addToQueue(x,y,4000,"rotate",deg,dir);
+           addToQueue(x,y,4000,"rotate",deg,dir,10);
 
 
           } // for
@@ -126,13 +169,13 @@
 
         var slideQueue = makeEmptyQueue();
 
-        dir = 1;
+        dir = "F";
         deg = 360;
 
         for (var y = 0; y < params.laastY; y++) {
           for(var x = 0; x < params.laastX; x++){
 
-          slideQueue[x][y].push(newQueueElement(Math.random()*100 + y*200+100,"rotate",deg,dir) );
+          slideQueue[x][y].push(newQueueElement(Math.random()*100 + y*200+100,"rotate",deg,dir,10) );
 
           } // for
         } // for
@@ -216,8 +259,8 @@
             for (var y = 0; y < params.laastY; y++) {
               for(var x = 0; x < params.laastX; x++){
                 if(slides[i].lines[y][x]){
-                  slideQueue[x][y].push(newQueueElement(10,"rotate",slides[i].lines[y][x]));
-                  slideQueue[x][y].push(newQueueElement(10,"letter",slides[i].lines[y][x]));
+                 // slideQueue[x][y].push(newQueueElement(10,"rotate",10,"F",10));
+                  slideQueue[x][y].push(newQueueElement(10,"change_letter",slides[i].lines[y][x]));
                 }
               } 
             }
@@ -238,37 +281,88 @@
 
 ///////////////////////////////////////////////////////////////
 
+function createBigfontSlide(str){
 
-    function formatDistrictHeader(district){
-
-        var districtName = district.name;
-        var line = {};
-
-        var titles = district.type;
-
-        // Remove too long translations
-        for(lang in titles){
-          var title = " " + districtName + " " + titles[lang] + " ";
-          if(title.length > params.laastX){
-            delete(titles[lang]);
-          } else {
-            titles[lang] = title;
-          }
-        }
-
-        // All translations too long, show only district name
-        if(titles.length==0){
-          titles["et"] = districtName;
-        }
-
-
-        for(lang in titles){
-          line[lang] = titles[lang].centerJustify(params.laastX,"*");
-        }
-
-        return line;
-
+  var symbol = [];
+  for (var i = 0; i < str.length; i++) {
+    if(bigfont[str[i]]){
+      symbol.push(bigfont[str[i]]);
+    } else {
+      symbol.push(bigfont[" "]);
     }
+  }
+
+  var lines = [[],[],[],[],[],[],[]];
+
+  for (var y = 0; y < 7; y++) {  
+    for (var i = 0; i < symbol.length; i++) {
+      if(symbol[i][y]){
+        lines[y].push(symbol[i][y].replace(/#/g,"*") + " ");
+      }
+    }
+  }
+
+  for (var i = 0; i < lines.length; i++) {
+    lines[i] = " " +lines[i].join("");
+  }
+
+  return lines;
+
+}
+
+///////////////////////////////////////////////////////////////
+
+function createTimeSlide(){
+
+  var d = new Date();
+  var time = (d.getHours() < 10 ? '0' : '') + d.getHours() + ":" + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
+  var date = d.getDate() + ". " + monthNames["et"][d.getMonth()] + " " + d.getFullYear();
+
+  var lines = [];
+  lines.push("".centerJustify(params.laastX," "));
+  lines = lines.concat(createBigfontSlide(time));
+  lines.push("".centerJustify(params.laastX," "));
+  lines.push((" " + date + " ").centerJustify(params.laastX,"*"));
+  lines.push("".centerJustify(params.laastX," "));
+  lines.push("".centerJustify(params.laastX," "));
+
+  return {"lines":lines};
+
+}
+
+
+///////////////////////////////////////////////////////////////
+
+  function formatDistrictHeader(district){
+
+      var districtName = district.name;
+      var line = {};
+
+      var titles = district.type;
+
+      // Remove too long translations
+      for(lang in titles){
+        var title = " " + districtName + " " + titles[lang] + " ";
+        if(title.length > params.laastX){
+          delete(titles[lang]);
+        } else {
+          titles[lang] = title;
+        }
+      }
+
+      // All translations too long, show only district name
+      if(titles.length==0){
+        titles["et"] = districtName;
+      }
+
+
+      for(lang in titles){
+        line[lang] = titles[lang].centerJustify(params.laastX,"*");
+      }
+
+      return line;
+
+  }
 
 ///////////////////////////////////////////////////////////////
 
@@ -511,6 +605,8 @@ function animateQueries(queries){
       var districtHeaders = formatDistrictHeader(queries.district);
 
       var newSlides = [];
+      
+      newSlides.push(createTimeSlide());
 
 
       for(var query_id in queries.queries){
@@ -540,6 +636,7 @@ function animateQueries(queries){
 
 
       }
+
 
         var playlist = animateSlides(newSlides)
 
