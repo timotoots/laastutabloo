@@ -8,7 +8,7 @@
 
 
 (function() {
-  var TablooAnim= (function() {
+  var Animator= (function() {
 
     var params = {
       laastX: 27, // number of shingles X
@@ -17,7 +17,7 @@
 
     var table;
       // console.log(letters);
-    var letters;
+    var allowedLetters;
     var bigfont = {};
 
     const monthNames = {};
@@ -30,9 +30,9 @@
     ];
 
     // Module init
-    var TablooAnim = function(options) {
-      console.log("Start TablooAnim!");
-      letters = options.letters;
+    var Animator = function(options) {
+      console.log("Loaded Lib Animator!");
+      allowedLetters = options.allowedLetters;
       bigfont = options.bigfont;
 
       table = require("table");
@@ -91,7 +91,7 @@
    function newQueueElement(delay, cmd, value1 = false, value2 = false, value3 = false){
 
       var msg = {};
-      msg.delay = delay;
+      msg.delay = Math.round(delay);
       msg.cmd = cmd;
 
       ///////////////
@@ -145,29 +145,32 @@
 
     function createTransition(id){
 
+       var slideQueue = makeEmptyQueue();
+
+       // id= "random3";
 
       ///////////////////////////////
 
-      if(id=="random"){
+      if(id=="random1"){
 
-        dir = "F";
+        dir = "B";
         deg = 1080;
 
         for (var y = 0; y < params.laastY; y++) {
           for(var x = 0; x < params.laastX; x++){
 
-           addToQueue(x,y,Math.random()*1000+2000,"delay",0);
-           addToQueue(x,y,4000,"rotate",deg,dir,10);
+
+          slideQueue[x][y].push(newQueueElement(Math.random()*100 + x*150,"flip",2,dir,10) );
 
 
           } // for
         } // for
+          return slideQueue;
 
       ///////////////////////////////
 
       } else if(id=="random2"){
 
-        var slideQueue = makeEmptyQueue();
 
         dir = "F";
         deg = 360;
@@ -175,7 +178,22 @@
         for (var y = 0; y < params.laastY; y++) {
           for(var x = 0; x < params.laastX; x++){
 
-          slideQueue[x][y].push(newQueueElement(Math.random()*100 + y*200+100,"rotate",deg,dir,10) );
+          slideQueue[x][y].push(newQueueElement(Math.random()*100 + y*200+100,"flip",1,dir,10) );
+
+          } // for
+        } // for
+        return slideQueue;
+
+      } else if(id=="random3"){
+
+
+        for (var y = 0; y < params.laastY; y++) {
+          for(var x = 0; x < params.laastX; x++){
+
+          var rando = Math.round(Math.random()*65+50);
+
+          slideQueue[x][y].push(newQueueElement(0,"rotate",rando,"F",10) );
+          slideQueue[x][y].push(newQueueElement(Math.random()*1000+3000,"rotate",360-rando,"F",10) );
 
           } // for
         } // for
@@ -209,14 +227,14 @@
             // check if has all columns
              for(var x = 0; x < params.laastX; x++){
                 if(!slide.lines[y][x]){
-                  slide.lines[y] = setCharAt(slide.lines[y],x," ");
+                  slide.lines[y] = setCharAt(slide.lines[y],x,".");
                 } else {
                   // Convert to uppercase
                   slide.lines[y] = setCharAt(slide.lines[y],x,slide.lines[y][x].toUpperCase());
                 }
 
                 // Find not defined characters
-                if(!letters[slide.lines[y][x]] && slide.lines[y][x]!=" "){
+                if(!allowedLetters[slide.lines[y][x]] && slide.lines[y][x]!=" "){
                   console.log("Character not found. Make one: " + slide.lines[y][x]);
                   slide.lines[y] = setCharAt(slide.lines[y],x,".");
                 }
@@ -246,6 +264,9 @@
 
       for(var i in slides){
 
+
+        if(slides[i].lines){
+
         // console.log("Slide:" + i);
 
         var slideQueue = makeEmptyQueue(); 
@@ -259,17 +280,30 @@
             for (var y = 0; y < params.laastY; y++) {
               for(var x = 0; x < params.laastX; x++){
                 if(slides[i].lines[y][x]){
-                 // slideQueue[x][y].push(newQueueElement(10,"rotate",10,"F",10));
-                  slideQueue[x][y].push(newQueueElement(10,"change_letter",slides[i].lines[y][x]));
+                  var rando = Math.random()*300;
+
+                  slideQueue[x][y].push(newQueueElement(rando,"flip",2,"F",10));
+                  slideQueue[x][y].push(newQueueElement(rando + 500,"change_letter",slides[i].lines[y][x]));
                 }
               } 
             }
-
         }
 
-        playlist.push(slideQueue);
+        playlist.push({"sequence":slideQueue,"waitAfter":10000,"type":"contentSlide"});
 
-        playlist.push(createTransition("random2"));
+        // Add random transition between slides
+        var rand = 3;
+        rand = Math.floor(Math.random()*(rand-1+1)+1);
+
+        var transition = createTransition("random" + rand);
+        playlist.push({"sequence":transition,"waitAfter":10000,"type":"effectTransition"});
+
+        } else if(slides[i].customAnimation) {
+          playlist.push({"sequence":false,"waitAfter":10000,"type":"customAnimation","customAnimation":slides[i].customAnimation})
+        }
+
+
+
 
       } // for all slides
 
@@ -281,20 +315,33 @@
 
 ///////////////////////////////////////////////////////////////
 
-function createBigfontSlide(str){
+function createBigfontSlide(str, enable_emoticons = false){
 
   var symbol = [];
-  for (var i = 0; i < str.length; i++) {
-    if(bigfont[str[i]]){
-      symbol.push(bigfont[str[i]]);
-    } else {
-      symbol.push(bigfont[" "]);
-    }
+
+  if(enable_emoticons){
+      if(bigfont[str]){
+          symbol.push(bigfont[str]);
+      }
+  } else {
+      for (var i = 0; i < str.length; i++) {
+        if(bigfont[str[i]]){
+          symbol.push(bigfont[str[i]]);
+        } else {
+          symbol.push(bigfont[" "]);
+        }
+      }
+
   }
 
-  var lines = [[],[],[],[],[],[],[]];
+  if(enable_emoticons){
+    var lines = [[],[],[],[],[],[],[],[],[],[],[],[]];
+  } else {
+    var lines = [[],[],[],[],[],[],[]];
+  }
 
-  for (var y = 0; y < 7; y++) {  
+
+  for (var y = 0; y < lines.length; y++) {  
     for (var i = 0; i < symbol.length; i++) {
       if(symbol[i][y]){
         lines[y].push(symbol[i][y].replace(/#/g,"*") + " ");
@@ -304,7 +351,11 @@ function createBigfontSlide(str){
 
   for (var i = 0; i < lines.length; i++) {
     lines[i] = " " +lines[i].join("");
+    lines[i] = lines[i].centerJustify(params.laastX," ");
+
   }
+
+
 
   return lines;
 
@@ -316,20 +367,41 @@ function createTimeSlide(){
 
   var d = new Date();
   var time = (d.getHours() < 10 ? '0' : '') + d.getHours() + ":" + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
-  var date = d.getDate() + ". " + monthNames["et"][d.getMonth()] + " " + d.getFullYear();
+  var date = d.getDate() + "." + monthNames["et"][d.getMonth()] + " " + d.getFullYear();
 
   var lines = [];
   lines.push("".centerJustify(params.laastX," "));
-  lines = lines.concat(createBigfontSlide(time));
+  lines = lines.concat(createBigfontSlide(time.toString()));
   lines.push("".centerJustify(params.laastX," "));
-  lines.push((" " + date + " ").centerJustify(params.laastX,"*"));
-  lines.push("".centerJustify(params.laastX," "));
+  lines.push((" " + date.toString() + " ").centerJustify(params.laastX,"*"));
+  lines.push("HAPPY BIRTHDAY, DEREK!".centerJustify(params.laastX," "));
   lines.push("".centerJustify(params.laastX," "));
 
   return {"lines":lines};
 
 }
 
+///////////////////////////////////////////////////////////////
+
+function createAnimationLibarySlide(id){
+
+
+  return {"lines":false,"customAnimation":id};
+
+
+}
+
+///////////////////////////////////////////////////////////////
+
+function createEmoticonSlide(){
+
+  var lines = [];
+  lines = lines.concat(createBigfontSlide("_smile",true));
+
+  return {"lines":lines};
+
+
+}
 
 ///////////////////////////////////////////////////////////////
 
@@ -606,8 +678,13 @@ function animateQueries(queries){
 
       var newSlides = [];
       
-      newSlides.push(createTimeSlide());
+      
 
+
+      newSlides.push(createTimeSlide());
+      newSlides.push(createAnimationLibarySlide("jasper1"));
+
+      newSlides.push(createEmoticonSlide());
 
       for(var query_id in queries.queries){
 
@@ -640,8 +717,8 @@ function animateQueries(queries){
 
         var playlist = animateSlides(newSlides)
 
-        // console.log("New playlist:");
-        // console.log(playlist);
+         // console.log("New playlist:");
+         // console.log(playlist);
 
         return playlist;
 
@@ -651,14 +728,14 @@ function animateQueries(queries){
 
 ///////////////////////////////////////////////////////////////
 
-    TablooAnim.prototype.animateQueries = animateQueries;
+    Animator.prototype.animateQueries = animateQueries;
 
-    return TablooAnim;
+    return Animator;
 
   })();
 
   if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
-    module.exports = TablooAnim;
+    module.exports = Animator;
   else
-    window.TablooAnim = TablooAnim;
+    window.Animator = Animator;
 })();

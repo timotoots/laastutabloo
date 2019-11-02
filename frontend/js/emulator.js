@@ -1,55 +1,83 @@
 ///////////////////////////////////////////////////////////////////////////
 //
-//  TablooControl interface of WebGL version
+//  WebGL Emulator
 // 
-//  Exposes functions: changeLetter, rotateLaast, runQueue
-//
 ///////////////////////////////////////////////////////////////////////////
 
-(function() {
 
-  var TablooControl = (function() {
+// Global parameters
+var params = {
+	laastX: 27, // Global: number of shingles X
+	laastY: 12 // Global: number of shingles Y
+};
 
-
-	// Constructor function
-
-
-
-    var TablooControl = function(params_in) {
-      	
-      	console.log("Start TablooControl WebGL!");
-		
-		params = params_in;
-		params.laastW = 180; // width of a shingle
-		params.laastH = 295; // height of a shingle
-		params.laastD = 10; // depth of a shingle
-		params.margin = 50; // margins around a shingle
-		
-
-      	init();
-	  	animate();
-
-    };
+// Emulator specific parameters
+params.laastW = 180; // Emulator: width of a shingle
+params.laastH = 295; // Emulator: height of a shingle
+params.laastD = 40;  // Emulator: depth of a shingle
+params.margin = 50;  // Emulator: margins around a shingle
 
 
-    // Global variables
-  	var params;
+///////////////////////////////////////////////////////////////////////////
 
-	var camera, scene, renderer, controls, stats;
-	var mesh;
-	var meshes = [];
-	var letters = {};
+// Letters in different formats
+var letterMapping = {};
+var allowedLetters = {};
 
-	var clock;
+// WebGL specifics
+var camera, scene, renderer, controls, stats;
+var mesh;
+var meshes = [];
+var letters = {};
+var clock;
+var lastTime = 0;
+var laastud = [];
 
-	var lastTime = 0;
+// Animator Library
+var ta;
 
-	var laastud = [];
+///////////////////////////////////////////////////////////////////////////
+// Load emulator
 
-	///////////////////////////////
+promiseLoadJson("json/letters.json")
+	.then(data => new Promise(function(resolve, reject) {
+
+   		for (var i = 0; i < data.length; i++) {
+        	allowedLetters[data[i].letter] = true;
+        	delete data[i].segments; // do not need segements in emulator
+      	}
+      	letterMapping = data;
+   		console.log("Letters loaded");
+        resolve(true);
+
+    })).then(a => promiseLoadJson("json/bigfont.json"))
+    .then(bigfont => new Promise(function(resolve, reject){
+
+   		console.log("Bigfont loaded!");
+
+   		// Load animator
+    	var animatorParams = params;
+    	animatorParams.bigfont = bigfont;
+    	animatorParams.runInBrowser = 1;
+    	animatorParams.allowedLetters = allowedLetters;
+   		ta = new Animator(animatorParams);
 
 
-function init() {
+   		console.log("Libraries loaded");
+
+   		resolve(true);
+   } )).then(a => new Promise(function(resolve, reject){
+   		init_emulator();
+   		resolve(true);
+   } ));
+
+
+
+///////////////////////////////////////////////////////////////////////////
+
+
+function init_emulator() {
+
 
 
 	params.offsetX = (params.laastX * ( params.laastW + params.margin) - params.margin) / 2;	
@@ -144,6 +172,7 @@ function init() {
 	
 	var default_texture = new THREE.TextureLoader().load( 'letters2/jpg'+ params.textureSize +'/letter_tyhik.jpg' );
 	var default_material = new THREE.MeshBasicMaterial( { map: default_texture } );
+	// default_texture.minFilter = THREE.LinearFilter;
 
 	///////////////////////////////
 	// Create meshes
@@ -176,9 +205,14 @@ function init() {
 
 	// window.addEventListener( 'resize', onWindowResize, false );
 
+	// Load textures
+	loadLetterTextures(letterMapping);
+	animate();
+	start();
+
 }
 
-	function loadLetters(data){
+	function loadLetterTextures(data){
 
 		for (var i = 0; i < data.length; i++) {
 			
@@ -186,6 +220,7 @@ function init() {
 			
 			letters[id] = data[i];
 			letters[id].texture = new THREE.TextureLoader().load( 'letters2/jpg'+ params.textureSize +'/letter_'+ data[i].filename +'.jpg' );
+			// letters[id].texture.minFilter = THREE.LinearFilter;
 			letters[id].material = new THREE.MeshBasicMaterial( { map: letters[id].texture } );
 
 		}
@@ -207,8 +242,9 @@ function init() {
 	/////////////////////////////////////////////////////////////
 	// Shingle controls 
 
-	function rotateLaast(x,y,deg,dir,time){
+	function rotateLaast(x,y,deg,dir,speed){
 
+		// console.log("RotateLaast");
 		if(dir=="F"){
 			dir = 1;
 		} else {
@@ -216,12 +252,32 @@ function init() {
 		}
 
 		laastud[x][y].rotateDirection = dir;
-		laastud[x][y].targetRotation = deg;
+		laastud[x][y].rotationSpeed = speed;
+		laastud[x][y].targetRotation += deg*dir;
+
+	}
+
+
+	function flipLaast(x,y,rotations,dir,speed){
+
+		// console.log("RotateLaast");
+		if(dir=="F"){
+			dir = 1;
+		} else {
+			dir = -1;
+		}
+
+
+
+		laastud[x][y].rotateDirection = dir;
+		laastud[x][y].rotationSpeed = speed;
+		laastud[x][y].targetRotation += 360*rotations*dir;
 
 	}
 
 
 	function changeLetter(x,y,letter){
+		// console.log("changeLetter");
 
 		laastud[x][y].newLetter = letter;
 
@@ -232,7 +288,7 @@ function init() {
 	function runQueue(queue){
 
       // console.log("Run Queue");
-      console.log(queue);
+      // console.log(queue);
 
         for(var x = 0; x < params.laastX; x++){
           for (var y = 0; y < params.laastY; y++) {
@@ -248,13 +304,26 @@ function init() {
 
                 // queue[x][y].laastTime += msg.delay;
 
+                // console.log("Rotate delay:" + msg.delay);
                 setTimeout(function(x,y,deg,dir){
                    rotateLaast(x,y,deg,dir,0);
                  },msg.delay,x,y,msg.degree,msg.direction,0);
 
 
+              } if(msg.cmd == "flip"){
+
+                // queue[x][y].laastTime += msg.delay;
+
+                // console.log("Rotate delay:" + msg.delay);
+                setTimeout(function(x,y,rotations,dir){
+
+                   flipLaast(x,y,rotations,dir,0);
+                 },msg.delay, x,y,msg.rotations,msg.direction);
+
+
               } else if(msg.cmd == "change_letter"){
 
+                // console.log("Change letter delay:" + msg.delay);
 
                 setTimeout(function(x,y,letter){
                    changeLetter(x,y,letter);
@@ -371,25 +440,8 @@ function init() {
 	  return radians * 180 / Math.PI;
 	};
 
-	/////////////////////////////////////////////////////////////
-	// Functions exposed
+	    function promiseLoadJson(url) {
+      return fetch(url)
+        .then(response => response.json());
+    }
 
-
-
-    TablooControl.prototype.changeLetter = changeLetter;
-    TablooControl.prototype.rotateLaast = rotateLaast;
-	TablooControl.prototype.loadLetters = loadLetters;
-	TablooControl.prototype.runQueue = runQueue;
-
-
-
-	/////////////////////////////////////////////////////////////
-
-    return TablooControl;
-  })();
-
-  if (typeof module !== 'undefined' && typeof module.exports !== 'undefined')
-    module.exports = TablooControl;
-  else
-    window.TablooControl = TablooControl;
-})();

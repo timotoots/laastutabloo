@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Laastutabloo Emulator</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="css/tabloo.css">
+
+		<!-- Fit DIVs -->
+		<script type="text/javascript" src="lib/fit.min.js"></script>
+		<script type="text/javascript" src="js/tabloo_fit.js"></script>
+
+		<script src="lib/node_modules/jquery/dist/jquery.min.js"></script>
+
+
+		<!-- WebGL -->
+		<script src="lib/node_modules/three/build/three.js"></script>
+		<script src="lib/node_modules/three/examples/js/controls/OrbitControls.js"></script>
+		<script src="lib/node_modules/three/examples/js/libs/stats.min.js"></script>
+		<script src="js/lib_animator.js"></script>
+		<script src="lib/bundle.min.js"></script>
+
+		<!-- <script src="https://jaspervanloenen.com/timodisplay.js"></script> -->
+		<script type="text/javascript" src="json/animation_library.js"></script>
+
+	</head>
+
+<body id="body">
+
+	<div id="controls">
+		<a href="javascript://" onclick="rotateLaast(4,5,1080,1,5000);">RO1</a>
+		<a href="javascript://" onclick="rotateLaast(4,5,-1080,-1,5000);">RO2</a>
+		<a href="javascript://" onclick="rotateRow(1,1080,1)">ROW</a>
+		<a href="javascript://" onclick="changeLetter(10,10,2)">L2</a>
+		<a href="javascript://" onclick="changeLetter(10,10,3)">L3</a>
+	</div>
+
+	<div id="content">
+	    <div id="tabloo_wrapper"></div>
+	</div>
+
+	<!-- Run script -->
+	<script type="text/javascript">
+
+
+
+	function start(){
+		console.log("Start!");
+		getQueries();	
+	}
+
+
+	  var animations;
+
+	  function getQueries(ehak,queries,language){
+
+	  	console.log("Get queries");
+
+	    var url = "json/slides.json";
+	    url =  "http://laastutabloo.erm.ee:5000/render_query?query_id=avalik&ehak=446";
+	    url = "http://laastutabloo.erm.ee/json/query.json";
+	
+	   var url = "http://laastutabloo.erm.ee:5000/render_query?query_id=avalik&ehak=1021"
+
+	    $.getJSON( url, function( data ) {
+
+	      var timer = 0;
+	      animations = ta.animateQueries(data);
+
+	      for (var i = 0; i < animations.length; i++) {
+
+	      	if(animations[i].type=="customAnimation" && animLib[animations[i].customAnimation]){
+		      	setTimeout(function(queue,timer, type){ runQueue(queue); console.log("Start custom animation at " + timer + "ms: " + type) }, timer,animLib[animations[i].customAnimation].sequence,timer,animLib[animations[i].customAnimation].type );
+		      	timer += animLib[animations[i].customAnimation].waitAfter;
+	      	} else {
+		      	setTimeout(function(queue,timer, type){ runQueue(queue); console.log("Start slide animation at " + timer + "ms: " + type) }, timer,animations[i].sequence,timer,animations[i].type );
+		      	timer += animations[i].waitAfter;	      		
+	      	}
+
+	      }
+	      setTimeout("getQueries()",timer);
+
+	    });
+
+/*
+
+
+	    var timer = 0;
+
+	    animLib["jasper"]
+
+	    console.log(jasper);
+
+	      for (var i = 0; i < jasper.length; i++) {
+
+	      	setTimeout(function(queue,timer, type){ runQueue(queue); console.log("Start slide animation at " + timer + "ms: " + type) }, timer,jasper[i].sequence,timer,jasper[i].type );
+	      	timer += jasper[i].waitAfter;
+
+	      }
+	      setTimeout("getQueries()",timer);
+
+	    */
+
+	  } // function
+
+
+	  /////////////////////////////////////////////////////////////
+
+	</script>
+		<script src="js/emulator.js"></script>
+
+</body>
+</html>
