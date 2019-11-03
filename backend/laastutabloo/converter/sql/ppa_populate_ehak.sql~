@@ -1,0 +1,3 @@
+alter table {tablename} add column {fieldname} integer;
+
+UPDATE {tablename} SET {fieldname} = (SELECT akood FROM ehak WHERE st_within(st_transform(point, 4326), geom))::integer;

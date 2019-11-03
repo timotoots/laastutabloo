@@ -1,0 +1,46 @@
+{
+  "type": "FeatureCollection",
+  "totalFeatures": "unknown",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "pk_objekt_metsas.0",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            25.900531,
+            58.233521
+          ],
+          [
+            25.892356,
+            58.206106
+          ]
+        ]
+      },
+      "geometry_name": "shape",
+      "properties": {
+        "avaldatus": "0",
+        "foto": "http://pk.rmk.ee/parandkultuur/VS/VS570.jpg",
+        "id": 1224259566,
+        "invent": "Väino Suigusaar",
+        "invent_kpv": "2011-04-27T00:00:00Z",
+        "kaart": "PK",
+        "kolvik": "Teemaa",
+        "kood": "797:MPO:003",
+        "koosseis": "Pärandkultuuri märgid NL ajast: piimapukid, tootmishooned, siloaugud",
+        "kyla": "Jakobimõisa küla",
+        "lahteandmed": "Kohalik elanik, metsatöötaja",
+        "maakond": "Viljandi maakond",
+        "markused": "Pikk kruusatee. Rajatud maaparanduse käigus.",
+        "nimi": "Tee Nevski prospekt",
+        "seisund": "Objekt hästi või väga hästi säilinud",
+        "sys_id": 17042,
+        "tyyp": "Maaparandusobjektid",
+        "ulatus": 3000,
+        "vald": "Viljandi vald",
+        "versioon": 1512695911837.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "basseinid": {
+    "bassein": [
+      {
+        "id": "401",
+        "ujula_id": "257",
+        "nimetus": "Abja Spordi- ja Tervisekeskuse suur bassein",
+        "tyyp": "Suplemisbassein",
+        "koormus": "30",
+        "veevahetustyyp": "Vee retsirkulatsiooniga",
+        "pindala": "225",
+        "ruumala": "281.3",
+        "ymbermoot": "68",
+        "min_sygavus": "1.05",
+        "max_sygavus": "1.45",
+        "viimane_inspekteerimine": "06.11.2018",
+        "inspekteerija": "Margit Matt",
+        "hinnang": "vastav",
+        "hinnangu_kuupaev": "12.06.2019",
+        "inspektori_markused": null,
+        "proovivotukohad": {
+          "proovivotukoht": {
+            "id": "5329",
+            "nimi": "Suur bassein",
+            "aadress": "Abja tee 15, Abja-Paluoja linn, Mulgi vald, Viljandi maakond",
+            "koordinaadid": null,
+            "veeallika_liik": "Basseinivesi",
+            "proovivotukoha_liik": "Bassein",
+            "proovivotukoha_liigitus": null
+          }
+        }
+      },
+      {
+        "id": "402",
+        "ujula_id": "257",
+        "nimetus": "Abja Spordi- ja Tervisekeskuse suur bassein",
+        "tyyp": "Suplemisbassein",
+        "koormus": "30",
+        "veevahetustyyp": "Vee retsirkulatsiooniga",
+        "pindala": "225",
+        "ruumala": "281.3",
+        "ymbermoot": "68",
+        "min_sygavus": "1.05",
+        "max_sygavus": "1.45",
+        "viimane_inspekteerimine": "06.11.2018",
+        "inspekteerija": "Margit Matt",
+        "hinnang": "vastav",
+        "hinnangu_kuupaev": "12.06.2019",
+        "inspektori_markused": null,
+        "proovivotukohad": {
+          "proovivotukoht": {
+            "id": "5329",
+            "nimi": "Suur bassein",
+            "aadress": "Abja tee 15, Abja-Paluoja linn, Mulgi vald, Viljandi maakond",
+            "koordinaadid": null,
+            "veeallika_liik": "Basseinivesi",
+            "proovivotukoha_liik": "Bassein",
+            "proovivotukoha_liigitus": null
+          }
+        }
+      }        
+    ]
+  }
+}

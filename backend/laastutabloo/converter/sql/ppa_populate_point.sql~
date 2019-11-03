@@ -1,0 +1,4 @@
+SELECT AddGeometryColumn('{tablename}', '{fieldname}', 4326, 'POINT', 2);
+
+UPDATE {tablename}  SET {fieldname} = ST_TRANSFORM(St_SetSRID(ST_MakePoint((split_part("Lest_Y", '-', 2)::integer - split_part("Lest_Y", '-', 1)::integer) / 2  + split_part("Lest_Y", '-', 1)::integer, (split_part("Lest_X", '-', 2)::integer - split_part("Lest_X", '-', 1)::integer) / 2  + split_part("Lest_X", '-', 1)::integer), 3301), 4326);
+
