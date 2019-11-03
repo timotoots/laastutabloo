@@ -1,0 +1,10 @@
+[
+    {
+        "yearly": 240,
+        "weekly":240,        
+        "daily": 240,
+        "hourly": 10,
+        "live": 0.2,
+        "default": 10
+    }
+]

@@ -7,10 +7,9 @@
       "update_frequency":"weekly",
       "converter_top_element":"body.oppeasutused.oppeasutus",
       "schema":[
-         {"column":"nimetus",             "type":"text",       "field":"nimetus"},
-         {"column":"_adr",             "type":"text",          "field":"juriidilineAadress.adrId"}
-
-     
+         {"column":"nimi",             "type":"text",       "field":"nimetus"},
+         {"column":"nimi_en",             "type":"text",       "field":"nimetusInglise"},
+         {"column":"adr",             "type":"text",          "field":"juriidilineAadress.adrId"}
        ]
    },
     {
@@ -22,7 +21,7 @@
       "converter_top_element":"kml.Document",
       "schema":[
          {"column":"name",             "type":"text",       "field":"name"},
-         {"column":"_latlon",          "type":"text",       "field":"Point.coordinates"}
+         {"column":"latlon",          "type":"text",       "field":"Point.coordinates"}
 
      
        ]

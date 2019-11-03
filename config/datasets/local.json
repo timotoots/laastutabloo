@@ -1,0 +1,15 @@
+[
+   {
+      "id":"prefixsuffix",
+      "provider":"local",
+      "type":"csv",
+      "url": "http://laastutabloo.erm.ee/uploads/prefixsuffix.csv",
+      "update_frequency":"manual",
+      "schema":[
+         {"column":"et",          "type":"text",       "field":"et"},
+         {"column":"en",          "type":"text",       "field":"en"},
+         {"column":"ru",          "type":"text",       "field":"ru"}
+    
+       ]
+   }
+]

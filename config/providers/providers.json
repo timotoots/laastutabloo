@@ -91,24 +91,6 @@
       }
     }
   },
-
-{
-    "id": "statistikaamet",
-    "meta": {
-      "en": {
-        "name": "Statistics Estonia",
-        "description": "",
-        "url": "https://www.stat.ee/en"
-      },
-      "et": {
-        "name": "Statistikaamet",
-        "description": "",
-        "url": "https://www.stat.ee/"
-      }
-    }
-  },
-
-
   {
     "id": "spordiregister",
     "meta": {

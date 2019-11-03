@@ -1,13 +1,13 @@
 [
   {
-    "query_id": "avalik",
-    "dataset_id":  "avalik_merged",
-    "where":"",
+    "query_id": "linnud",
+    "dataset_id":"loodusvaatlused_2019",
+    "where":"klass='Aves'",
     "sql": "",
     "name": {
-      "et": "Avalikud rikkumised",
-      "en": "Public crimes",
-      "ru": "Public crimes"
+      "et": "Nähtud linnud",
+      "en": "Sighted birds",
+      "ru": "Зрячие птицы"
     },
     "style": {
       "template": "table",
@@ -16,7 +16,7 @@
     },
     "columns": [
       {
-        "name": "syndmus_liik",
+        "name": "liiginimi_et",
         "width": 15,
         "align": "left",
         "prefix": "Kaugus:",
@@ -25,7 +25,7 @@
         "orderby_direction":"DESC"
       },
       {
-        "name": "_time",
+        "name": "time",
         "width": 12,
         "align": "right",
         "suffix": "km",
@@ -36,5 +36,3 @@
     ]
   }
 ]
-
-

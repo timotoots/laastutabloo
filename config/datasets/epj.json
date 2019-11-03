@@ -4,11 +4,19 @@
       "provider":"epj",
       "private":true,
       "type":"csv",
+      "csv_colnames":["nimi","inv_number","reg_number","sunniaeg","sunniriigi_kood","pria_id","toug","isa","omanik","laktatsioon_algusaeg","laktatsioon_kord","piim_kogus","rasva_protsents","rasva_kogus","valgu_protsent","valgu_kogus","karja_kood_klinr_pria","ehitise_kood_pria","aadr_kyla_alev"],
       "update_frequency":"monthly",
+      "encoding": "latin1",
       "schema":[
-         {"column":"name",             "type":"text",       "field":"RALLI"},
-         {"column":"kyla",          "type":"text",       "field":"Aarna küla"}
+         {"column":"nimi",             "type":"text",       "field":"nimi"},
+         {"column":"aadr_kyla_alev",          "type":"text",       "field":"aadr_kyla_alev"},
+         {"column":"ehitis_pria",          "type":"text",       "field":"ehitise_kood_pria"},
+         {"column":"piim_kogus",          "type":"text",       "field":"piim_kogus"}
     
        ]
    }
 ]
+
+
+
+

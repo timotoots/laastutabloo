@@ -557,7 +557,7 @@ var selectedTerms = {};
 
 		var html = [];
 
-		var url = "admin/js/providers_example.json";
+		var url = "admin/data_examples/providers.json";
 
 		$.getJSON( url, function( data ) {
 
@@ -594,7 +594,7 @@ var selectedTerms = {};
 
 		var html = [];
 
-		var url = "admin/js/texts.json";
+		var url = "admin/data_examples/texts.json";
 
 		$.getJSON( url, function( data ) {
 

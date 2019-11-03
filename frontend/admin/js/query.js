@@ -207,10 +207,13 @@ var query_states = {};
       ///////////////////////////////////
       // Query list
 
+      if(!query.name){
+        query.name = {"et" : "no name!!"};
+      }
 
         html.push('<div class="row shuffle-row" style="border-bottom: 0px solid black;padding:0.5rem 0 0.5rem 0; width:100%" id="query_'+ query.query_id +'" data-groups="[]" data-private="" data-status="">');
 
-        html.push(' <div class="col-md-6 col-sm-6 col-xs-6"><b class="dataset_name"> <a href="?p=query&id='+ query.query_id +'" >' +query.name.et + '</a></b>  </div>');
+        html.push(' <div class="col-md-6 col-sm-6 col-xs-6"><b class="dataset_name"> <a href="?p=query&id='+ query.query_id +'" >' + query.name.et + '</a></b>  </div>');
 
         // html.push(' <div class="one columns"><span class="dataset_status_updater">updater</span></div>');
         html.push(' <div class="col-md-2 col-sm-2  col-xs-2"><span class="dataset_update_button"></span> <span>'+ query.query_id +'</span></div>');

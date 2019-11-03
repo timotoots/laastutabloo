@@ -2,14 +2,16 @@
 	{
       "id":"ads",
       "provider":"maaamet",
-      "url": "http://xgis.maaamet.ee/adsavalik/xads?FLsMCTuF",
+      "url": "http://xgis.maaamet.ee/adsavalik/xads?FYMVOd9Z",
       "type":"csv",
-      "update_frequency":"minute",
+      "delimiter":";",
+      "file_in_package": "*.csv", 
+      "update_frequency":"weekly",
       "schema":[
-         {"column":"ads_oid",             "type":"text",       "field":"ADS_OID"},
-         {"column":"aadress",               "type":"text",       "field":"LAHIAADRESS"},
-         {"column":"x",               "type":"text",       "field":"VIITEPUNKT_X"},
-         {"column":"y",         "type":"text",       "field":"VIITEPUNKT_Y"}
+         {"column":"ads_oid",          "type":"text",       "field":"ADS_OID"},
+         {"column":"aadress",          "type":"text",       "field":"LAHIAADRESS"},
+         {"column":"lest_x",           "type":"text",       "field":"VIITEPUNKT_X"},
+         {"column":"lest_y",           "type":"text",       "field":"VIITEPUNKT_Y"}
        ]
    },
    {
@@ -19,11 +21,11 @@
       "type":"shapefile",
       "file_in_package": "asustusyksus_*.*", 
       "update_frequency":"monthly",
+      "converter_top_element":"features",
+      "encoding": "latin1",
       "schema":[
-         {"column":"total",             "type":"text",       "field":"TOTAL#TOTAL"},
-         {"column":"_ehak",          "type":"text",       "field":"AKOOD"}
-
-     
-       ]
+         {"column":"name",       "type":"text",       "field":"properties.ANIMI"},
+         {"column":"ehak",       "type":"text",       "field":"properties.AKOOD"}
+       ] 
    }
 ]

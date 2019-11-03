@@ -5,10 +5,10 @@
       "url": "http://vtiav.sm.ee/index.php/opendata/basseinid.xml",
       "type":"xml",
       "update_frequency":"weekly",
-      "converter_top_element":"basseinid",
+      "converter_top_element":"basseinid.bassein",
       "schema":[
-         {"column":"id",             "type":"text",       "field":"id"}
-     
+          {"column":"id",             "type":"text",       "field":"id"},
+          {"column":"nimetus",        "type":"text",       "field":"nimetus"}
        ]
    },{
       "id":"supluskohad",
@@ -19,9 +19,8 @@
       "converter_top_element":"supluskohad",
       "schema":[
          {"column":"nimetus",             "type":"text",       "field":"nimetus"}
-     
        ],
-        "cron_minutes":"0",
+      "cron_minutes":"0",
       "cron_hour":"0",
       "cron_day_of_month":"*",
       "cron_month":"*",

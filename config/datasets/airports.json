@@ -8,9 +8,9 @@
       "converter_top_element":"",
       "schema":[
          {"column":"icao",             "type":"text",       "field":"icao"},
-         {"column":"name",             "type":"text",       "field":"name"},
-         {"column":"_lat",   "type":"float",       "field":"lat"},
-         {"column":"_lon",   "type":"float",       "field":"lon"}
+         {"column":"city",             "type":"text",       "field":"city"},
+         {"column":"_lat",             "type":"float",       "field":"lat"},
+         {"column":"_lon",             "type":"float",       "field":"lon"}
        ]
    }
 ]

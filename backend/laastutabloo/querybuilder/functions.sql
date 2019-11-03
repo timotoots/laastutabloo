@@ -9,7 +9,7 @@ FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As featur
    FROM ehak As lg WHERE lg.akood='%d' ) As f ) As fc; """ % (str(s), int(ehak)))
 return rec[0]['row_to_json']
 $$
-LANGUAGE plpythonu SECURITY DEFINER;
+LANGUAGE plpython3u SECURITY DEFINER;
 
 
 
@@ -24,5 +24,5 @@ FROM ( SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As featur
    FROM %s As lg WHERE lg.ehak_akood='%d' ) As f ) As fc;""" % (str(s), str(tablename), int(ehak)))
 return rec[0]['row_to_json']
 $$
-LANGUAGE plpythonu SECURITY DEFINER;
+LANGUAGE plpython3u SECURITY DEFINER;
 

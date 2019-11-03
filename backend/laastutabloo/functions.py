@@ -55,4 +55,4 @@ def wms_get_capabilities(url,service):
 
 if __name__ == '__main__':
     url = get_wms_url("www.ee","wms","test",0)
-    print url
+    print (url)

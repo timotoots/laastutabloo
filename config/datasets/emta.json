@@ -6,8 +6,9 @@
       "update_frequency":"manual",
       "delimiter":",",
       "schema":[
-         {"column":"nimi",       "type":"text",       "field":"nimi"},
-         {"column":"ariregistri_kood",     "type":"text",       "field":"ariregistri_kood"},
+         {"column":"nimi",       "type":"text",       "field":"Nimi"},
+         {"column":"ariregistri_kood",     "type":"text",       "field":"Registrikood"},
+         {"column":"riiklikud_maksud",     "type":"text",       "field":"Riiklikud Maksud"},
          {"column":"_ehak",     "type":"text",       "field":"asukoha_ehak_kood"}
        ]
    }

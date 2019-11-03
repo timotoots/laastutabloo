@@ -374,7 +374,7 @@ function createTimeSlide(){
   lines = lines.concat(createBigfontSlide(time.toString()));
   lines.push("".centerJustify(params.laastX," "));
   lines.push((" " + date.toString() + " ").centerJustify(params.laastX,"*"));
-  lines.push("HAPPY BIRTHDAY, DEREK!".centerJustify(params.laastX," "));
+  lines.push("".centerJustify(params.laastX," "));
   lines.push("".centerJustify(params.laastX," "));
 
   return {"lines":lines};

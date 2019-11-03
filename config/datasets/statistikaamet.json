@@ -5,9 +5,10 @@
       "url": "https://www.stat.ee/public/data/erm/Palgatootaja_brutotulu.csv",
       "type":"csv",
       "update_frequency":"yearly",
+      "encoding": "latin1",
       "delimiter":";",
       "schema":[
-         {"column":"ehak",                           "type":"text",       "field":"AKOOD"},
+         {"column":"ehak",               "type":"text",       "field":"AKOOD"},
          {"column":"brutotulu",          "type":"text",       "field":"Palgatöötaja_brutotulu"}
        ]
    },
@@ -20,8 +21,8 @@
       "update_frequency":"yearly",
       "schema":[
          {"column":"ehak",            "type":"text",       "field":"AKOOD"},
-         {"column":"total_male",          "type":"text",       "field":"M#TOTAL"},
-         {"column":"total_female",          "type":"text",       "field":"F#TOTAL"}
+         {"column":"total_male",      "type":"text",       "field":"M#TOTAL"},
+         {"column":"total_female",    "type":"text",       "field":"F#TOTAL"}
        ]
    }
 ]

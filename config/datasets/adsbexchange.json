@@ -2,17 +2,18 @@
 	{
       "id":"aircrafts",
       "provider":"adsbexchange",
-      "url": "http://public-api.adsbexchange.com/VirtualRadar/AircraftList.json?lat=58.8863558&lng=25.4984873&fDstL=0&fDstU=400",
+      "url": "http://p.timo.ee/lennuvalvur/cache/apis/adsbexchange_eesti.json",
       "type":"json",
       "update_frequency":"minutely",
-      "converter_top_element":"acList",
+      "converter_top_element":"ac",
       "schema":[
-         {"column":"from",             "type":"text",       "field":"From"},
-         {"column":"to",               "type":"text",       "field":"To"},
-         {"column":"altitude",         "type":"text",       "field":"Altitude"},
-         {"column":"airplane_year",    "type":"text",       "field":"Year"},
-         {"column":"_lat",   "type":"float",       "field":"Lat"},
-         {"column":"_lon",   "type":"float",       "field":"Long"}
+         {"column":"from",             "type":"text",       "field":"from"},
+         {"column":"to",               "type":"text",       "field":"to"},
+         {"column":"altitude",         "type":"int",       "field":"altitude"},
+         {"column":"type",             "type":"text",       "field":"type"},
+         {"column":"speed",            "type":"int",       "field":"speed"},
+         {"column":"_lat",             "type":"float",       "field":"lat"},
+         {"column":"_lon",             "type":"float",       "field":"lon"}
        ],
       "cron_minutes":"*",
       "cron_hour":"*",

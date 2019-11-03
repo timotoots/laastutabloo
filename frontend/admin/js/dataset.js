@@ -587,7 +587,7 @@ function buttonSave() {
         delete val.last_updated;
         console.log("Valid value: " + JSON.stringify(val, null, "  "));
 
-        $.ajax(backend_server + '/dataset/spordikoolid', {
+        $.ajax(backend_server + '/dataset/' + dataset.id, {
           contentType: "application/json",
           type: "POST",
           data: JSON.stringify(val)
@@ -658,7 +658,7 @@ console.log("Form loaded.");
   "id": { 
       "type": "string", 
       "title": "Unique ID",
-      "pattern":"^[a-z]+$",
+      "pattern":"^[a-z0-9_]+$",         
       "fieldOptions":{
         "disallowEmptySpaces":true
       }
@@ -776,7 +776,7 @@ console.log("Form loaded.");
             },
             "type": {
                 "type": "string",
-                "enum": ["float", "int", "text","timestamp"],
+                "enum": ["float", "int", "text","timestamp","geom"],
                 "title": "Type"
             },
             "field": {
@@ -810,7 +810,14 @@ console.log("Form loaded.");
   },
 
   
-  
+   "script_sql": { 
+      "type": "string", 
+      "title": "Custom SQL script",
+      "pattern":"^[a-z_.]+$",
+      "fieldOptions":{
+        "disallowEmptySpaces":true
+      }
+  },
 
   "subtitle_updater":{
       "type":"any",
@@ -826,7 +833,7 @@ console.log("Form loaded.");
       "type": "string",
       "title": "Update frequency",
       "required":true,
-      "enum": ["none","minutely","hourly","daily", "weekly", "montly","yearly","custom"],
+      "enum": ["manual","minutely","hourly","daily", "weekly", "montly","yearly","custom"],
       "fieldOptions":{}
   },     
 

@@ -5,20 +5,51 @@
       "url": "http://www.ilmateenistus.ee/ilma_andmed/xml/observations.php",
       "type":"xml",
       "update_frequency":"weekly",
-      "delimiter":";",
+      "schema":[
+         {"column":"name",             "type":"text",       "field":"name"},
+         {"column":"wmocode",          "type":"text",       "field":"wmocode"},
+         {"column":"lan",          "type":"text",       "field":"latitude"},
+         {"column":"lon",          "type":"text",       "field":"longitude"},
+         {"column":"humidity",          "type":"text",       "field":"relativehumidity"},
+         {"column":"temperature",          "type":"text",       "field":"airtemperature"},
+         {"column":"winddirection",          "type":"text",       "field":"winddirection"},
+         {"column":"windspeed",          "type":"text",       "field":"windspeed"},
+         {"column":"windspeedmax",          "type":"text",       "field":"windspeedmax"},
+         {"column":"uvindex",          "type":"text",       "field":"uvindex"},
+         {"column":"windspeedmax",          "type":"text",       "field":"windspeedmax"},
+         {"column":"watertemperature",   "type":"text",       "field":"watertemperature"}
+       ]
+   },
+   {
+      "id":"forecast",
+      "provider":"ilmateenistus",
+      "url": "http://www.ilmateenistus.ee/wp-content/themes/emhi2013/meteogram.php/?locationId=__EHAK__",
+      "type":"json",
+      "update_frequency":"live",
       "schema":[
          {"column":"name",             "type":"text",       "field":"name"},
          {"column":"wmocode",          "type":"text",       "field":"wmocode"},
          {"column":"airtemperature",   "type":"text",       "field":"airtemperature"}
        ]
    },
-  
-    {
-      "id":"forecast",
+   {
+      "id":"forecast_grib_test",
       "provider":"ilmateenistus",
-      "url": " http://www.ilmateenistus.ee/wp-content/themes/emhi2013/meteogram.php/?locationId=__EHAK__",
-      "type":"json",
-      "update_frequency":"live",
+      "url": "https://api.met.no/weatherapi/gribfiles/1.1/?area=oslofjord&content=weather",
+      "type":"grib",
+      "update_frequency":"manual",
+      "schema":[
+         {"column":"name",             "type":"text",       "field":"name"},
+         {"column":"wmocode",          "type":"text",       "field":"wmocode"},
+         {"column":"airtemperature",   "type":"text",       "field":"airtemperature"}
+       ]
+   },
+   {
+      "id":"forecast_grib",
+      "provider":"ilmateenistus",
+      "url": "https://kaurteenused.envir.ee/MUD/",
+      "type":"grib",
+      "update_frequency":"manual",
       "schema":[
          {"column":"name",             "type":"text",       "field":"name"},
          {"column":"wmocode",          "type":"text",       "field":"wmocode"},

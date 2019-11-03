@@ -11,14 +11,17 @@
       "cron_month":"*",
       "cron_day_of_week":"FRI",
       "cron_custom":"",
+      "timeout_min": "60",
 
       "delimiter":"\t",
       "schema":[
          {"column":"juhtum_id",     "type":"text",       "field":"JuhtumId"},
          {"column":"syndmus_liik",  "type":"text",       "field":"SyndmusLiik"},
-         {"column":"_lat",          "type":"float",      "script":"ppa_lest_x"},
-         {"column":"_lon",          "type":"float",      "script":"ppa_lest_y"},
-         {"column":"_time",         "type":"timestamp",  "script":"ppa_timestamp"}
+         {"column":"_time",         "type":"timestamp",  "script":"ppa_timestamp"},
+         {"column":"Lest_X",         "type":"text",     "field":"Lest_X"},
+         {"column":"Lest_Y",         "type":"text",     "field":"Lest_Y"},
+          {"column":"point",         "type":"geom",       "sql": "ppa_populate_point.sql" },
+          {"column":"ehak",         "type":"integer",    "sql": "ppa_populate_ehak.sql" }
        ]
    },{
       "id":"avalik_2",
@@ -38,16 +41,18 @@
       "schema":[
          {"column":"juhtum_id",     "type":"text",       "field":"JuhtumId"},
          {"column":"syndmus_liik",  "type":"text",       "field":"SyndmusLiik"},
-         {"column":"_lat",          "type":"float",      "script":"ppa_lest_x"},
-         {"column":"_lon",          "type":"float",      "script":"ppa_lest_y"},
-         {"column":"_time",         "type":"timestamp",  "script":"ppa_timestamp"}
+         {"column":"_time",         "type":"timestamp",  "script":"ppa_timestamp"},
+         {"column":"Lest_X",         "type":"text",     "field":"Lest_X"},
+         {"column":"Lest_Y",         "type":"text",     "field":"Lest_Y"},
+         {"column":"point",         "type":"geom",       "sql": "ppa_populate_point.sql" },
+         {"column":"ehak",         "type":"integer",    "sql": "ppa_populate_ehak.sql" }
        ]
    },{
       "id":"avalik_merged",
       "provider":"ppa",
       "tables":["avalik_1","avalik_2"]
    },{
-      "id":"liiklusjarelevalve_1.csv",
+      "id":"liiklusjarelevalve_1",
       "provider":"ppa",
       "url": "https://opendata.smit.ee/ppa/csv/liiklusjarelevalve_1.csv",
       "type":"csv",
@@ -69,7 +74,7 @@
          {"column":"_time",         "type":"timestamp",  "script":"ppa_timestamp"}
        ]
    },{
-      "id":"liiklusjarelevalve_2.csv",
+      "id":"liiklusjarelevalve_2",
       "provider":"ppa",
       "url": "https://opendata.smit.ee/ppa/csv/liiklusjarelevalve_2.csv",
       "type":"csv",
@@ -91,7 +96,7 @@
          {"column":"_time",         "type":"timestamp",  "script":"ppa_timestamp"}
        ]
    },{
-      "id":"vara_1.csv",
+      "id":"vara_1",
       "provider":"ppa",
       "url": "https://opendata.smit.ee/ppa/csv/vara_1.csv",
       "type":"csv",
@@ -113,7 +118,7 @@
          {"column":"_time",         "type":"timestamp",  "script":"ppa_timestamp"}
        ]
    },{
-      "id":"vara_2.csv",
+      "id":"vara_2",
       "provider":"ppa",
       "url": "https://opendata.smit.ee/ppa/csv/vara_2.csv",
       "type":"csv",

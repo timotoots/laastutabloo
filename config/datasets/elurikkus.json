@@ -1,16 +1,46 @@
 [{
-      "id":"loodusvaatlused",
+      "id":"loodusvaatlused-2018",
       "provider":"elurikkus",
-      "url": "https://elurikkus.ee/biocache-service/occurrences/index/download?q=*:*&fq=basis_of_record:'HumanObservation'&fq=country:'Estonia'&fq=geospatial_kosher:'true'&fq=occurrence_date:[2018-01-01T00:00:00Z TO 2018-12-31T00:00:00Z]&email=info@timo.ee&sourceTypeId=&reasonTypeId=10&file=data",
+      "url": "https://elurikkus.ee/biocache-service/occurrences/index/download?q=data_resource_uid%3Adr1&basis_of_record:'HumanObservation'&fq=occurrence_date:[1600-01-01T00:00:00Z TO 2018-12-31T00:00:00Z]&email=info@timo.ee&sourceTypeId=&reasonTypeId=10&file=elurikkus&extra=dataResourceUid,dataResourceName.p",
       "type":"csv",
       "update_frequency":"manual",
 
-      "file_in_package":"*.csv",
+      "file_in_package":"elurikkus.csv",
       "delimiter":",",
       "schema":[
-         {"column":"nimi",       "type":"text",       "field":"nimi"},
-         {"column":"ariregistri_kood",     "type":"text",       "field":"ariregistri_kood"},
-         {"column":"_ehak",     "type":"text",       "field":"asukoha_ehak_kood"}
+         {"column":"klass",    "type":"text",       "field":"Class - matched"},
+         {"column":"time",     "type":"text",       "field":"Event Date - parsed"},
+         {"column":"liiginimi_et",     "type":"text",    "field":"Vernacular Name - matched"},
+         {"column":"lat",     "type":"text",       "field":"Latitude - processed"},
+         {"column":"lon",     "type":"text",       "field":"Longitude - processed"},
+         {"column":"sugu",     "type":"text",       "field":"Sex"},
+         {"column":"kaitumine",     "type":"text",       "field":"Behaviour"},
+         {"column":"taxon_guid",     "type":"text",       "field":"Match Taxon Concept GUID"},
+         {"column":"liiginimi_latin",     "type":"text",       "field":"Matched Scientific Name"},
+         {"column":"point", "type" : "geom",              "sql":"populate_point_from_lat_lon.sql"} 
+       ]
+   },
+   {
+      "id":"loodusvaatlused_2019",
+      "provider":"elurikkus",
+      "url": "https://elurikkus.ee/biocache-service/occurrences/index/download?q=data_resource_uid%3Adr1&basis_of_record:'HumanObservation'&fq=occurrence_date:[2019-01-01T00:00:00Z TO 2019-12-31T00:00:00Z]&email=info@timo.ee&sourceTypeId=&reasonTypeId=10&file=elurikkus&extra=dataResourceUid,dataResourceName.p",
+      "type":"csv",
+      "update_frequency":"daily",
+
+      "file_in_package":"elurikkus.csv",
+      "delimiter":",",
+      "schema":[
+         {"column":"klass",    "type":"text",       "field":"Class - matched"},
+         {"column":"time",     "type":"text",       "field":"Event Date - parsed"},
+         {"column":"liiginimi_et",     "type":"text",    "field":"Vernacular Name - matched"},
+         {"column":"lat",     "type":"text",       "field":"Latitude - processed"},
+         {"column":"lon",     "type":"text",       "field":"Longitude - processed"},
+         {"column":"sugu",     "type":"text",       "field":"Sex"},
+         {"column":"kaitumine",     "type":"text",       "field":"Behaviour"},
+         {"column":"taxon_guid",     "type":"text",       "field":"Match Taxon Concept GUID"},
+         {"column":"liiginimi_latin",     "type":"text",       "field":"Matched Scientific Name"},
+         {"column":"point", "type":"geom",              "sql":"populate_point_from_lat_lon.sql"} 
        ]
    }
+
 ]
