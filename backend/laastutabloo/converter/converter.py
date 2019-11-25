@@ -241,6 +241,8 @@ def handle_json_records(records, f, engine):
   for k in schema:
     dtypes[k['column']] = dtypes_map.get(k['type'], sqlalchemy.types.Text)
 
+  new_table = f.id + "_new"
+
   def write_pandas_df(data):
     if f.type == "geojson" or f.type == "shapefile":
       def to_wkt(x):
@@ -257,12 +259,12 @@ def handle_json_records(records, f, engine):
       except:
         pass
       try:
-        data.to_sql(f.id, engine, schema=schema, if_exists='replace', chunksize=10000, dtype=dtypes)
+        data.to_sql(new_table, engine, schema=schema, if_exists='replace', chunksize=10000, dtype=dtypes)
       except:
         log.critical("Converter failed")
       # Append dataframe to db
     else:
-      data.to_sql(f.id, engine, schema=schema, if_exists='append', chunksize=10000, dtype=dtypes)
+      data.to_sql(new_table, engine, schema=schema, if_exists='append', chunksize=10000, dtype=dtypes)
 
   # Loop throught every record in the JSON
   total_count = 0
@@ -306,7 +308,7 @@ def handle_json_records(records, f, engine):
     if 'sql' in field:
       session = Session()
       sql_template = open("/opt/laastutabloo/backend/laastutabloo/converter/sql/" + field['sql']).read()
-      sql = sql_template.format(tablename=f.id, fieldname=field['column'])
+      sql = sql_template.format(tablename=new_table, fieldname=field['column'])
       print(sql)
       session.execute(sql)
       session.commit()
@@ -319,6 +321,21 @@ def handle_json_records(records, f, engine):
       session.commit()
 
   create_views(engine, views)
+  if validate_new_table(new_table, f.id):
+      session = Session()
+      sql = "DROP TABLE IF EXISTS {}_old".format(f.id)
+      print(sql)
+      session.execute(sql)
+      sql = "ALTER TABLE {} RENAME TO {}_old ".format(f.id, f.id)
+      print(sql)
+      session.execute(sql)
+      sql = "ALTER TABLE {} RENAME TO {}".format(new_table, f.id)
+      print(sql)
+      session.execute(sql)
+      session.commit()
+
+def validate_new_table(new_table, old_table):
+    return True
 
     
 def convert_shapefile_to_geojson(shp, geojson, encoding=None):
