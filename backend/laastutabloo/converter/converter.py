@@ -239,7 +239,11 @@ def handle_json_records(records, f, engine):
   schema = f.schema  # Mapping for columns
   dtypes = {'geom': Geometry('', srid=4326)}
   for k in schema:
-    dtypes[k['column']] = dtypes_map.get(k['type'], sqlalchemy.types.Text)
+    try:
+      dtypes[k['column']] = dtypes_map.get(k['type'], sqlalchemy.types.Text)
+    except KeyError:
+      log.critical('Missing column type: ' + str(k))
+      return
 
   new_table = f.id + "_new"
 
@@ -261,7 +265,8 @@ def handle_json_records(records, f, engine):
       try:
         data.to_sql(new_table, engine, schema=schema, if_exists='replace', chunksize=10000, dtype=dtypes)
       except:
-        log.critical("Converter failed")
+        log.error("Converter failed to insert into table.")
+        logging.exception('Pandas to_sql failed.')
       # Append dataframe to db
     else:
       data.to_sql(new_table, engine, schema=schema, if_exists='append', chunksize=10000, dtype=dtypes)
@@ -449,6 +454,7 @@ def convert_and_insert_DB(ds, engine, files):
       print ("Bad file type", ds.type)
   except Exception as e:
     log.critical("Cannot convert file: " + path)
+    logging.exception('Exception:')
     ds.status_converter = 'failed'
     session = inspect(ds).session
     session.commit()
