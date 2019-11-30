@@ -33,6 +33,8 @@ import sqlalchemy.exc
 import uuid, datetime
 import csv
 
+import geojson
+
 from sqlalchemy.dialects import postgresql
 from laastutabloo.functions import get_wms_url, wms_get_capabilities
 
@@ -93,7 +95,7 @@ class DatasetsResource(Resource):
         },
         })
     def get(self):
-        return [ sqlrow_as_dict(r) for r in session.query(Dataset).all() ], 200
+        return [ sqlrow_as_dict(r) for r in session.query(Dataset).order_by(Dataset.provider, Dataset.id) ], 200
 
 class DatasetResource(Resource):
     @swagger.doc({
@@ -167,8 +169,7 @@ class DatasetResource(Resource):
       if not request.json:
         return jsonify({'error': "No JSON received."})
       devel = request.json.get('devel', False)
-      DatasetResource._sync_with_scrapykeeper(dataset_id, devel, request.json)
-      return jsonify(True)
+      return jsonify(DatasetResource._sync_with_scrapykeeper(dataset_id, devel, request.json))
         
     @staticmethod
     def _sync_with_scrapykeeper(dataset_id, devel, update_json):
@@ -180,8 +181,10 @@ class DatasetResource(Resource):
       session.add(ds)
       try:
         session.commit()
-      except:
+      except:    
         session.rollback()
+        return False
+
       jobs = json.loads(requests.get(SCRAPYKEEPER_API_URL).text)
       job_id = None
       for j in jobs:
@@ -250,7 +253,8 @@ class DatasetResource(Resource):
       # if not ds.last_updated or ds.last_updated.year == 1970:
           # run job
           # requests.put(API_URL + "/" + str(job_id), data={ 'status': 'run',})
-            
+      return True
+
     @staticmethod
     def _copy_schema_from_parent(dataset_id):
       ds = session.query(Dataset).filter_by(id=dataset_id).first()
@@ -482,6 +486,8 @@ class PreparedStatement(DecBase):
       if c['column'] == 'ehak':
         has_ehak = True
 
+    #print("ehak {} point {}".format(has_ehak, has_point))
+
     ## select liiginimi_et from loodusvaatlused_2019 inner join ehak ON ST_Contains(ehak.geom, loodusvaatlused_2019.point) WHERE akood::integer=6455 LIMIT 10;
 
     sql_template = "SELECT {columns} FROM {table} WHERE {where_clause} ORDER BY {order_clause} LIMIT {limit}"
@@ -509,10 +515,11 @@ class PreparedStatement(DecBase):
       where_columns.append(self.where)
 
     table_clause = self.dataset_id    
-    if has_ehak:
+    if has_ehak and not has_point:
       where_columns.append("ehak::integer = $1")
     elif has_point:
       table_clause = "{table} LEFT JOIN ehak ON ST_Contains(ehak.geom, {table}.point)".format(table=self.dataset_id)
+      columns.append("ST_AsGeoJSON(point) as point")
       where_columns.append("ehak.akood::integer = $1::integer")
 
     where_clause = " AND ".join(where_columns)
@@ -994,19 +1001,43 @@ def render_query():
 @cross_origin(supports_credentials=True)
 def run_query_geojson():
     devel = int(request.args.get('devel', 0))    
+
     s = session.query(PreparedStatement).filter_by(query_id=request.args.get('query_id', ''), devel=devel).first()
     if not s:
         return jsonify(False)
 
+    ehak = int(request.args.get('ehak', None))
+
+    if ehak is None:
+      return jsonify({'error': "Parameter ehak required."})
+
     val1 = request.args.get('val1', None)
-    val2 = request.args.get('val2', None)
-    args = val1
-    if val2 is not None:
-        args = args + ", " + val2
-    query = "EXECUTE %s_%d(%s)" % (s.query_id,  s.devel, args)
-    print(query)
-    res = engine.execute(query)
-    resp = Response(res.first().values()[0])
+
+    values = _run_prepared_statement(s, devel, ehak, val1)
+
+
+
+    # create a new list which will store the single GeoJSON features
+    featureCollection = list()
+
+    # iterate through the list of result dictionaries
+    for row in values:
+        # create a single GeoJSON geometry from the geometry column which already contains a GeoJSON string
+        geom = geojson.loads(row['point'])
+
+        # remove the geometry field from the current's row's dictionary
+        row.pop('point')
+
+        # create a new GeoJSON feature and pass the geometry columns as well as all remaining attributes which are stored in the row dictionary
+        feature = geojson.Feature(geometry=geom, properties=row)
+        
+        # append the current feature to the list of all features
+        featureCollection.append(feature)
+
+    # when single features for each row from the database table are created, pass the list to the FeatureCollection constructor which will merge them together into one object
+    featureCollection = geojson.FeatureCollection(featureCollection)
+    GeoJSONFeatureCollectionAsString = geojson.dumps(featureCollection)
+    resp = Response(GeoJSONFeatureCollectionAsString)
     resp.headers['Content-Type'] = 'application/json;type=geojson'
     return resp
 
