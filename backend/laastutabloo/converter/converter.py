@@ -266,7 +266,7 @@ def handle_json_records(records, f, engine):
         data.to_sql(new_table, engine, schema=schema, if_exists='replace', chunksize=10000, dtype=dtypes)
       except:
         log.error("Converter failed to insert into table.")
-        logging.exception('Pandas to_sql failed.')
+        log.exception('Pandas to_sql failed.')
       # Append dataframe to db
     else:
       data.to_sql(new_table, engine, schema=schema, if_exists='append', chunksize=10000, dtype=dtypes)
@@ -454,7 +454,7 @@ def convert_and_insert_DB(ds, engine, files):
       print ("Bad file type", ds.type)
   except Exception as e:
     log.critical("Cannot convert file: " + path)
-    logging.exception('Exception:')
+    log.exception('Exception:')
     ds.status_converter = 'failed'
     session = inspect(ds).session
     session.commit()
