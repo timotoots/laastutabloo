@@ -1,7 +1,7 @@
 [{
-      "id":"avalik_1",
+      "id":"avalik_merged",
+      "dataset_type" : "merged",
       "provider":"ppa",
-      "url": "https://opendata.smit.ee/ppa/csv/avalik_1.csv",
       "type":"csv",
       "update_frequency":"weekly",
 
@@ -20,37 +20,19 @@
          {"column":"_time",         "type":"timestamp",  "script":"ppa_timestamp"},
          {"column":"Lest_X",         "type":"text",     "field":"Lest_X"},
          {"column":"Lest_Y",         "type":"text",     "field":"Lest_Y"},
-          {"column":"point",         "type":"geom",       "sql": "ppa_populate_point.sql" },
-          {"column":"ehak",         "type":"integer",    "sql": "ppa_populate_ehak.sql" }
-       ]
-   },{
-      "id":"avalik_2",
-      "provider":"ppa",
-      "url": "https://opendata.smit.ee/ppa/csv/avalik_2.csv",
-      "type":"csv",
-      "update_frequency":"weekly",
-
-      "cron_minutes":"0",
-      "cron_hour":"0",
-      "cron_day_of_month":"*",
-      "cron_month":"*",
-      "cron_day_of_week":"FRI",
-      "cron_custom":"",
-
-      "delimiter":"\t",
-      "schema":[
-         {"column":"juhtum_id",     "type":"text",       "field":"JuhtumId"},
-         {"column":"syndmus_liik",  "type":"text",       "field":"SyndmusLiik"},
-         {"column":"_time",         "type":"timestamp",  "script":"ppa_timestamp"},
-         {"column":"Lest_X",         "type":"text",     "field":"Lest_X"},
-         {"column":"Lest_Y",         "type":"text",     "field":"Lest_Y"},
          {"column":"point",         "type":"geom",       "sql": "ppa_populate_point.sql" },
          {"column":"ehak",         "type":"integer",    "sql": "ppa_populate_ehak.sql" }
        ]
    },{
-      "id":"avalik_merged",
-      "provider":"ppa",
-      "tables":["avalik_1","avalik_2"]
+      "id":"avalik_1",
+      "url": "https://opendata.smit.ee/ppa/csv/avalik_1.csv",
+      "dataset_type" : "merged",
+      "master_dataset": "avalik_merged",
+   },{
+      "id":"avalik_2",
+      "url": "https://opendata.smit.ee/ppa/csv/avalik_2.csv",
+      "dataset_type" : "merged",
+      "master_dataset": "avalik_merged",
    },{
       "id":"liiklusjarelevalve_1",
       "provider":"ppa",

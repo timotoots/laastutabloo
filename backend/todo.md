@@ -11,6 +11,7 @@
 ** TODO spider timeout per dataset
 *** new conf option 'timeout_min', config/timeout_conf.json
 ** TODO GRIB parser - ilmateenistus
+** TODO url build script, make starting url dynamic
 ** TODO XLS parser
 ** TODO converter check unicode stuff
 ** TODO converter validate data, compare with previous version, check against schema

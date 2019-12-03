@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import pandas, numpy
-import glob
+import argparse
+import glob, sys, os.path
 import requests
 import sqlalchemy
 from sqlalchemy import create_engine
@@ -18,7 +19,7 @@ def load_providers():
     
 
 
-def load_to_db():
+def load_to_db(table):
     df = pandas.DataFrame()
     for f in glob.glob("/opt/laastutabloo/config/datasets/*.json"):
         dataset_df = pandas.read_json(f, convert_dates=['last_updated', 'remote_updated'])
@@ -48,13 +49,13 @@ def load_to_db():
             df.loc[df['id'] == auth.id, 'http_header'] = auth.http_header
 
     df['last_updated'] = df['last_updated'].fillna(pandas.Timestamp(0))
-    df.to_sql("datasets2", engine, dtype={'schema':sqlalchemy.types.JSON,                                          
+    df.to_sql(table, engine, dtype={'schema':sqlalchemy.types.JSON,                                          
                                           'remote_updated':sqlalchemy.types.DateTime,
                                           'last_updated':sqlalchemy.types.DateTime,
                                           'tables':sqlalchemy.types.JSON,
                                           'http_header':sqlalchemy.types.JSON,
                                           'devel': sqlalchemy.types.Boolean}, if_exists='replace')
-    engine.execute("ALTER TABLE datasets2 ADD PRIMARY KEY (id, devel)")
+    engine.execute("ALTER TABLE {} ADD PRIMARY KEY (id, devel)".format(table))
     engine.execute("CREATE SCHEMA IF NOT EXISTS devel")
     for i, r in df.iterrows():
         if not r['tables']:
@@ -64,5 +65,11 @@ def load_to_db():
         # requests.post("http://127.0.0.1:5000/dataset/" + r['id'], json={})
     
 if __name__ == '__main__':
-    load_providers()
-    load_to_db()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("table", default="datasets2", help="Database table to import datasets. Defaults to datasets2")
+    args = parser.parse_args()
+
+    if not args:
+        load_providers()
+    load_to_db(args.table)
+

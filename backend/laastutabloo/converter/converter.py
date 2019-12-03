@@ -184,9 +184,10 @@ def populate_dict_from_json(record, field_description, dictionary):
 
     # If there is no field, run given custom script to build it
   else:
-    if 'script' in field_description:
+    if 'script' in field_description: 
+      #filename = scripts[]['script']
       if not module_cache.get(field_description["script"]):
-        module_cache[field_description["script"]] = import_module("laastutabloo.converter.scripts." + field_description["script"])
+        module_cache[field_description["script"]] = import_module("laastutabloo.converter.scripts." + field_description['script'])
       function = getattr(module_cache[field_description["script"]], field_description["script"])
       try:
         field = function(record)
@@ -225,7 +226,8 @@ def create_views(engine, views):
     except:
       session.rollback()
   session.commit()
-  
+
+
 dtypes_map = { 'text': sqlalchemy.types.Text,
                'float': sqlalchemy.types.Float }
 
@@ -243,7 +245,7 @@ def handle_json_records(records, f, engine):
       dtypes[k['column']] = dtypes_map.get(k['type'], sqlalchemy.types.Text)
     except KeyError:
       log.critical('Missing column type: ' + str(k))
-      return
+      raise
 
   new_table = f.id + "_new"
 
@@ -265,8 +267,9 @@ def handle_json_records(records, f, engine):
       try:
         data.to_sql(new_table, engine, schema=schema, if_exists='replace', chunksize=10000, dtype=dtypes)
       except:
-        log.error("Converter failed to insert into table.")
+        log.critical("Converter failed to insert into table.")
         log.exception('Pandas to_sql failed.')
+        raise
       # Append dataframe to db
     else:
       data.to_sql(new_table, engine, schema=schema, if_exists='append', chunksize=10000, dtype=dtypes)
@@ -278,6 +281,7 @@ def handle_json_records(records, f, engine):
     
     if f.type == "geojson" or f.type == "shapefile":
       schema.append({"column": "geometry", "type" :"geojson", "field": "geometry"})
+
     # Loop through every column to map
     for k in schema:
       populate_dict_from_json(o, k, dictionary)
@@ -308,19 +312,34 @@ def handle_json_records(records, f, engine):
 
   log.info("Found {} items.".format(total_count))
 
+
+  #schema.append({"column": "_point", "type" :"geom", "sql": "populate_point_from_lat_lon"})
+  table_script = f.script_sql
+  if not table_script:
+    if 'lest_x' in schema:
+      table_script = "populate_point_from_lest"
+    else:
+      table_script = "populate_point_from_lat_lon"
+
   Session = sessionmaker(bind=engine) 
-  for field in f.schema:
-    if 'sql' in field:
+  for field in schema:
+    if 'script' in field:
+      if scripts[field['script']]['type'] != 'sql_field':
+          continue
       session = Session()
-      sql_template = open("/opt/laastutabloo/backend/laastutabloo/converter/sql/" + field['sql']).read()
+      filename = scripts[field['script']]['script']      
+
+      sql_template = open("/opt/laastutabloo/scripts/converter_sql_field/" + filename).read()
       sql = sql_template.format(tablename=new_table, fieldname=field['column'])
       print(sql)
       session.execute(sql)
       session.commit()
 
-  if f.script_sql:
+  if table_script:
       session = Session()
-      sql = open("/opt/laastutabloo/backend/laastutabloo/converter/sql/" + f.script_sql).read()
+      filename = scripts[table_script]['script']
+      sql_template = open("/opt/laastutabloo/scripts/converter_sql_table/" + filename).read()
+      sql = sql_template.format(tablename=new_table, fieldname="_point")
       print(sql)
       session.execute(sql)
       session.commit()
@@ -331,13 +350,35 @@ def handle_json_records(records, f, engine):
       sql = "DROP TABLE IF EXISTS {}_old".format(f.id)
       print(sql)
       session.execute(sql)
-      sql = "ALTER TABLE {} RENAME TO {}_old ".format(f.id, f.id)
+      sql = "ALTER TABLE IF EXISTS {} RENAME TO {}_old".format(f.id, f.id)
       print(sql)
       session.execute(sql)
-      sql = "ALTER TABLE {} RENAME TO {}".format(new_table, f.id)
+
+      sql = "ALTER TABLE IF EXISTS {} RENAME TO {}".format(new_table, f.id)
       print(sql)
       session.execute(sql)
+
+      # rename indexes
+      sql = "SELECT indexname FROM pg_indexes WHERE tablename = '{}'".format(f.id)
+      print(sql)
+      indexes = session.execute(sql)
+
+      for index in indexes:
+          # XXX
+          sql = "ALTER INDEX IF EXISTS {}_live RENAME TO {}_old".format(index[0], index[0])
+          print(sql)
+          session.execute(sql)
+          sql = "ALTER INDEX IF EXISTS {} RENAME TO {}_live".format(index[0], index[0])
+          print(sql)
+          session.execute(sql)
+
+
       session.commit()
+
+  f.status_converter = 'done'
+  session.commit()
+
+  log.info("Converter done")
 
 def validate_new_table(new_table, old_table):
     return True
@@ -368,12 +409,18 @@ def convert_shapefile_to_geojson(shp, geojson, encoding=None):
       
     
 # Insert given file to postgreSQL
-def convert_and_insert_DB(ds, engine, files):
+def convert_and_insert_DB(ds, engine, pdb, files):
+  global scripts
   # Construct path with file object
   filetype = ds.type
   path = files[0]
   data = pandas.DataFrame()
 
+  scripts = json.loads(open("/opt/laastutabloo/config/scripts.json").read())
+
+
+  log.info("Converter started")
+  
   # Switch-case for file type differentiation, reading to pandas
   try:
     if filetype == 'shapefile':
@@ -403,7 +450,7 @@ def convert_and_insert_DB(ds, engine, files):
         handle_json_records(objects, ds, engine)
       except ijson.common.IncompleteJSONError:
         log.critical("Incomplete JSON.")
-      
+        raise
 
     elif filetype == 'csv':
       encoding = 'utf-8'
@@ -453,13 +500,14 @@ def convert_and_insert_DB(ds, engine, files):
     else:
       print ("Bad file type", ds.type)
   except Exception as e:
+    if pdb:
+        import pdb; pdb.set_trace()
     log.critical("Cannot convert file: " + path)
     log.exception('Exception:')
     ds.status_converter = 'failed'
     session = inspect(ds).session
     session.commit()
     log.debug("Exception: {}".format(e))
-
 
 # Run file through pipeline
 def pipeline(f, engine):

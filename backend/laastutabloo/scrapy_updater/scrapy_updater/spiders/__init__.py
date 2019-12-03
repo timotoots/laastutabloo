@@ -41,10 +41,14 @@ class DatasetItem(scrapy.Item):
   dataset = scrapy.Field()
   engine = scrapy.Field()
   downloaded_files = scrapy.Field()
+  pdb = scrapy.Field()
 
 class DownloadingSpider(scrapy.Spider):
   name = "downloader"
 
+  def construct_url(self, ds):
+    return ds.url
+  
   def start_requests(self):
     dataset_id = getattr(self, 'dataset', '')
     convert_only = getattr(self, 'convert_only', False)
@@ -59,16 +63,18 @@ class DownloadingSpider(scrapy.Spider):
       datasets = session.query(Dataset).filter_by(id=dataset_id)
     else:
       datasets = session.query(Dataset).all()
+
     for ds in datasets:
 
+      # get timeout conf
       if getattr(ds, 'timeout_min', None):
-        task_timeout = ds.timeout_min * 60
+        task_timeout = ds.timeout_min
       else:
         timeout_map = json.load(open("/opt/laastutabloo/config/timeout_conf.json"))[0]
         task_timeout = timeout_map.get(ds.update_frequency, None)
         if task_timeout is None:
           task_timeout = timeout_map.get('default', 10)
-      self.task = reactor.callLater(task_timeout, self.crawler.engine.close_spider, self, reason='spider_timeout')
+      self.task = reactor.callLater(task_timeout * 60, self._close_spider, ds)
       self.clean_log.info("Timeout set to {} min.".format(task_timeout))
         
       
@@ -83,14 +89,32 @@ class DownloadingSpider(scrapy.Spider):
 
       self.clean_log.info("Starting check")
 
+      #if getattr(self, 'debug'):
+      #  import pdb; pdb.set_trace()
       try:
-        self._headers = ds.http_header if ds.http_header else {}
+        self._headers = {}
+        headers_str = ds.http_header if ds.http_header else ""
+        for header_row in headers_str:
+          k, v = header_row.split(":")
+          self._headers[k] = v
         if ds.username and ds.password:
           self._headers[b'Authorization'] = basic_auth_header(ds.username, ds.password)
-        yield scrapy.Request(url=ds.url, method="HEAD", callback=self.check, errback=self.request_failed,
+        yield scrapy.Request(url=self.construct_url(ds) , method="HEAD", callback=self.check, errback=self.request_failed,
                              headers=self._headers, meta={'dataset' : ds})
       except BaseException as ex:
         self.clean_log.error("Check failed: {}".format(ex))
+
+
+  def _close_spider(self, ds):
+    self.clean_log.error("Converter timed out.")
+    if ds.status_updater == 'converting':
+      ds.status_updater = 'done'
+      ds.status_converter = 'failed'
+    else:
+      ds.status_updater = 'failed'
+      ds.status_converter = 'failed'
+    session.commit()
+    self.crawler.engine.close_spider(self, reason='spider_timeout')
 
   def start_converter_hack_callback(self, response):
     dataset = response.meta['dataset']
@@ -103,14 +127,20 @@ class DownloadingSpider(scrapy.Spider):
       # these exceptions come from HttpError spider middleware
       # you can get the non-200 response
       response = failure.value.response
-      self.clean_log.error('HttpError on {}: {}'.format(response.url, response.status))
+      if response.request.method == 'HEAD' and response.status == 405:
+        self.clean_log.info("HTTP method HEAD not allowed, skip to GET.")
+        request = response.request
+        yield scrapy.Request(url=request.url , callback=self.check, errback=self.request_failed,
+                             headers=self._headers, meta=request.meta)
+        return
+      self.clean_log.critical('HttpError on {}: {}'.format(response.url, response.status))
     elif failure.check(DNSLookupError):
       # this is the original request
       request = failure.request
-      self.clean_log.error('DNSLookupError on {}'.format(request.url))
+      self.clean_log.critital('DNSLookupError on {}'.format(request.url))
     elif failure.check(TimeoutError, TCPTimedOutError):
       request = failure.request
-      self.clean_log.error('TimeoutError on {}'.format(request.url))
+      self.clean_log.critical('TimeoutError on {}'.format(request.url))
     else:
       self.clean_log.info(repr(failure))
     ds = failure.request.meta['dataset']
@@ -139,13 +169,15 @@ class DownloadingSpider(scrapy.Spider):
     if last_modified:
       last_modified = parsedate(last_modified, ignoretz=True)
       try:
-        if db_last_mod and last_modified < db_last_mod:
-          self.clean_log.info("Skipping download because dataset not modified.")
-          dataset.status_updater = 'done'
           dataset.remote_updated = last_modified
           session.add(dataset)
           session.commit()
-          return
+
+          if db_last_mod and last_modified < db_last_mod:
+            self.clean_log.info("Skipping download because dataset not modified.")
+            dataset.status_updater = 'done'
+            return
+
       except Exception:
         pass
     # update_interval = dataset.update_frequency
@@ -221,7 +253,7 @@ class DownloadingSpider(scrapy.Spider):
 
 
   def start_converter(self, ds):
-    ds.status_updater = 'converting'
+    ds.status_updater = 'done'
     ds.status_converter = 'running'
 
     try:
@@ -230,10 +262,11 @@ class DownloadingSpider(scrapy.Spider):
       item['dataset'] = ds
       item['engine'] = engine
       item['downloaded_files'] = ds.dataset_files      
-      self.clean_log.info('Converter started.')
+      self.clean_log.info('Starting converter.')
+      item['pdb'] = getattr(self, 'debug', False)
       yield item
-      ds.status_updater = 'done'
-      ds.status_converter = 'done'
+      if item['pdb']:
+        import pdb; pdb.set_trace()
     except BaseException as e:
       session.rollback()
       ds.status_converter = 'failed'

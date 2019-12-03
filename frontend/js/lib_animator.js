@@ -642,6 +642,9 @@ function splitPages(text){
   }
   
       pages[currentPage] = pages[currentPage].concat(currentElementLines);
+      for(var i=0; i< 9 - pages[currentPage].length;i++){
+        pages[currentPage].push("".centerJustify(params.laastX," "));
+      }
     
      //  console.log("Pages:");
      // console.log(pages);
@@ -652,9 +655,7 @@ function splitPages(text){
 
 ///////////////////////////////////////////////////////////////
 
-
-function animateQueries(queries){
-
+function createSlides(queries, debug=0){
 
       var nextSlides = [];
 
@@ -681,21 +682,38 @@ function animateQueries(queries){
       
 
 
-      newSlides.push(createTimeSlide());
-      newSlides.push(createAnimationLibarySlide("jasper1"));
+     // newSlides.push(createTimeSlide());
+     // newSlides.push(createAnimationLibarySlide("jasper1"));
 
-      newSlides.push(createEmoticonSlide());
+     // newSlides.push(createEmoticonSlide());
 
       for(var query_id in queries.queries){
 
         // Query metadata
         queries.queries[query_id] = countQueryColumn(queries.queries[query_id]);
+         queries.queries[query_id].data = queries.queries[query_id].data.splice(0,30);
+
         var query = queries.queries[query_id];
         var queryTitle  = formatSlideTitle(query.config.name);
 
         // Format data
         var text = formatToTable(query);
         var pages = splitPages(text);
+
+        if(debug==1){
+            console.log("debug output");
+            var slideLines = [];
+            slideLines.push(districtHeaders["et"]);
+            slideLines.push(queryTitle["et"]);
+            slideLines.push(headerLine);
+            for (var i = 0; i < pages.length; i++) {
+              slideLines = slideLines.concat(pages[i]);
+              slideLines.push("".centerJustify(params.laastX,"="));
+
+            }
+
+            return slideLines
+        }
 
         // Create slides from pages
         for (var i = 0; i < pages.length; i++) {
@@ -714,6 +732,17 @@ function animateQueries(queries){
 
       }
 
+      return newSlides;
+
+
+}
+
+///////////////////////////////////////////////////////////////
+
+function animateQueries(queries){
+
+
+        var newSlides = createSlides(queries);
 
         var playlist = animateSlides(newSlides)
 
@@ -729,6 +758,7 @@ function animateQueries(queries){
 ///////////////////////////////////////////////////////////////
 
     Animator.prototype.animateQueries = animateQueries;
+    Animator.prototype.createSlides = createSlides;
 
     return Animator;
 

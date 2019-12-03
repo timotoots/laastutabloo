@@ -19,7 +19,7 @@
 
     function createMap(){
 		
-		var map = L.map('map').setView([58.6072058,25.238651], 7);
+		 map = L.map('map').setView([58.6072058,25.238651], 7);
 		
 		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 			maxZoom: 18,
@@ -91,7 +91,7 @@
 			layer.addData(data);
 		}
 
-		map.fitBounds(layer.getBounds());
+		// map.fitBounds(layer.getBounds());
 
 	}
 
@@ -103,7 +103,7 @@
 		// var url = "http://www.laastutabloo.ee:5000/run_query_geojson?query_id=geojson_from_ehak&val1='animi,onimi'&val2=1586"
 		// var url = "http://www.laastutabloo.ee:5000/run_query_geojson?query_id=geojson_from_avalik&val1='SyndmusLiik,JuhtumId'&val2=1586"
 		// var url = "http://www.laastutabloo.ee:5000/run_query_geojson?query_id=geojson_from_avalik&val1='SyndmusLiik,JuhtumId'&val2=8151"
-		// url = 'leaflet_example.json';
+		// url = 'data_examples/leaflet_example.json';
 
  		$.getJSON(url, function(data) {
           	console.log(data);

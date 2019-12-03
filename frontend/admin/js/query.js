@@ -153,7 +153,8 @@ var query_states = {};
             <li class="dataset_status_updater"><div><b>Debug:</b></div></li>
 
             <li><a href="#log_display" class="btn-show-log"> <span class="glyphicon glyphicon-align-left icon-black btn-show-log" aria-hidden="true"></span> Show log</a></li>
-            <li><a href="#log_display" class="btn-show-table"> <span class="glyphicon glyphicon-arrow-right icon-black " aria-hidden="true"></span> Preview output</a></li>
+            <li><a href="#tabulator_display" class="btn-show-table"> <span class="glyphicon glyphicon-arrow-right icon-black " aria-hidden="true"></span> Preview as table</a></li>
+            <li><a href="#taboo_display" class="btn-show-tabloo"> <span class="glyphicon glyphicon-arrow-right icon-black " aria-hidden="true"></span> Preview design</a></li>
             <li><a href="#map" class="btn-show-map"> <span class="glyphicon glyphicon-arrow-left icon-black " aria-hidden="true"></span> Preview map</a></li>
 
           </ul>
@@ -169,6 +170,8 @@ var query_states = {};
         // $('#dataset_'+dataset_id+' .btn-run-updater').click(dataset_id,triggerUpdater);
         $('#query_'+query.query_id+' .btn-show-table').click(query.query_id,showTabulatorHandler);
         $('#query_'+query.query_id+' .btn-show-map').click(query.query_id,showMapHandler);
+        $('#query_'+query.query_id+' .btn-show-tabloo').click(query.query_id,showTablooHandler);
+
 
         function showMapHandler(event){
 
@@ -184,7 +187,7 @@ var query_states = {};
 
              if(query_states[event.data].show_map==0){
               query_states[event.data].show_map = 1;
-              var url =  query_preview_url + "?query_id=" + event.data+"&ehak=8151&output=geojson";
+              var url =  render_query + "?query_id=" + event.data+"&ehak=8151&output=geojson";
               console.log(url);
               // url = "data_examples/tabulator_example.json";
               loadGeoJson(url, "", selector);
@@ -193,6 +196,27 @@ var query_states = {};
               query_states[event.data].show_map = 0;
               //$(selector).hide();
             }
+
+
+
+        }
+
+        function showTablooHandler(event){
+
+          if(!params.id){
+              var selector =  "#query_" +params.id+" .tabloo_display";
+            } else {
+              var selector = ".tabloo_display";
+            }
+
+            $( selector).show();
+            var url =  render_query + "?query_id=" + event.data+"&ehak=8151&limit=100";
+
+          $.getJSON( url, function( data ) {
+              var animations = ta.createSlides(data,1);
+              $(".tabloo_content1").html("<pre>"+ animations.join("\n") +"</pre>")
+              //console.log(animations);
+            });
 
 
 
@@ -261,7 +285,9 @@ var query_states = {};
          if(query_states[event.data].show_tabulator==0){
           query_states[event.data].show_tabulator = 1;
           var url =  query_preview_url+"?query_id=" + event.data+"&limit=10";
-          console.log(url);
+          // var url =  render_query +"?query_id=" + event.data+"&ehak=10";
+          // var url = "http://laastutabloo.erm.ee:5000/render_query?query_id=avalik&ehak=1021";
+          // console.log(url);
           // url = "data_examples/tabulator_example.json";
           createTabulator(url, "", selector);
           $( selector).show();
@@ -274,7 +300,10 @@ var query_states = {};
 }
 
 
-    function saveButtonHandler(event){
+
+
+
+    function saveButtonHandler_notused(event){
 
 
       var control = $("#form1").alpaca("get");
@@ -300,6 +329,21 @@ var query_states = {};
         console.log(data);
 
       } // function saveButtonHandler
+
+/////////////////////////////
+
+    function saveButtonHandler(event){
+
+
+      var control = $("#form1").alpaca("get");
+      var data = control.getValue();
+
+
+      saveData("query", data.query_id, data);
+
+    }
+
+
 
 
 function create_form(){
@@ -338,88 +382,99 @@ function create_form(){
 
        "subtitle_datasets":{
           "type":"any", 
-          "title":"Connect datasets and columns",
+          "title":"Choose data",
           "fieldOptions":{
             "fieldClass":"customSubTitle"
           }
       },
+
+
 
       "dataset_id":{
         "type": "string",
         "enum": datasets_enum,
         "title": "Select dataset",
         "fieldOptions":{
-          "optionLabels":datasets_enum_labels
-        }
+          "optionLabels":datasets_enum_labels,
+  
+              
+
+        },
+       
       }, 
+     "where":{
+        "type": "string",
+        "title": "SQL where clause",
+        "fieldOptions":{
+          "type":"text",
+          "helper":"For advanced use!",
+          "buttons":{
+              "load_fields":{
+                  "title": '<span class="glyphicon glyphicon-arrow-down icon-green" aria-hidden="true"></span> Load fields',
+                  "click": loadFieldsButtonHandler
+              }
+              
+          },
+
+        }
+        }, 
+   "show_sql": {
+      "type": "boolean",
+      "title": "Custom SQL?",
+      "fieldOptions":{}
+  },
+
+      "sql":{
+        "type": "string",
+        "title": "Custom SQL",
+        "fieldOptions":{
+          "type":"textarea",
+          "helper":"For advanced usage only, overrides dataset selection and sorting!",
+
+           "dependencies": { "show_sql": true }
+      
+
+        }
+        }, 
 
 
 
-    "columns":{
+
+       "subtitle_sortby":{
+          "type":"any", 
+          "title":"Sort data",
+          "fieldOptions":{
+            "fieldClass":"customSubTitle"
+          }
+      },
+
+
+    "orderby":{
       "type":"array",
-      "title":"Columns",
+      "title":"Order data",
       "items": {
         "type": "object",
         "properties": {
             
-            "name": {
+            "orderby_column": {
                 "type": "string",
                 "title": "Column",
                 "readonly":false
             },
-             "width": {
-                "type": "string",
-                "enum":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
-                "title": "Width"
-            },
-            
-             "wrap": {
-                "type": "string",
-                "enum": ["truncate","wrap"],
-                "title": "Wrap"
-            },
-             "align": {
-                "type": "string",
-                "enum": ["right","center","left"],
-                "title": "Align"
-            },
-            "orderby_order": {
-                "type": "string",
-                "enum": [1,2,3,4],
-                "title": "Sort order"
-            },
             "orderby_direction": {
                 "type": "string",
-                "enum": ["ASC","DESC"],
+                "enum": ["None","ASC","DESC"],
                 "title": "Sort direction"
-            },
-            "prefix": {
-                "type": "string",
-                "enum":["Kaugus:"],
-                "title": "Prefix"
-            },
-           
-            "suffix": {
-                "type": "string",
-                "enum": ["km", "kraadi"],
-                "title": "Suffix"
-            }
-            
+            }            
         }
     },
     "fieldOptions":{
       "type": "table",
+      "title":"Order data",
+
       "items": {
       "fields": {
          "orderby_direction": {
-            "type": "select"
-          },"suffix": {
-            "type": "select"
-          },"prefix": {
-            "type": "select"
-          },"wrap": {
-            "type": "select"
-          },"align": {
             "type": "select"
           }
         },
@@ -428,34 +483,19 @@ function create_form(){
 
     }
   },
-     "where":{
-        "type": "string",
-        "title": "SQL where clause",
-        "fieldOptions":{
-          "type":"text",
-          "helper":"",
 
 
-        }
-        }, 
-
-      "sql":{
-        "type": "string",
-        "title": "Custom SQL",
-        "fieldOptions":{
-          "type":"textarea",
-          "helper":"For advanced usage only, overrides above!",
 
 
-        }
-        }, 
-          "subtitle_style":{
+   "subtitle_data_style":{
           "type":"any", 
-          "title":"Query style",
+          "title":"Design data",
           "fieldOptions":{
             "fieldClass":"customSubTitle"
           }
       },
+
+
   "style":{
     "title":"",
      "type": "object",
@@ -493,6 +533,68 @@ function create_form(){
       }
 
   },
+
+    "columns":{
+      "type":"array",
+      "title":"Columns",
+      "items": {
+        "type": "object",
+        "properties": {
+            
+            "name": {
+                "type": "string",
+                "title": "Column",
+                "readonly":false
+            },
+             "width": {
+                "type": "string",
+                "enum":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
+                "title": "Width"
+            },
+             "enable": {
+                "type": "boolean",
+                "title": "Enable?"
+            },           
+             "wrap": {
+                "type": "string",
+                "enum": ["truncate","wrap","wrap1", "wrap2","wrap3"],
+                "title": "Wrap"
+            },
+             "align": {
+                "type": "string",
+                "enum": ["right","center","left"],
+                "title": "Align"
+            },
+            "prefix": {
+                "type": "string",
+                "enum":["Kaugus: %data km"],
+                "title": "Format"
+            }
+           
+            
+            
+        }
+    },
+    "fieldOptions":{
+      "type": "table",
+      "items": {
+      "fields": {
+         "orderby_direction": {
+            "type": "select"
+          },"prefix": {
+            "type": "select"
+          },"wrap": {
+            "type": "select"
+          },"align": {
+            "type": "select"
+          }
+        },
+
+      },
+
+    }
+  },
+
       "buttons_updater":{
       "type":"any",
       "title":"Testing area",
@@ -512,11 +614,19 @@ function create_form(){
 
 
   var formOptionsFields = {};
+  var dependencies = {};
+
 
   for(var key in formSchemaProperties){
 
     if(typeof formSchemaProperties[key].fieldOptions != "undefined"){
       formOptionsFields[key] = formSchemaProperties[key].fieldOptions;
+      if(typeof formSchemaProperties[key].fieldOptions.dependencies != "undefined"){
+        dependencies[key] = [];
+        for(var dep_key in formSchemaProperties[key].fieldOptions.dependencies){
+          dependencies[key].push(dep_key);
+        }
+      }
     }
 
   }
@@ -536,7 +646,7 @@ function create_form(){
 
 };
 
-  // formOptionsFields["schema"].dataSource = columnsDataSource;
+  // formOptionsFields["columns_order"].dataSource = columnsDataSource;
 
 
     $("#form1").alpaca({
@@ -544,8 +654,7 @@ function create_form(){
       "schema": {
           "type": "object",
           "properties": formSchemaProperties,
-          "dependencies": {
-          }
+          "dependencies": dependencies
       }, 
       "options": {
         "fields":formOptionsFields,
@@ -562,17 +671,112 @@ function create_form(){
 
 
 
+function loadFieldsButtonHandler(event){
+
+        var control = $("#form1").alpaca("get");
+
+
+        ///////////////////
+        // Check if new dataset is good one
+
+        var dataset_id_control = control.childrenByPropertyId["dataset_id"];
+        var new_dataset_id = dataset_id_control.getValue();
+
+        if(!datasets[new_dataset_id].schema){
+          console.err("No schema in this dataset!");
+          return false;
+        }
+
+        ///////////////////
+        // Prepare new form fields and data
+
+        var orderby_enum = [];
+        var orderby_data = [];
+
+        var style_data = []
+ 
+        for(var i in datasets[new_dataset_id].schema){
+
+            var column_name = datasets[new_dataset_id].schema[i].column;
+
+            // Preferred orderby columns
+            if(column_name=="time"){
+              orderby_data.push({"orderby_column":column_name,"orderby_direction":"DESC"})
+            }
+
+            // 
+            if(column_name=="lat" || column_name=="lon" ){
+                var column_enable = false;
+            } else{
+                var column_enable = true;
+            }
+
+            orderby_enum.push(column_name);
+            style_data.push({"name":column_name,"enable":column_enable,"width":1,"align":"center","wrap":"wrap1","prefix":"None"});
+        }
+
+  
+
+        ///////////////////
+        // Push to forms
+
+        var orderby_control = control.childrenByPropertyId["orderby"];
+
+        // set data of orderby
+        if(orderby_data.length!=0){
+          orderby_control.setValue(orderby_data);
+          // orderby_control.refresh();
+        }
+
+
+        var style_data_control = control.childrenByPropertyId["columns"];
+        style_data_control.setValue(style_data);
+
+        // set enum of orderby columns
+        orderby_control.schema.items.properties.orderby_column.enum = orderby_enum;
+
+
+
+       orderby_control.refresh();
+       style_data_control.refresh();
+
+
+}
+
+
 
   function postRender(control) {
 
-
+    /*
         var dataset_id = control.childrenByPropertyId["dataset_id"];
-        var columns = control.childrenByPropertyId["columns"];
+        var columns_order = control.childrenByPropertyId["columns_order"];
+
+        // console.log(dataset_id.getValue());
+        // console.log(columns.getValue());
+
         // console.log(columns);
-        dataset_id.on("change", function() {
-            console.err("TODO: Why does refresh not work?");
-            columns.refresh();
+
+        columns_order.subscribe(dataset_id, function(val) {
+
+            if(!datasets[val].schema){
+              console.err("No schema in this dataset!");
+              return false;
+            }
+
+            var new_columns_order = [];
+
+            for(var i in datasets[val].schema){
+              console.log(datasets[val].schema[i].column);
+              new_columns_order.push({"name":datasets[val].schema[i].column,"orderby_direction":"ASC","enable":true})
+            }
+            this.setValue(new_columns_order);
+            // this.schema.enum = this.options.optionLabels = teams[val];
+            this.refresh();
         });
+
+*/
+
+      
     }
 
 } // create_form

@@ -34,7 +34,7 @@ app.get('/get_animations', function (req, res) {
    var url = "http://laastutabloo.erm.ee:5000/render_query?query_id=avalik&ehak=446";
 
 
-   var url = "http://laastutabloo.erm.ee:5000/render_query?query_id=avalik&ehak=1021"
+   var url = "http://laastutabloo.erm.ee:5000/render_query?query_id=linnud&ehak=1021"
 
     promiseLoadJson(url)
       .then(data => new Promise(function(resolve, reject) {

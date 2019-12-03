@@ -171,3 +171,13 @@ body {
 .icon-transparent{
   opacity: 0;
 }
+
+.provider_hidden{
+  display: none;
+} 
+
+.provider_visible{
+  padding:1rem 0rem 0rem 0rem;
+  border-top: 1px solid black
+} 
+

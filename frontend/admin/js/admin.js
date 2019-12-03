@@ -17,6 +17,11 @@ var dataset_preview_url = backend_server + "/dataset_preview";
 
 var queries_url = backend_server + "/list_queries";
 var query_preview_url = backend_server + "/run_query";
+var script_url = backend_server + "/get_script";
+var scripts_url = backend_server + "/get_scripts";
+
+var text_url = backend_server + "/get_text";
+
 var render_query = backend_server + "/render_query"; //?query_id=avalik&ehak=1234
 
 var save_query_url = backend_server + "/query";
@@ -37,6 +42,15 @@ var form_lang_choices = {
     }
 };
 
+var form_lang_textarea = {
+    "et":{
+        "type":"textarea",
+    },"en":{
+        "type":"textarea",
+    },"ru":{
+        "type":"textarea",
+    }
+}
 
 
 
@@ -115,11 +129,26 @@ function getIcon(id,color,tooltip){
 
 /////////////////////////////////////////////////////////////////////////////////////
 
-function triggerUpdater(clickHandler){
+function runConverterHandler(clickHandler){
+
+  runUpdaterHandler(clickHandler,1);
+  showLogButtonHandler(clickHandler,1);
+
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+function runUpdaterHandler(clickHandler, convert_only = 0){
 
   var dataset_id = clickHandler.data;
 
-    $.getJSON(backend_server + "/run_updater?dataset_id=" + dataset_id,function(returned_data) {
+  var url = backend_server + "/run_updater?dataset_id=" + dataset_id;
+
+  if(convert_only){
+   url += "&convert_only=1";
+  } 
+
+    $.getJSON(url,function(returned_data) {
 
       console.log(returned_data);
 
@@ -174,6 +203,7 @@ function changeIconColor(element, color){
 
 }
 
+var table ;
 
 function createTabulator(url, data, element){
 
@@ -183,7 +213,7 @@ function createTabulator(url, data, element){
 
     // $(element).html('<div class="tabulator"></table>');
 
-    var table = new Tabulator(element, {
+      table = new Tabulator(element, {
   
       height:205, // set height of table (in CSS or here), this enables the Virtual DOM and improves render speed dramatically (can be any valid css height value)
       // data:tabledata, //assign data to table
@@ -286,15 +316,28 @@ function loadHtmlWithScript(page){
         $("body").append(result);
         if(page=="dataset_list" || page=="dataset_edit"){
           loadJS("js/dataset.js");
+        } else if(page=="provider_list" || page=="provider_edit"){
+          loadJS("js/provider.js");
+        } else if(page=="script_list" || page=="script_edit"){
+          loadJS("js/script.js");
+        } else if(page=="text_list" || page=="text_edit"){
+          loadJS("js/text.js");
         } else if(page=="query_list" || page=="query_edit"){
           loadJS("js/query.js");
+
+          if(page=="query_edit") {
+            loadJS("../lib/bundle.min.js");
+            loadJS("../js/lib_animator.js");
+            loadJS("js/emulator.js");
+          }
+
         } else if(page != "404"){
           loadJS("js/" + page + ".js");
         }
         if(page=="dataset_list"){
-          // setTimeout(function(){
-          //   loadJS("devel/shufflejs.js");
-          // },5000);
+          setTimeout(function(){
+            // loadJS("devel/shufflejs.js");
+          },5000);
           
         }
    }});
@@ -310,7 +353,10 @@ $( document ).ready(function() {
   } if(params.p=="shufflejs"){
     page = "../devel/" + params.p;
 
-  } else if ( params.p=="dataset" || params.p=="query" || params.p=="provider"){
+  } if(params.p=="help"){
+    page = params.p;
+
+  } else if ( params.p=="dataset" || params.p=="query" || params.p=="provider" || params.p=="script" || params.p=="text"){
 
     if(typeof params.id === "undefined"){
        page = params.p + "_list";
@@ -328,4 +374,54 @@ $( document ).ready(function() {
 
 
 /////////////////////////////////////////////////////////////////////////////////////
+
+    function saveData(type, id, data){
+
+      if(type!="query" && type!="dataset" && type!="provider" && type!="script" && type!="text"){
+        console.log("No such type as " + type);
+        return false;
+      } 
+
+      var url = backend_server + "/" + type + "/" + id;
+      
+      console.log("Save query:");
+      console.log(data);
+
+      $.ajax(url, {
+        contentType: "application/json",
+        type: "POST",
+        data: JSON.stringify(data)
+      }).done(function(msg) {
+        console.log("Data Saved!");
+        console.log(msg);
+      });
+
+
+    } // function saveData
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+function sortMeBy(arg, sel, elem, order) {
+        arg = "data-" + arg;
+        var $selector = $(sel),
+        $element = $selector.children(elem);
+        $element.sort(function(a, b) {
+                var an = a.getAttribute(arg)
+                bn = b.getAttribute(arg)
+                if (order == "asc") {
+                        if (an > bn)
+                        return 1;
+                        if (an < bn)
+                        return -1;
+                } else if (order == "desc") {
+                        if (an < bn)
+                        return 1;
+                        if (an > bn)
+                        return -1;
+                }
+                return 0;
+        });
+        $element.detach().appendTo($selector);
+}
 

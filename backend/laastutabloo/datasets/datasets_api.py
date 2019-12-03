@@ -61,13 +61,95 @@ def sqlrow_as_dict(row):
 @app.route('/list_datasets')
 @cross_origin(supports_credentials=True)
 def list_datasets():
-  return jsonify([ sqlrow_as_dict(r) for r in session.query(Dataset).all() ])
+  res = session.query(Dataset).all()
+  session.commit()
+  return jsonify([ sqlrow_as_dict(r) for r in res ])
+
+class ProviderSchema(Schema):
+    type = 'object'
+    properties = {
+        'id': {
+            'type': 'string'
+        }
+    }
+
+class Scipt(DecBase):
+    __tablename__ = "script"
+    id = Column(Text, primary_key=True)
+    type = Column(Text)
+    script = Column(Text)
 
 
-@app.route('/list_providers')
-@cross_origin(supports_credentials=True)
-def list_providers():
-    return jsonify([ sqlrow_as_dict(r) for r in session.query(Provider).all() ])
+class ProvidersResource(Resource):
+    @swagger.doc({
+        'tags': ['provider'],
+        'description': "All defined providers.",
+        'responses': {
+            '200': {
+                'description': 'Providers',
+                'schema': ProviderSchema,
+                'examples': {
+                    'application/json': {
+                    }
+                }       
+            }
+        },
+        })
+    def get(self):
+        res = session.query(Provider).order_by(Provider.id)
+        session.commit()
+        return [ sqlrow_as_dict(r) for r in res ], 200
+
+
+class ProviderResource(Resource):
+    @swagger.doc({
+        'tags': ['provider'],
+        'description': "Update provider",
+        'consumes': ['application/json'],
+        'parameters':[
+            {
+                "name": "provider_id",
+                "description": "Provider id",
+                'in': 'path',
+                'type': 'string',
+            },
+            {
+                "name": "json",
+                "description": "Provider metadata",
+                'in': 'body',
+                'schema': { 'type': 'object', 'properties': [ {'json': {'type': 'json'} } ]},
+                'type': 'string',
+            }
+            
+          ],
+        'responses': {
+            '200': {
+                'description': 'Provider',
+                'schema': ProviderSchema,
+                'examples': {
+                    'application/json': {
+                        'id': "basseinid",
+                    }
+                }       
+            }
+        },
+        })
+    @cross_origin(supports_credentials=True)
+    def post(self, provider_id):
+      if not request.json:
+        return jsonify({'error': "No JSON received."})
+
+      p = session.query(Provider).filter_by(id=provider_id).first()
+      if not p:      
+        p = Provider()
+        session.add(p)
+
+      for k, v in request.json.items():
+        setattr(p, k, v)
+
+      session.commit()
+      return jsonify(True)
+
 
 class DatasetSchema(Schema):
     type = 'object'
@@ -95,7 +177,9 @@ class DatasetsResource(Resource):
         },
         })
     def get(self):
-        return [ sqlrow_as_dict(r) for r in session.query(Dataset).order_by(Dataset.provider, Dataset.id) ], 200
+        res = session.query(Dataset).order_by(Dataset.provider, Dataset.id)
+        session.commit()
+        return [ sqlrow_as_dict(r) for r in res ], 200
 
 class DatasetResource(Resource):
     @swagger.doc({
@@ -130,7 +214,9 @@ class DatasetResource(Resource):
         })
     def get(self, dataset_id):
         devel = request.args.get('devel', False)
-        return sqlrow_as_dict(session.query(Dataset).filter_by(id=dataset_id, devel=devel).first()), 200
+        res = session.query(Dataset).filter_by(id=dataset_id, devel=devel).first()
+        session.commit()
+        return sqlrow_as_dict(res), 200
 
     @swagger.doc({
         'tags': ['datasets'],
@@ -227,7 +313,9 @@ class DatasetResource(Resource):
         cron_day_of_month = 1
         cron_hour = 0
         cron_minutes = 0
-        
+
+      if ds.update_frequency == 'custom':
+        cron_minute, cron_hour, cron_day_of_month, cron_month, cron_day_of_week = ds.cron_custom.split(" ")
 
       if not job_id:
         # create new job
@@ -277,6 +365,8 @@ class DatasetResource(Resource):
     
 api.add_resource(DatasetsResource, '/datasets')
 api.add_resource(DatasetResource, '/dataset/<string:dataset_id>')
+api.add_resource(ProvidersResource, '/list_providers')
+api.add_resource(ProviderResource, '/provider/<string:provider_id>')
 
 @app.route('/reload_datasets')
 @cross_origin(supports_credentials=True)
@@ -337,6 +427,7 @@ def run_updater():
     return jsonify({"error" : "Need parameter dataset_id."})
 
   ds = session.query(Dataset).filter_by(id=dataset_id).first()
+  session.commit()
   if not ds:
     return jsonify({"error" : "No such dataset {}.".format(dataset_id)})
 
@@ -361,10 +452,11 @@ def run_updater():
 @cross_origin(supports_credentials=True)
 def get_log():
   dataset_id = request.args.get('dataset_id')
+  limit = int(request.args.get('limit', 100)) + 1
   if dataset_id:
     filename = "/opt/laastutabloo/backend/data/logs/" + dataset_id
     try:
-      loglines = open(filename).readlines()
+      loglines = open(filename).readlines()[-limit:-1]
     except:
       return jsonify({"error": "No log for {}.".format(dataset_id)})
     
@@ -393,6 +485,7 @@ def dataset_preview():
   ds = session.query(Dataset).filter_by(id=dataset_id).first()
   try:
     res = session.execute("SELECT * FROM {} ORDER BY ctid ASC LIMIT {}".format(ds.id, int(limit)))
+    session.commit()
   except:
     session.rollback()
     return jsonify(False)
@@ -475,20 +568,20 @@ class PreparedStatement(DecBase):
     
   def _construct_sql(self):
     dataset = session.query(Dataset).filter_by(id=self.dataset_id).first()
+    session.commit()
     if not dataset:
       return False
     has_point = False
     has_ehak = False
 
-    for c in dataset.schema:
-      if c['column'] == 'point' and c['type'] == 'geom':
-        has_point = True
-      if c['column'] == 'ehak':
-        has_ehak = True
+    if session.execute("SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_NAME = '{}' and COLUMN_NAME = '_point';".format(self.dataset_id)):
+      has_point = True
+    if session.execute("SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_NAME = '{}' and COLUMN_NAME = '_ehak';".format(self.dataset_id)):
+      has_ehak = True
 
     #print("ehak {} point {}".format(has_ehak, has_point))
 
-    ## select liiginimi_et from loodusvaatlused_2019 inner join ehak ON ST_Contains(ehak.geom, loodusvaatlused_2019.point) WHERE akood::integer=6455 LIMIT 10;
+    ## select liiginimi_et from loodusvaatlused_2019 inner join ehak ON ST_Contains(ehak.geom, loodusvaatlused_2019._point) WHERE akood::integer=6455 LIMIT 10;
 
     sql_template = "SELECT {columns} FROM {table} WHERE {where_clause} ORDER BY {order_clause} LIMIT {limit}"
     columns = []
@@ -518,8 +611,8 @@ class PreparedStatement(DecBase):
     if has_ehak and not has_point:
       where_columns.append("ehak::integer = $1")
     elif has_point:
-      table_clause = "{table} LEFT JOIN ehak ON ST_Contains(ehak.geom, {table}.point)".format(table=self.dataset_id)
-      columns.append("ST_AsGeoJSON(point) as point")
+      table_clause = "{table} LEFT JOIN ehak ON ST_Contains(ehak.geom, {table}._point)".format(table=self.dataset_id)
+      columns.append("ST_AsGeoJSON(_point) as _point")
       where_columns.append("ehak.akood::integer = $1::integer")
 
     where_clause = " AND ".join(where_columns)
@@ -594,7 +687,9 @@ class QueryResource(Resource):
         })
     def get(self, query_id):
         devel = request.args.get('devel', 0)
-        return sqlrow_as_dict(session.query(PreparedStatement).filter_by(query_id=query_id, devel=devel).first()), 200
+        res = session.query(PreparedStatement).filter_by(query_id=query_id, devel=devel).first()
+        session.commit()
+        return sqlrow_as_dict(res), 200
 
     @swagger.doc({
         'tags': ['queries'],
@@ -803,9 +898,11 @@ class QuerySlide(DecBase):
 # @app.route('/list_queries')
 # @cross_origin(supports_credentials=True)
 def list_queries():
+    res = session.query(PreparedStatement).all()
+    session.commit()
     return jsonify([ {"query_id": r.query_id, "sql": r.statement, "devel": bool(r.devel),
                       "style": r.style, "columns": r.columns,
-                      "dataset_id": r.dataset_id, "where": r.where, "name": r.name} for r in session.query(PreparedStatement).all() ])
+                      "dataset_id": r.dataset_id, "where": r.where, "name": r.name} for r in res ])
 
 @app.route('/list_query2')
 @cross_origin(supports_credentials=True)
@@ -833,6 +930,12 @@ def file_preview():
   if dataset_id:
     pass
 
+@app.route('/get_scripts')
+@cross_origin(supports_credentials=True)
+def get_scripts():
+  f = open("/opt/laastutabloo/config/scripts.json")
+  return f.read()
+
 
 def prepare_statement(s, raise_exc=False):
     print(s.query_id, s.devel)
@@ -846,7 +949,9 @@ def prepare_statement(s, raise_exc=False):
 
 def clean_and_prepare_all():
     engine.execute("DEALLOCATE ALL")
-    for s in session.query(PreparedStatement).all():
+    res = session.query(PreparedStatement).all()
+    session.commit()
+    for s in res:
         prepare_statement(s)
 
 
@@ -956,6 +1061,8 @@ def render_query():
   query_id=request.args.get('query_id', '')
   query_ids=request.args.get('query_ids', False)
   s = session.query(PreparedStatement).filter_by(query_id=query_id, devel=devel).first()
+  session.commit()
+
   if not s:
       return jsonify({'error': "Query not found."})
   ehak = int(request.args.get('ehak', None))
@@ -963,6 +1070,7 @@ def render_query():
     return jsonify({'error': "Parameter ehak required."})
   try:
       ehak_name, ehak_type = session.execute("select animi, tyyp from ehak where akood::integer = '{}';".format(ehak)).first()
+      session.commit()
   except TypeError:
       return jsonify({'msg': 'Cannot find ehak.'})
   val1 = request.args.get('val1', None)
@@ -992,6 +1100,7 @@ def render_query():
                                                             'query_id': s.query_id}, page_num).split("\n"))
           # qdict['pages'].append(lines[0])
       # jt['queries'][s.query_id] = qdict
+  session.commit()
   return jsonify(jt)
   # qs = session.query(QuerySlide).filter_by(query_id=s.query_id).first()
 
@@ -1003,6 +1112,7 @@ def run_query_geojson():
     devel = int(request.args.get('devel', 0))    
 
     s = session.query(PreparedStatement).filter_by(query_id=request.args.get('query_id', ''), devel=devel).first()
+    session.commit()
     if not s:
         return jsonify(False)
 
@@ -1023,10 +1133,10 @@ def run_query_geojson():
     # iterate through the list of result dictionaries
     for row in values:
         # create a single GeoJSON geometry from the geometry column which already contains a GeoJSON string
-        geom = geojson.loads(row['point'])
+        geom = geojson.loads(row['_point'])
 
         # remove the geometry field from the current's row's dictionary
-        row.pop('point')
+        row.pop('_point')
 
         # create a new GeoJSON feature and pass the geometry columns as well as all remaining attributes which are stored in the row dictionary
         feature = geojson.Feature(geometry=geom, properties=row)
