@@ -6,7 +6,7 @@ RUN apt-get update -y && \
 
 
 # We copy just the requirements.txt first to leverage Docker cache
-COPY backend/requirements.txt requirements.txt
+COPY backend/datastore/requirements.txt requirements.txt
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -15,9 +15,9 @@ ENV PYTHONUNBUFFERED 1
 RUN pip3 install -r requirements.txt
 COPY backend /opt/laastutabloo/backend
 COPY config /opt/laastutabloo/config
-WORKDIR /opt/laastutabloo/backend/
+WORKDIR /opt/laastutabloo/backend/datastore
 
-RUN python3 setup.py install
+RUN python3 setup.py develop
 
 #ENTRYPOINT [ "python3" ]
 
