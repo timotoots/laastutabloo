@@ -50,3 +50,21 @@ sudo pip3 install scrapyd-client flask_cors
 sudo pip3 install scrapyd-client flask_cors 
 cd /opt/laastutabloo/backend/laastutabloo/scrapy_updater/; scrapyd-deploy -p Laastutabloo
 ```
+
+
+Docker
+apt update ; apt install -y docker.io docker-compose
+
+docker-compose up -d  postgres
+docker-compose exec postgres /bin/bash
+su postgres
+psql -c "create role $laastutabloo_db_user with login password '$laastutabloo_db_password'"
+createdb -O $laastutabloo_db_user $laastutabloo_db
+createdb -O $laastutabloo_db_user scrapykeeper
+psql -d $laastutabloo_db  -c "GRANT CREATE ON DATABASE $laastutabloo_db TO $laastutabloo_db_user;"
+psql -d $laastutabloo_db  -c "CREATE EXTENSION postgis;"
+psql -d $laastutabloo_db -f /opt/laastutabloo/config/ehak/ehak.sql
+
+docker-compose start
+docker-compose run datastore python3 /opt/laastutabloo/backend/laastutabloo/datastore/dataset_json_to_db_loader.py --providers datasets2
+docker-compose exec scrapyd scrapyd-deploy
