@@ -9,5 +9,9 @@ from laastutabloo.converter import converter
 
 class DatasetConverterPipeline(object):
     def process_item(self, item, spider):
-        converter.convert_and_insert_DB(item['dataset'], item['engine'], item['pdb'], item['downloaded_files'].split(",")) 
+        try:
+            files = item['downloaded_files'].split(",")
+        except:
+            files = ""
+        converter.convert_and_insert_DB(item['dataset'], item['engine'], item['pdb'], item['limit'], files) 
         return item

@@ -59,7 +59,7 @@ def load_to_db(table):
     engine.execute("CREATE SCHEMA IF NOT EXISTS devel")
 
     # datasets_api does db introspection at import time
-    from laastutabloo.datastore import DatasetResource
+    from datastore import DatasetResource
     for i, r in df.iterrows():
         if not r['tables']:
             DatasetResource._sync_with_scrapykeeper(r['id'], False, {})

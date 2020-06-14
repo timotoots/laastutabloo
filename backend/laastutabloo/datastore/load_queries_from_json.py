@@ -1,11 +1,11 @@
 #!/usr/bin/python
 import pandas, numpy
-import glob
+import glob, os
 import requests
 import sqlalchemy, json
 from sqlalchemy import create_engine
 from .datasets_api import PreparedStatement, SlideTemplate, SubTemplate, TemplateRow, TemplateColumn, QuerySlide, session
-engine = create_engine("postgresql://datastore_default:laastu123@localhost/laastutabloo")
+engine = create_engine("postgresql://{laastutabloo_db_user}:{laastutabloo_db_password}@postgres/{laastutabloo_db}".format(**os.environ))
 
 def load_queries():
     all_df = pandas.DataFrame()

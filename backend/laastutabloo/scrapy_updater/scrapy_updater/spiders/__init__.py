@@ -23,7 +23,7 @@ from sqlalchemy.orm import sessionmaker
 
 RAW_FILE_PATH = '/opt/laastutabloo/backend/data/raw/'
 
-engine = create_engine("postgresql://datastore_default:laastu123@localhost/laastutabloo")
+engine = create_engine("postgresql://{laastutabloo_db_user}:{laastutabloo_db_password}@postgres/{laastutabloo_db}".format(**os.environ))
 metadata = MetaData()
 metadata.reflect(engine, only=['datasets2',])
 
@@ -42,6 +42,7 @@ class DatasetItem(scrapy.Item):
   engine = scrapy.Field()
   downloaded_files = scrapy.Field()
   pdb = scrapy.Field()
+  limit = scrapy.Field()
 
 class DownloadingSpider(scrapy.Spider):
   name = "downloader"
@@ -52,6 +53,7 @@ class DownloadingSpider(scrapy.Spider):
   def start_requests(self):
     dataset_id = getattr(self, 'dataset', '')
     convert_only = getattr(self, 'convert_only', False)
+
     if dataset_id:
       self.clean_log = logging.getLogger("spider_cleanlog")
       flogger = logging.handlers.RotatingFileHandler(filename = "/opt/laastutabloo/backend/data/logs/" + dataset_id, mode='a', maxBytes=1024*1024)
@@ -100,7 +102,7 @@ class DownloadingSpider(scrapy.Spider):
         if ds.username and ds.password:
           self._headers[b'Authorization'] = basic_auth_header(ds.username, ds.password)
         yield scrapy.Request(url=self.construct_url(ds) , method="HEAD", callback=self.check, errback=self.request_failed,
-                             headers=self._headers, meta={'dataset' : ds})
+                             headers=self._headers, meta={'dataset' : ds, 'download_timeout': task_timeout * 60})
       except BaseException as ex:
         self.clean_log.error("Check failed: {}".format(ex))
 
@@ -144,12 +146,23 @@ class DownloadingSpider(scrapy.Spider):
     else:
       self.clean_log.info(repr(failure))
     ds = failure.request.meta['dataset']
-    ds.status_updater = 'failed'
+    ds.status_updater = 'failed'    
     session.commit()
 
 
   def check(self, response):
     dataset = response.meta['dataset']
+    if dataset.dataset_type == 'merged':
+      master = session.query(Dataset).filter_by(id=dataset.master_dataset).first()
+      if not master:
+        self.clean_log.info("Cannot find master dataset.")
+        ds.status_updater = 'failed'
+        session.add(dataset)
+        session.commit()
+        return
+      dt_type = master.type
+    else:
+      dt_type = dataset.type
         
     db_last_mod = dataset.last_updated
     last_modified = response.headers.get('Last-Modified')
@@ -202,7 +215,7 @@ class DownloadingSpider(scrapy.Spider):
     # print("Should we update? " + str(update))
 
     # if update:
-    filename = RAW_FILE_PATH + dataset.id + '.' + dataset.type
+    filename = RAW_FILE_PATH + dataset.id + '.' + dt_type
     dataset.status_updater = 'downloading'
     session.add(dataset)
     try:
@@ -241,7 +254,7 @@ class DownloadingSpider(scrapy.Spider):
 
     self.clean_log.info('Saved file %s' % filename)
 
-    ds.last_updated = datetime.utcnow()#.replace(tzinfo=None)
+    ds.last_updated = datetime.now()#.replace(tzinfo=None)
     if ds.file_in_package:
       ds.dataset_files = ",".join(self.extract_from_zip(filename, ds))
     else:
@@ -261,9 +274,10 @@ class DownloadingSpider(scrapy.Spider):
       item = DatasetItem()
       item['dataset'] = ds
       item['engine'] = engine
-      item['downloaded_files'] = ds.dataset_files      
+      item['downloaded_files'] = ds.dataset_files
       self.clean_log.info('Starting converter.')
       item['pdb'] = getattr(self, 'debug', False)
+      item['limit'] = getattr(self, 'limit', None)
       yield item
       if item['pdb']:
         import pdb; pdb.set_trace()

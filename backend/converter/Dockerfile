@@ -26,12 +26,5 @@ ENV PYTHONUNBUFFERED 1
 
 COPY scrapyd.conf /etc/scrapyd/
 
-#COPY config /opt/laastutabloo/config
-#WORKDIR /opt/laastutabloo/backend/
-
-#
-#RUN python setup.py install
-
-
 EXPOSE 6800
 CMD ["scrapyd", "--pidfile="]

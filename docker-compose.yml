@@ -9,7 +9,6 @@ x-datastore-defaults: &datastore_defaults
   depends_on:
     - postgres
     - smtp
-#    DATASTORE_CONF: '/etc/datastore'
   env_file: .env
   ports:
     - "5000:5000"
@@ -44,6 +43,7 @@ services:
       - '80:80/tcp'
     image: "nginx:latest"
     volumes:
+      - './frontend:/frontend'
       - type: bind
         read_only: true
         source: ./config/nginx
@@ -56,6 +56,7 @@ services:
     environment:
       DATABASE_CONNECTION_STRING: "postgresql://${laastutabloo_db_user}:${laastutabloo_db_password}@postgres/scrapykeeper"
       SERVERS: 'http://scrapyd:6800'
+    env_file: .env
     build:
       context: ./scrapykeeper
     ports:
@@ -76,9 +77,9 @@ services:
       - './data:/opt/laastutabloo/backend/data'
       - './config:/opt/laastutabloo/config/'
       - './data/scrapyd_dbs:/var/lib/scrapyd/dbs/'
-  frontend:
+  curator:
     build:
-      context: frontend
+      context: curator
     ports:
       - '3030:3030/tcp'
     volumes:

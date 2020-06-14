@@ -2,7 +2,7 @@ FROM ubuntu:18.04
 MAINTAINER Tanel Karindi mou@mou.ee
 
 RUN apt-get update -y && \
-    apt-get install -y python3-pip git python3-psycopg2 libmysqlclient-dev python3-numpy
+    apt-get install -y python3-pip git python3-psycopg2 libmysqlclient-dev python3-numpy wget
 
 
 #RUN git clone https://github.com/fliot/ScrapyKeeper.git
@@ -15,6 +15,8 @@ ENV PYTHONUNBUFFERED 1
 ENV TZ=UTC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
+
+COPY init_scrapykeeper.sh /init_scrapykeeper.sh
 WORKDIR ScrapyKeeper
 #RUN  grep -vE "(PyMySQL|mysqlclient)" requirements.txt > req-without-mysql.txt
 
