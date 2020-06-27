@@ -35,7 +35,9 @@ EXPOSE 5050
 ENV RUNS_IN_CLOUD 0
 # docker-compose run --service-ports scrapykeeper /bin/bash
 # scrapykeeper --port 5050 --server http://scrapyd:6800
-CMD [ "scrapykeeper", "--port", "5050", "--server", "http://scrapyd:6800" ]
+
+COPY run_scrapykeeper.sh /run_scrapykeeper.sh
+CMD [ "/run_scrapykeeper.sh" ]
 
 
 
