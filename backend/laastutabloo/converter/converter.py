@@ -22,6 +22,11 @@ from geoalchemy2 import Geometry, WKTElement
 from geomet import wkt
 import logging
 
+from chardet.universaldetector import UniversalDetector
+
+
+from laastutabloo.datasets.script import Script
+
 log = logging.getLogger("converter")
 
 # Constants
@@ -170,8 +175,8 @@ def populate_dict_from_json(record, field_description, dictionary):
 
         dictionary[field_description["column"]] = [text_value]
       except BaseException as e:
-        import pdb; pdb.set_trace()
-        print(e)
+        log.critical("Cannot stringify value {}".format(value))
+        log.exception()
       # if field_description["type"] == "geojson":
       # value = json.dumps(record[fieldname], cls=DecimalEncoder)
       # If field is without "." and contained in record,
@@ -227,10 +232,17 @@ def _reflect_dataset(engine):
 
     Base = automap_base(metadata=metadata)                                                                                                           
     Base.prepare(engine)
+<<<<<<< HEAD
 
     Dataset = Base.classes.datasets2
     return session, Dataset
 
+=======
+
+    Dataset = Base.classes.datasets2
+    return session, Dataset
+
+>>>>>>> 9b204e1e58431d65dddb5a52b3ae5ef0d9ae82f2
 def handle_json_records(records, f, engine, limit=None):
   session = inspect(f).session
   data = pandas.DataFrame()
@@ -266,11 +278,18 @@ def handle_json_records(records, f, engine, limit=None):
     schema = 'public'
     if f.devel:
       schema = 'devel'
+
+    for name, dtype in dtypes.items():
+        try:  
+            if dtype == sqlalchemy.types.Float:
+                data[name] = pandas.to_numeric(data[name], errors='coerce')
+            if dtype == sqlalchemy.types.Integer:
+                data[name] = pandas.to_numeric(data[name], errors='coerce')
+        except KeyError:
+            log.critical("Missing field: {}".format(name))
+            raise
+        
     if first:
-      try:
-        drop_views(engine, views)
-      except:
-        pass
       try:
         data.to_sql(new_table, engine, schema=schema, if_exists='replace', chunksize=10000, dtype=dtypes)
       except:
@@ -283,9 +302,13 @@ def handle_json_records(records, f, engine, limit=None):
 
   # Loop throught every record in the JSON
   total_count = 0
+
   for o in records:
     dictionary = {}       # will hold data from record in dict form
-    
+
+    if limit and limit <= total_count:
+      break
+
     if f.type == "geojson" or f.type == "shapefile":
       schema.append({"column": "geometry", "type" :"geojson", "field": "geometry"})
 
@@ -308,6 +331,7 @@ def handle_json_records(records, f, engine, limit=None):
 
     total_count += 1
 
+    
 
   # write leftover data if any
   if not data.empty:
@@ -319,24 +343,35 @@ def handle_json_records(records, f, engine, limit=None):
 
   log.info("Found {} items.".format(total_count))
 
-
   #schema.append({"column": "_point", "type" :"geom", "sql": "populate_point_from_lat_lon"})
+  has_lest_x = has_lest_y = has_lat = has_lon = False
   table_script = f.script_sql
   if not table_script:
-    if 'lest_x' in schema:
+    for field in schema:
+      if field['column'] == 'lest_x':
+          has_lest_x = True
+      if field['column'] == 'lest_y':
+          has_lest_y = True
+      if field['column'] == 'lat':
+          has_lat = True
+      if field['column'] == 'lon':
+          has_lon = True
+
+    if has_lest_x and has_lest_y:
       table_script = "populate_point_from_lest"
-    else:
+    elif has_lat and has_lon:
       table_script = "populate_point_from_lat_lon"
+    else:
+      log.info("Location data not found.")
 
   Session = sessionmaker(bind=engine) 
   for field in schema:
     if 'script' in field:
-      if scripts[field['script']]['type'] != 'sql_field':
+      script = session.query(Script).filter_by(id=field['script']).first()
+      if script.type != 'converter_sql':
           continue
-      session = Session()
-      filename = scripts[field['script']]['script']      
 
-      sql_template = open("/opt/laastutabloo/scripts/converter_sql_field/" + filename).read()
+      sql_template = script.script
       sql = sql_template.format(tablename=new_table, fieldname=field['column'])
       print(sql)
       session.execute(sql)
@@ -351,10 +386,18 @@ def handle_json_records(records, f, engine, limit=None):
       session.execute(sql)
       session.commit()
 
-  create_views(engine, views)
   if validate_new_table(new_table, f.id):
+
+
       session = Session()
-      sql = "DROP TABLE IF EXISTS {}_old".format(f.id)
+      for v in views.keys():
+          try:
+              sql = "DROP VIEW {} CASCADE;".format(v)
+              session.execute(sql)
+          except:
+              session.rollback()
+
+      sql = "DROP TABLE IF EXISTS {}_old CASCADE".format(f.id)
       print(sql)
       session.execute(sql)
       sql = "ALTER TABLE IF EXISTS {} RENAME TO {}_old".format(f.id, f.id)
@@ -370,8 +413,7 @@ def handle_json_records(records, f, engine, limit=None):
       print(sql)
       indexes = session.execute(sql)
 
-      for index in indexes:
-          # XXX
+      for index in indexes:          
           sql = "ALTER INDEX IF EXISTS {}_live RENAME TO {}_old".format(index[0], index[0])
           print(sql)
           session.execute(sql)
@@ -379,6 +421,16 @@ def handle_json_records(records, f, engine, limit=None):
           print(sql)
           session.execute(sql)
 
+      session.commit()
+
+      for v, tables in views.items():
+          try:
+              selects = [ "select * from {} ".format(t) for t in tables ]
+              union = " union ".join(selects)
+              sql = "create view {} as {}".format(v, union)
+              session.execute(sql)
+          except:
+              log.exception("Exception while creating view.")
 
       session.commit()
 
@@ -389,6 +441,16 @@ def handle_json_records(records, f, engine, limit=None):
 
 def validate_new_table(new_table, old_table):
     return True
+
+def detect_encoding(filename):
+    detector = UniversalDetector()
+    f = open(filename, mode='rb')
+    for line in f.readlines():
+        detector.feed(line)
+        if detector.done: break
+    detector.close()
+    f.close()
+    return detector.result['encoding']
 
     
 def convert_shapefile_to_geojson(shp, geojson, encoding=None):
@@ -416,10 +478,46 @@ def convert_shapefile_to_geojson(shp, geojson, encoding=None):
       
     
 # Insert given file to postgreSQL
-def convert_and_insert_DB(ds, engine, pdb, files):
+def convert_and_insert_DB(ds, engine, pdb, limit, files):
   global scripts
   # Construct path with file object
-  filetype = ds.type
+  if ds.dataset_type == 'merged':
+    session, Dataset = _reflect_dataset(engine)
+    master = session.query(Dataset).filter_by(id=ds.master_dataset).first()
+    session.commit()
+    filetype = master.type
+  else:
+    filetype = ds.type
+
+    
+  if ds.dataset_type == 'joined':
+    session, Dataset = _reflect_dataset(engine)
+    parents = session.query(Dataset).filter(Dataset.id.in_(ds.tables)).all()
+    schema = {}
+    columns = []
+    columns_set = set()
+
+    if ds.tables_join_key:
+      for p in parents:
+        if session.execute("SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_NAME = '{}' and COLUMN_NAME = '_point';".format(p.id)).first() and '_point' not in columns_set:
+          columns.append(p.id + '."_point"')
+          columns_set.add('_point')
+
+        for c in p.schema:
+          if c['column'] not in columns_set:
+            columns.append(p.id + '."' + c['column'] + '"')
+            columns_set.add(c['column'])
+
+    select_fields = ", ".join(columns)
+    from_str = "{} join {} using ({})".format(ds.tables[0], ds.tables[1], ds.tables_join_key)
+    sql = "DROP VIEW {}".format(ds.id)
+    session.execute(sql)
+    sql = "CREATE OR REPLACE VIEW {} AS SELECT {} FROM {}".format(ds.id, select_fields, from_str)
+    session.execute(sql)
+    ds.status_converter = 'done'
+    session.commit()
+    return
+
   path = files[0]
   data = pandas.DataFrame()
 
@@ -445,7 +543,7 @@ def convert_and_insert_DB(ds, engine, pdb, files):
       def iter_rows(data):
         for i, row in data.iterrows():
           yield row
-      handle_json_records(iter_rows(objects), ds, engine)
+      handle_json_records(iter_rows(objects), ds, engine, limit)
       return
     
     if filetype == 'json' or filetype == 'geojson':
@@ -454,7 +552,7 @@ def convert_and_insert_DB(ds, engine, pdb, files):
       prefix = ds.converter_top_element
       objects = iter_json_objects(open(path, mode="rb"), prefix)
       try:
-        handle_json_records(objects, ds, engine)
+        handle_json_records(objects, ds, engine, limit)
       except ijson.common.IncompleteJSONError:
         log.critical("Incomplete JSON.")
         raise
@@ -463,6 +561,9 @@ def convert_and_insert_DB(ds, engine, pdb, files):
       encoding = 'utf-8'
       if ds.encoding:
         encoding = ds.encoding
+      else:
+        encoding = detect_encoding(path)
+
       kwargs = {}
       if ds.csv_colnames:
         kwargs['names'] = ds.csv_colnames.strip('{}').split(",")
@@ -472,7 +573,7 @@ def convert_and_insert_DB(ds, engine, pdb, files):
       def iter_rows(data):
         for i, row in data.iterrows():
           yield row
-      handle_json_records(iter_rows(objects), ds, engine)
+      handle_json_records(iter_rows(objects), ds, engine, limit)
       return
     
     elif filetype == 'xml':
@@ -483,7 +584,7 @@ def convert_and_insert_DB(ds, engine, pdb, files):
 
       prefix = ds.converter_top_element
       objects = iter_json_objects(open(path + "tmp.json", mode='rb'), prefix)
-      handle_json_records(objects, ds, engine)
+      handle_json_records(objects, ds, engine, limit)
       return
     
       
