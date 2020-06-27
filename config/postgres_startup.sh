@@ -3,6 +3,4 @@ psql -c "create role $laastutabloo_db_user with login password '$laastutabloo_db
 createdb -O $laastutabloo_db_user $laastutabloo_db
 createdb -O $laastutabloo_db_user scrapykeeper
 psql -d $laastutabloo_db  -c "GRANT CREATE ON DATABASE $laastutabloo_db TO $laastutabloo_db_user;"
-psql -d $laastutabloo_db  -c "CREATE EXTENSION postgis;"
-psql -U $laastutabloo_db_user -d $laastutabloo_db  -c "CREATE TABLE datasets2 (id varchar(40));"
-psql -U $laastutabloo_db_user -d $laastutabloo_db -f /opt/laastutabloo/config/ehak/ehak.sql
+psql -U $laastutabloo_db_user -d $laastutabloo_db -f /opt/laastutabloo/config/init.sql
