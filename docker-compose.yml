@@ -1,0 +1,93 @@
+version: '3.7'
+x-restart-policy: &restart_policy
+  restart: unless-stopped
+x-datastore-defaults: &datastore_defaults
+  << : *restart_policy
+  build:
+    context: .
+  image: datastore
+  depends_on:
+    - postgres
+    - smtp
+  env_file: .env
+  ports:
+    - "5000:5000"
+  volumes:
+    - './data:/opt/laastutabloo/backend/data'
+services:
+  smtp:
+    << : *restart_policy
+    image: tianon/exim4
+    volumes:
+      - 'datastore-smtp:/var/spool/exim4'
+      - 'datastore-smtp-log:/var/log/exim4'
+  postgres:
+    << : *restart_policy
+    image: mdillon/postgis:11
+    #image: postgis/postgis:11-3.0
+    env_file: .env
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: 'trust'
+      PGHOST: 'postgres'
+    volumes:
+      - 'postgres-data:/var/lib/postgresql/data'
+      - './config:/opt/laastutabloo/config/'
+  datastore:
+    << : *datastore_defaults
+# cron:
+#   << : *datastore_defaults
+#   command: run cron
+  nginx:
+    << : *restart_policy
+    ports:
+      - '80:80/tcp'
+    image: "nginx:latest"
+    volumes:
+      - './frontend:/frontend'
+      - type: bind
+        read_only: true
+        source: ./config/nginx
+        target: /etc/nginx
+    depends_on:
+      - datastore
+      - scrapykeeper
+  scrapykeeper:
+    << : *restart_policy
+    environment:
+      DATABASE_CONNECTION_STRING: "postgresql://${laastutabloo_db_user}:${laastutabloo_db_password}@postgres/scrapykeeper"
+      SERVERS: 'http://scrapyd:6800'
+    env_file: .env
+    build:
+      context: ./scrapykeeper
+    ports:
+      - '5050:5050/tcp'      
+    depends_on:
+      - postgres
+      - scrapyd
+  scrapyd:
+    << : *restart_policy
+    env_file: .env
+    build:
+      context: backend/converter
+    ports:
+      - '6800:6800/tcp'
+    depends_on:
+      - postgres
+    volumes:
+      - './data:/opt/laastutabloo/backend/data'
+      - './config:/opt/laastutabloo/config/'
+      - './data/scrapyd_dbs:/var/lib/scrapyd/dbs/'
+  curator:
+    build:
+      context: curator
+    ports:
+      - '3030:3030/tcp'
+    volumes:
+      - './frontend:/opt/laastutabloo/frontend'
+      - './curator:/opt/laastutabloo/curator'
+
+volumes:
+  postgres-data:
+  datastore-smtp:
+  datastore-smtp-log:
+

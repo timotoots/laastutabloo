@@ -1,0 +1,14 @@
+SQLAlchemy
+GeoAlchemy2
+pytz
+python-dateutil
+python-scrapyd-api
+ujson
+pandas
+xmltodict
+pyshp
+pandas-ods-reader
+geomet
+Shapely
+scrapyd
+scrapyd-client

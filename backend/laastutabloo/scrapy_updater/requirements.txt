@@ -1,0 +1,4 @@
+SQLAlchemy
+pytz
+python-dateutil
+python-scrapyd-api
