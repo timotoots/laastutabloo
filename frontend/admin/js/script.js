@@ -73,11 +73,11 @@ var scripts = {};
 
           <div class="row" style="border-bottom: 0px solid black;padding:0.5rem 0 0.5rem 0; width:100%" id="datarow_`+ rowdata.id +`">
 
-              <div class="col-md-6 col-sm-6 col-xs-6"><b> <a href="?p=script&id=`+ rowdata.id +`" >` + rowdata.name + `</a></b></div>
+              <div class="col-md-5 col-sm-5 col-xs-5"><b><a href="?p=script&id=`+ rowdata.id +`" >` + rowdata.meta.description + `</a></b></div>
 
-              <div class="col-md-2 col-sm-2  col-xs-2"><span class="dataset_update_button"></span> <span>`+ rowdata.id +`</span></div>
+              <div class="col-md-4 col-sm-4 col-xs-4"><span class="dataset_update_button"></span> <span>`+ rowdata.id +`</span></div>
 
-              <div class="col-md-4 col-sm-1 col-xs-1" style="text-align:right">`+ rowdata.type +`</div>
+              <div class="col-md-3 col-sm-3 col-xs-3" style="text-align:left">`+ rowdata.type +`</div>
 
           </div>
         `;
@@ -105,26 +105,14 @@ function saveButtonHandler(event){
   var control = $("#form1").alpaca("get");
   var data = control.getValue();
 
-  /*
+  
   data.meta = {};
-  data.meta_internal = {};
-
-  data.meta.name = data.name;
-  delete data.name;
 
   data.meta.description = data.description;
   delete data.description;
 
-  data.meta.url = data.url;
-  delete data.url;
 
-  data.meta_internal.contact_person = data.contact_person;
-  delete data.contact_person;
 
-  data.meta_internal.notes = data.notes;
-  delete data.notes;
-
-*/
 
   saveData("script", data.id, data);
 
@@ -134,6 +122,8 @@ function saveButtonHandler(event){
 
 function create_form(){
 
+
+
     console.log("Form loaded.");
     
     var formSchemaProperties = {
@@ -142,16 +132,24 @@ function create_form(){
       "id": { 
           "type": "string",
           "title": "Unique ID",
-          "pattern":"^[a-z]+$",
+          "pattern":"^[a-z_0-9]+$",
           "fieldOptions":{
             "disallowEmptySpaces":true,
+          }
+      },
+
+       "description": { 
+          "type": "string",
+          "title": "Description",
+          "fieldOptions":{
+             "helper":"Something short and helpful"
           }
       },
 
       "type": { 
           "type": "string",
           "title": "type",
-          "enum":["converter_sql","query_sql","import_python"],
+          "enum":["converter_sql","query_sql","converter_python"],
           "helper":"",
           "fieldOptions":{
             "optionLabels":["Converter: SQL for fields","Query: SQL for fields","Converter: Python for fields"],
@@ -161,15 +159,14 @@ function create_form(){
       "script": { 
           "type": "string",
           "title": "Script",
-         
           "fieldOptions":{
             "type":"textarea",
-             "helper":"Be very careful!",
-            "disallowEmptySpaces":true,
+             "helper":"Be very careful! Use template tags: {tablename}, {fieldname} for SQL"
           }
       },
 
-       "buttons_updater":{
+
+      "buttons_updater":{
       "type":"any",
       "title":"",
       "fieldOptions":{
@@ -202,12 +199,18 @@ function create_form(){
       }
     }
   }
+  if(params.id!="new"){
+    var data = scripts[params.id];
+    data.description = data.meta.description;
+    delete data.meta.description;
+  }
+
 
 
 // Create form
 
   $("#form1").alpaca({
-    "data": scripts[params.id],
+    "data": data,
     "schema": {
         "type": "object",
         "properties": formSchemaProperties,

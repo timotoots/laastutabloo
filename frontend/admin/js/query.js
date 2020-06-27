@@ -12,15 +12,25 @@ var datasets = {};
 var queries = {};
 var query_states = {};
 
+var customScripts = {"enum":[],"labels":[]};
+
 
 ///////////////////////////////////////////////////////////////////////////////
 
 // START UP THE SCRIPT
 
-
   console.log("Query start");
+  loadJson(scripts_url)
+   .then(data => new Promise(function(resolve, reject) {
+      
+      customScripts = createScriptEnum(data,["query_sql"]);
 
-  loadJson(queries_url)
+      console.log(customScripts);
+      console.log("Scripts loaded.");
+      resolve(true);
+
+    }))
+   .then(a => loadJson(queries_url))
    .then(data => new Promise(function(resolve, reject) {
       
       for (var i = 0; i < data.length; i++) {
@@ -237,18 +247,30 @@ var query_states = {};
 
         html.push('<div class="row shuffle-row" style="border-bottom: 0px solid black;padding:0.5rem 0 0.5rem 0; width:100%" id="query_'+ query.query_id +'" data-groups="[]" data-private="" data-status="">');
 
-        html.push(' <div class="col-md-6 col-sm-6 col-xs-6"><b class="dataset_name"> <a href="?p=query&id='+ query.query_id +'" >' + query.name.et + '</a></b>  </div>');
+        html.push(' <div class="col-md-4 col-sm-4 col-xs-4"><b class="dataset_name"> <a href="?p=query&id='+ query.query_id +'" >' + query.name.et + '</a></b>  </div>');
 
         // html.push(' <div class="one columns"><span class="dataset_status_updater">updater</span></div>');
         html.push(' <div class="col-md-2 col-sm-2  col-xs-2"><span class="dataset_update_button"></span> <span>'+ query.query_id +'</span></div>');
 
   
-           html.push(` <div class="col-md-4 col-sm-1 col-xs-1" style="text-align:right">
+           html.push(` <div class="col-md-2 col-sm-2 col-xs-2" style="text-align:right">
 
-          <button type="button" class="btn btn-default sidebar-btn btn-show-table">
-            <span class="glyphicon glyphicon-align-left icon-black" aria-hidden="true"></span> Preview
-          </button>
+         <a href="http://laastutabloo.erm.ee:5000/render_query?query_id=`+query.query_id +`&ehak=8151&limit=100"><button type="button" class="btn btn-default sidebar-btn btn-show-table">
+            <span class="glyphicon glyphicon-align-left icon-black" aria-hidden="true"></span> Tartu
+          </button></a>
 
+          </div>
+
+          <div class="col-md-2 col-sm-2 col-xs-2" style="text-align:right">
+         <a href="http://laastutabloo.erm.ee:5000/render_query?query_id=`+query.query_id +`&ehak=5396&limit=100"><button type="button" class="btn btn-default sidebar-btn btn-show-table">
+            <span class="glyphicon glyphicon-align-left icon-black" aria-hidden="true"></span> Neeruti
+          </button></a>
+          </div>
+
+         <div class="col-md-2 col-sm-2 col-xs-2" style="text-align:right">
+         <a href="http://laastutabloo.erm.ee:5000/render_query?query_id=`+query.query_id +`&ehak=7498&limit=100"><button type="button" class="btn btn-default sidebar-btn btn-show-table">
+            <span class="glyphicon glyphicon-align-left icon-black" aria-hidden="true"></span> Saviranna
+          </button></a>
           </div>
 
          <div class="col-md-12 col-sm-12 col-xs-12 log_display" style="color:black;display:none">log</div>`);
@@ -260,7 +282,7 @@ var query_states = {};
 
         // $('#dataset_'+dataset_id+" .btn-show-log").click(dataset_id,showLogButtonHandler);
         // $('#dataset_'+dataset_id+' .btn-run-updater').click(dataset_id,triggerUpdater);
-        $('#query_'+query.query_id+' .btn-show-table').click(query.query_id,showTabulatorHandler);
+        // $('#query_'+query.query_id+' .btn-show-table').click(query.query_id,showTabulatorHandler);
 
       }
 
@@ -365,7 +387,7 @@ function create_form(){
       "query_id": { 
           "type": "string", 
           "title": "Unique ID",
-          "pattern":"^[a-z]+$",
+          "pattern":"^[a-z_0-9]+$",
           "fieldOptions":{
             "disallowEmptySpaces":true,
           }
@@ -402,29 +424,14 @@ function create_form(){
         },
        
       }, 
-     "where":{
-        "type": "string",
-        "title": "SQL where clause",
-        "fieldOptions":{
-          "type":"text",
-          "helper":"For advanced use!",
-          "buttons":{
-              "load_fields":{
-                  "title": '<span class="glyphicon glyphicon-arrow-down icon-green" aria-hidden="true"></span> Load fields',
-                  "click": loadFieldsButtonHandler
-              }
-              
-          },
 
-        }
-        }, 
    "show_sql": {
       "type": "boolean",
       "title": "Custom SQL?",
       "fieldOptions":{}
   },
 
-      "sql":{
+      "custom_sql":{
         "type": "string",
         "title": "Custom SQL",
         "fieldOptions":{
@@ -437,7 +444,29 @@ function create_form(){
         }
         }, 
 
+  "subtitle_filter_data":{
+          "type":"any", 
+          "title":"Filter data",
+          "fieldOptions":{
+            "fieldClass":"customSubTitle"
+          }
+      },
+     "where":{
+        "type": "string",
+        "title": "SQL where clause",
+        "fieldOptions":{
+          "type":"text",
+          "helper":"For advanced user! Example: klass='Aves'",
+          "buttons":{
+              "load_fields":{
+                  "title": '<span class="glyphicon glyphicon-arrow-down icon-green" aria-hidden="true"></span> Load fields',
+                  "click": loadFieldsButtonHandler
+              }
+              
+          },
 
+        }
+        }, 
 
 
        "subtitle_sortby":{
@@ -471,7 +500,6 @@ function create_form(){
     "fieldOptions":{
       "type": "table",
       "title":"Order data",
-
       "items": {
       "fields": {
          "orderby_direction": {
@@ -484,12 +512,74 @@ function create_form(){
     }
   },
 
+   "subtitle_format_data":{
+          "type":"any", 
+          "title":"Format data",
+          "fieldOptions":{
+            "fieldClass":"customSubTitle"
+          }
+      },
 
 
+    "columns":{
+      "type":"array",
+      "title":"Columns",
+      "items": {
+        "type": "object",
+        "properties": {
+            
+            "name": {
+                "type": "string",
+                "title": "Column",
+                "readonly":false
+            },
+            "max_length": {
+                "type": "string",
+                "default":"full",
+                "enum":["full","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20"],
+                "title": "Max length"
+            },
+            "max_lines": {
+                "type": "string",
+                "default":1,
+                "enum": ["1","2","3"],
+                "title": "Max lines"
+            },
+            "script": {
+                "type": "string",
+                "enum": customScripts.enum,
+                "title": "Format"
+            }
+           
+            
+            
+        }
+    },
+    "fieldOptions":{
+      "type": "table",
+      "items": {
+      "fields": {
+
+         "max_length": {
+            "type": "select",
+            "removeDefaultNone":true
+          },"max_lines": {
+            "type": "select",
+             "removeDefaultNone":true
+          },"script": {
+            "type": "select",
+            "optionLabels":customScripts.labels
+          }
+        },
+
+      },
+
+    }
+  },
 
    "subtitle_data_style":{
           "type":"any", 
-          "title":"Design data",
+          "title":"Style data",
           "fieldOptions":{
             "fieldClass":"customSubTitle"
           }
@@ -508,7 +598,7 @@ function create_form(){
 
             "num_of_pages":{
                 "type": "string",
-                "enum":[1,2,3,4],
+                "enum":["1","2","3","4"],
                 "title": "Maximum number of pages",
               }, 
 
@@ -532,67 +622,6 @@ function create_form(){
 
       }
 
-  },
-
-    "columns":{
-      "type":"array",
-      "title":"Columns",
-      "items": {
-        "type": "object",
-        "properties": {
-            
-            "name": {
-                "type": "string",
-                "title": "Column",
-                "readonly":false
-            },
-             "width": {
-                "type": "string",
-                "enum":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
-                "title": "Width"
-            },
-             "enable": {
-                "type": "boolean",
-                "title": "Enable?"
-            },           
-             "wrap": {
-                "type": "string",
-                "enum": ["truncate","wrap","wrap1", "wrap2","wrap3"],
-                "title": "Wrap"
-            },
-             "align": {
-                "type": "string",
-                "enum": ["right","center","left"],
-                "title": "Align"
-            },
-            "prefix": {
-                "type": "string",
-                "enum":["Kaugus: %data km"],
-                "title": "Format"
-            }
-           
-            
-            
-        }
-    },
-    "fieldOptions":{
-      "type": "table",
-      "items": {
-      "fields": {
-         "orderby_direction": {
-            "type": "select"
-          },"prefix": {
-            "type": "select"
-          },"wrap": {
-            "type": "select"
-          },"align": {
-            "type": "select"
-          }
-        },
-
-      },
-
-    }
   },
 
       "buttons_updater":{
@@ -693,6 +722,8 @@ function loadFieldsButtonHandler(event){
         var orderby_enum = [];
         var orderby_data = [];
 
+        var format_data = {"enum":[],"fields":[]};
+
         var style_data = []
  
         for(var i in datasets[new_dataset_id].schema){
@@ -711,8 +742,11 @@ function loadFieldsButtonHandler(event){
                 var column_enable = true;
             }
 
+            format_data.enum.push(column_name);
+            format_data.fields.push(column_name);
+
             orderby_enum.push(column_name);
-            style_data.push({"name":column_name,"enable":column_enable,"width":1,"align":"center","wrap":"wrap1","prefix":"None"});
+            //style_data.push({"name":column_name,"enable":1,"max_width":1,"max_lines":3,"script":"None"});
         }
 
   
@@ -729,8 +763,11 @@ function loadFieldsButtonHandler(event){
         }
 
 
-        var style_data_control = control.childrenByPropertyId["columns"];
-        style_data_control.setValue(style_data);
+         var style_data_control = control.childrenByPropertyId["columns"];
+         console.log(format_data.enum);
+         style_data_control.schema.items.properties.name.enum = format_data.enum;
+
+        // style_data_control.setValue(style_data);
 
         // set enum of orderby columns
         orderby_control.schema.items.properties.orderby_column.enum = orderby_enum;

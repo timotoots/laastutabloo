@@ -16,13 +16,12 @@ var dataset_log_url = backend_server + "/get_log";
 var dataset_preview_url = backend_server + "/dataset_preview";
 
 var queries_url = backend_server + "/list_queries";
-var query_preview_url = backend_server + "/run_query";
-var script_url = backend_server + "/get_script";
-var scripts_url = backend_server + "/get_scripts";
+
+var scripts_url = backend_server + "/scripts";
 
 var text_url = backend_server + "/get_text";
 
-var render_query = backend_server + "/render_query"; //?query_id=avalik&ehak=1234
+var query_preview_url = render_query = backend_server + "/render_query"; //?query_id=avalik&ehak=1234
 
 var save_query_url = backend_server + "/query";
 
@@ -70,6 +69,28 @@ function loadJS(file) {
     jsElm.src = file;
     // finally insert the element to the body element in order to load the script
     document.body.appendChild(jsElm);
+}
+
+
+function createScriptEnum(scripts, types){
+
+  var out = {"enum":[],"labels":[]};
+  var t = {};
+
+  // Prepare for easier checking
+  for(var i in types){
+    t[types[i]] = true;
+  }
+
+  for(var i in scripts){
+    if(t[scripts[i].type]){
+      out.enum.push(scripts[i].id);
+      out.labels.push(scripts[i].id);
+    }
+  }
+
+  return out;
+   
 }
 
 
@@ -314,6 +335,12 @@ function loadHtmlWithScript(page){
 
 
         $("body").append(result);
+
+         if(page=="query_edit" || page=="explorer") {
+            // loadJS("../lib/bundle.min.js");
+            loadJS("../js/lib_animator.js");
+            
+          }
         if(page=="dataset_list" || page=="dataset_edit"){
           loadJS("js/dataset.js");
         } else if(page=="provider_list" || page=="provider_edit"){
@@ -325,19 +352,18 @@ function loadHtmlWithScript(page){
         } else if(page=="query_list" || page=="query_edit"){
           loadJS("js/query.js");
 
-          if(page=="query_edit") {
-            loadJS("../lib/bundle.min.js");
-            loadJS("../js/lib_animator.js");
-            loadJS("js/emulator.js");
-          }
+         
 
         } else if(page != "404"){
           loadJS("js/" + page + ".js");
         }
-        if(page=="dataset_list"){
+
+        
+
+        if(page=="explorer"){
           setTimeout(function(){
-            // loadJS("devel/shufflejs.js");
-          },5000);
+            loadJS("js/emulator.js");
+          },1000);
           
         }
    }});
@@ -353,7 +379,7 @@ $( document ).ready(function() {
   } if(params.p=="shufflejs"){
     page = "../devel/" + params.p;
 
-  } if(params.p=="help"){
+  } if(params.p=="help" || params.p=="explorer"){
     page = params.p;
 
   } else if ( params.p=="dataset" || params.p=="query" || params.p=="provider" || params.p=="script" || params.p=="text"){

@@ -15,7 +15,7 @@
       laastY: 12 // number of shingles Y
     };
 
-    var table;
+    // var table;
       // console.log(letters);
     var allowedLetters;
     var bigfont = {};
@@ -35,7 +35,7 @@
       allowedLetters = options.allowedLetters;
       bigfont = options.bigfont;
 
-      table = require("table");
+      // table = require("table");
     };
 
 /////////////////////////////////////////////////////////////
@@ -236,7 +236,7 @@
                 // Find not defined characters
                 if(!allowedLetters[slide.lines[y][x]] && slide.lines[y][x]!=" "){
                   console.log("Character not found. Make one: " + slide.lines[y][x]);
-                  slide.lines[y] = setCharAt(slide.lines[y],x,".");
+                  slide.lines[y] = setCharAt(slide.lines[y],x," ");
                 }
               } // for
           }
@@ -449,92 +449,282 @@ function createEmoticonSlide(){
 
 ///////////////////////////////////////////////////////////////
 
+function forceWrap( str, width ) {
+
+    if (!str) { return [str]; }
+
+    width = width || 75;
+    cut = true
+    var regex =   '.{1,' + width + '}(\s|$)' + (cut ? '|.{' +width+ '}|.+$' : '|\S+?(\s|$)');
+    return str.match( RegExp(regex, 'g') );
+ 
+}
+
+function wordWrap(input, size){
+
+  //https://github.com/gajus/table/blob/master/src/wrapWord.js
+
+ let subject;
+
+  subject = input;
+
+  const chunks = [];
+
+  // https://regex101.com/r/gY5kZ1/1
+  const re = new RegExp('(^.{1,' + size + '}(\\s+|$))|(^.{1,' + (size - 1) + '}(\\\\|/|_|\\.|,|;|-))');
+
+  do {
+    let chunk;
+
+    chunk = subject.match(re);
+
+    if (chunk) {
+      chunk = chunk[0];
+
+      // subject = slice(subject, chuck.length);
+      subject = subject.substr(chunk.length)
+
+      chunk = chunk.trim();
+    } else {
+      // chunk = slice(subject, 0, size);
+      // subject = slice(subject, size);
+
+      chunk = subject.substr(0, size)
+      subject = subject.substr(size)
+    }
+
+    chunks.push(chunk);
+  } while (subject.length);
+
+  return chunks;
+
+
+}
+
+///////////////////////////////////////////////////////////////
+
+function formatText(str, width, height){
+
+  //////////////////////
+
+  // Prepare the text
+
+  if (!str) { return [str]; }
+
+  // remove newlines
+  str = str.replace(/[\r\n]+/g, ' ')
+  // remove double spaces
+  str = str.replace(/ +(?= )/g,'');
+
+  if(str.length==0){
+    return [""];
+  }
+
+
+  // Check if wrapping is nessecary
+
+  if (str.length < width){
+    return [str];
+  }
+  // console.log(str);
+
+  // Check if nice wrapping works
+  // str = wordwrap(str,width, false);
+  str = wordWrap(str, width)
+
+  console.log(str);
+  return str;
+
+ ///// todo
+  if(str){
+    if(str.length <= height){
+      return str;
+    }
+  } 
+
+
+  // Force wrapping
+  str = forceWrap(str,width);
+  return str;
+
+}
+
+
+
+///////////////////////////////////////////////////////////////
+
   function formatToTable(query){
 
-    var table_data = [];
+     var conf = query.config;
 
-    var columnsConf = {};
+     conf.column_widths = [27];
+     conf.spaces = 1;
+     conf.table_template = "table_2x2";
+     // conf.columns = [
+     //    {
+     //      "name": "time"
+     //    },
+
+     //    {
+     //      "name": "syndmus_liik"
+     //    },
+        
+     // ];
+
+     console.log(conf);
+
+     var templates = {
+      "table_2x2": 
+      [
+          [1],
+          [1],
+          [2],
+          [2],
+          [2],
+          [3],
+          [3]
+      ],
+
     
-    for (var j = 0 ;j < query.config.columns.length; j++){
+     }
 
-      columnsConf[j] = {width:query.config.columns[j].text_width};
+     var t = templates[conf.table_template];
 
-    }
+     /////////////
+
+     var slotConf = {};
+     for (var y = 0; y < t.length; y++) {
+       for (var x = 0; x < t[0].length; x++) {
+          if(t[y][x]!=0){
+            if(!slotConf[t[y][x]]){
+              slotConf[t[y][x]] = {"lines":1,"width":conf.column_widths[x]};
+            } else {
+              slotConf[t[y][x]].lines++;
+            }
+          }
+        }
+     }
+
+    // console.log("slotConf:");
+    // console.log(slotConf);
+
+    /////////////
+
+     function createEmptyMatrix(template, widths){
+
+      var emptyTableMatrix = []; 
+
+       for (var y = 0; y < template.length; y++) {
+              emptyTableMatrix.push([]);
+             for (var x = 0; x < template[0].length; x++) {
+                emptyTableMatrix[y].push("");
+              }
+           }
+        return emptyTableMatrix;
+
+     }
+  
+
+  /////////////
+   
+
+
+     function addToTemplate(slot, lines){
+
+        var slotCount = 0;
+
+       // console.log(lines);
+
+        for (var y = 0; y < t.length; y++) {
+         for (var x = 0; x < t[0].length; x++) {
+         
+         
+              if(t[y][x]==slot){
+                if(lines[slotCount]){
+                  tableMatrix[y][x] = lines[slotCount];
+                }
+                slotCount++;
+              }         
+           }
+        }
+
+         // console.log(tableMatrix);
+     } // addToTemplate
+
+     function removeEmptyRows(template){
+
+      // console.log(template);
+
+        for (var y = 0; y < template.length; y++) {
+          var emptyCount = 0;
+         for (var x = 0; x < template[y].length; x++) {
+          if(template[y][x]==""){
+            emptyCount++;
+          }
+         }
+         if(emptyCount==template[y].length){
+          delete template[y];
+         }
+       }
+       template = template.filter(function(){return true;});
+       return template;
+
+     }
+
+     /*
+     addToTemplate(1,["1A"]);
+     addToTemplate(2,["2A","2B"])
+     console.log(tableMatrix);
+     */
+
+
+
+
+     var table_data = [];
+
 
     for (var i = 0; i < query.data.length; i++) {
 
-      var table_row = [];
+      var tableMatrix  = createEmptyMatrix(t,conf.column_widths);
 
-      for (var j = 0 ;j < query.config.columns.length; j++){
+      for (var slot_i = 1 ;slot_i <= query.config.columns.length; slot_i++){
 
-        var column = query.config.columns[j];
+
+        var column = query.config.columns[slot_i-1];
 
         if(typeof query.data[i][column.name] === "object"){
-          table_row.push(query.data[i][column.name]["et"]);
+          var str = query.data[i][column.name]["et"];
         } else if(typeof query.data[i][column.name] != "undefined"){
-          table_row.push(query.data[i][column.name]);
+          var str = query.data[i][column.name];
         } else {
-          table_row.push("");
+          var str ="";
         }
-        
 
-      }
+
+        var lines = formatText(str,slotConf[slot_i].width,slotConf[slot_i].lines);
+        addToTemplate(slot_i, lines);       
+
+      } // for column config
       
 
-       table_data.push(table_row);
+      //table_data.push(table_row);
+      // console.log(tableMatrix);
+     tableMatrix = removeEmptyRows(tableMatrix);
+        // console.log(tableMatrix);
 
+      for (var tableMatrix_i = 0; tableMatrix_i < tableMatrix.length; tableMatrix_i++) {
+          str = tableMatrix[tableMatrix_i].join("");
+          str = str.toString();
+          str = str.centerJustify(params.laastX," ");
+          table_data.push(str)
+      }
+          table_data.push("===ROW==")
 
-      //  // Add emtpy line
-      // var table_row = [];
-      // for (var j = 0 ;j < query.columns.length; j++){
-      //     table_row.push("");
-      // }
-      // table_data.push(table_row);
+    } // for data
 
+       // console.log(table_data);
 
-
-
-    }
-
-
-        var options = {
-
-            border: {
-              topBody: ``,
-              topJoin: ``,
-              topLeft: ``,
-              topRight: ``,
-
-              bottomBody: ``,
-              bottomJoin: ``,
-              bottomLeft: ``,
-              bottomRight: ``,
-
-              bodyLeft: ``,
-              bodyRight: ``,
-              bodyJoin: ``,
-
-              joinBody: `=`,
-              joinLeft: ``,
-              joinRight: ``,
-              joinJoin: ``
-            },
-            columnDefault: {
-                paddingLeft: 0,
-                paddingRight: 1
-            },
-            columns:columnsConf,
-            drawHorizontalLine: () => {
-                return true
-            }
-        };
-
-        var output = table.table(table_data,options);
-
-      //  console.log(output);
-
-
-        return output;
+        return table_data;
 
 
   }
@@ -609,11 +799,12 @@ function countQueryColumn(query){
 
 }
 
+
+
 ///////////////////////////////////////////////////////////////
 
-function splitPages(text){
+function splitPages(lines){
 
-  var lines = text.split("\n");
   var pages = [];
   var currentPage = 0;
   var currentElementLines = [];
@@ -625,9 +816,14 @@ function splitPages(text){
 
 
     // If element ends
-    if(lines[i].substr(0,5)=="====="){
+    if(lines[i]=="===ROW=="){
       
       if(pages[currentPage].length + currentElementLines.length > 9){
+
+         for(var j=0; j< 9 - pages[currentPage].length;j++){
+          pages[currentPage].push("".centerJustify(params.laastX," "));
+        }
+
         currentPage++;
         pages[currentPage] = [];
       }
@@ -697,8 +893,8 @@ function createSlides(queries, debug=0){
         var queryTitle  = formatSlideTitle(query.config.name);
 
         // Format data
-        var text = formatToTable(query);
-        var pages = splitPages(text);
+        var lines = formatToTable(query);
+        var pages = splitPages(lines);
 
         if(debug==1){
             console.log("debug output");
@@ -731,6 +927,8 @@ function createSlides(queries, debug=0){
 
 
       }
+
+      console.log(newSlides);
 
       return newSlides;
 

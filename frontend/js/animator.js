@@ -19,6 +19,7 @@ var animator_lib = require('./lib_animator.js');
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Web server
+// nohup node animator.js
 
 const express = require('express')
 const app = express()
@@ -29,12 +30,26 @@ app.listen(port, () => console.log(`Listening commands on port ${port}!`))
 
 app.get('/get_animations', function (req, res) {
 
+  var rando = Math.floor((Math.random() * 3) + 1);
 
-   var url = "http://laastutabloo.erm.ee/json/query.json";
+  var ehak = "6017";
+
+  if(rando==1){
+    ehak = "6017";
+  } else if(rando==2){
+    ehak = "3364";
+  } else {
+    ehak = "6017";
+  }
+
+  console.log("Query: EHAK:" + ehak+" ");
+
    var url = "http://laastutabloo.erm.ee:5000/render_query?query_id=avalik&ehak=446";
 
-
-   var url = "http://laastutabloo.erm.ee:5000/render_query?query_id=linnud&ehak=1021"
+   var url = "http://laastutabloo.erm.ee:5000/render_query?query_id=viimasedlaenutused&ehak=6017";
+   
+   // var url = "http://laastutabloo.erm.ee:5000/render_query?query_id=linnud&ehak=1021"
+   var url = "http://laastutabloo.erm.ee/json/query3.json";
 
     promiseLoadJson(url)
       .then(data => new Promise(function(resolve, reject) {

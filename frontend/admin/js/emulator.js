@@ -41,16 +41,24 @@ var ta;
 
 
    		console.log("Libraries loaded");
+      resolve(true);
 
-   		resolve(true);
    } )).then(a => new Promise(function(resolve, reject){
+
+    console.log("start");
+    startExplorer();
+      /*
    		// init_emulator();
-   		var url = "http://laastutabloo.erm.ee:5000/render_query?query_id=avalik&ehak=1021"
+   		var url = "http://laastutabloo.erm.ee:5000/render_query?query_id=avalik&ehak=8151"
    		// var url = "http://laastutabloo.erm.ee/json/query.json";
    		 $.getJSON( url, function( data ) {
+
    			var animations = ta.createSlides(data,1);
+       // $("#explorer .tabloo1").html("<pre>"+ animations.join("\n") +"</pre>")
+
    			console.log(animations);
    		});
-   		
+   		//reject(false);
+*/
    		resolve(true);
    } ));

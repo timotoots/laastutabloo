@@ -16,7 +16,7 @@ var provider_meta = {};
 var datasets_info = [];
 var datasets_states = {};
 
-var customScripts = [];
+var customScripts = {"enum":[],"labels":[]};
 
 var sortField = "provider";
 
@@ -31,9 +31,9 @@ var sortField = "provider";
   loadJson(scripts_url)
    .then(data => new Promise(function(resolve, reject) {
       
-      for(var id in data){
-        customScripts.push(id);
-      }
+      customScripts = createScriptEnum(data,["converter_python","converter_sql"]);
+
+      
 
       console.log(data);
       console.log("Scripts loaded.");
@@ -441,6 +441,9 @@ var last_log = [];
       ///////////////////////////////////
       // Side bar
 
+      // sorting ordering
+      // https://www.shift8web.ca/2017/01/use-jquery-sort-reorganize-content/
+
       if(params.id){
 
         html.push('<div id="dataset_'+ dataset_id +'">');
@@ -609,9 +612,27 @@ function showTabulatorHandler(event){
 function showRawHandler(event){
 
   console.log("raw button");
-  console.log(event);
-  
+  console.log(event.data);
 
+      if(!params.id){
+          var selector =  content_selector = "#dataset_" + datasets_states[event.data].div_id+" .raw_display";
+        } else {
+          var selector = ".raw_display";
+          var content_selector = selector + " .raw_display_content";
+        }
+
+$(selector).show();
+  
+  var url = "http://laastutabloo.erm.ee:5000/dataset_raw?dataset_id="+event.data+"&limit=10000"
+   $.getJSON( url, function( data ) {
+    // console.log(data);
+    $(content_selector).html("<pre>"+data+"<pre>")
+    });
+
+
+
+  //
+  
 }
 
 
@@ -860,7 +881,7 @@ console.log("Form loaded.");
   "type": {
       "type": "string",
       "title": "File format",
-      "enum": ["json", "csv", "xml", "geojson","wms","ods"],
+      "enum": ["json", "csv", "xml", "geojson","wms","ods","shapefile"],
       "fieldOptions":{
          "dependencies": { "dataset_type": ["regular"] }  
       }
@@ -974,7 +995,7 @@ console.log("Form loaded.");
            
             "script": {
                 "type": "string",
-                "enum": customScripts,
+                "enum": customScripts.enum,
                 "title": "Script"
             }
             
@@ -989,7 +1010,8 @@ console.log("Form loaded.");
             "type": "select"
           },
           "script": {
-            "type": "select"
+            "type": "select",
+            "optionLabels":customScripts.labels
           }
         },
 
@@ -1024,7 +1046,7 @@ console.log("Form loaded.");
       "type": "string",
       "title": "Update frequency",
       "required":true,
-      "enum": ["manual","minutely","hourly","daily", "weekly", "montly","yearly","custom"],
+      "enum": ["manual","minutely","hourly","daily", "weekly", "monthly","yearly","custom"],
       "fieldOptions":{
          "dependencies":{"dataset_type": ["regular","merged"] }
       }
