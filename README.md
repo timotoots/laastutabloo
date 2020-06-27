@@ -45,16 +45,18 @@ sudo pip3 install scrapyd-client flask_cors
 
 ```
 
-## Setup up scrapy
+# Setup using docker
 ```
-sudo pip3 install scrapyd-client flask_cors 
-cd /opt/laastutabloo/backend/laastutabloo/scrapy_updater/; scrapyd-deploy -p Laastutabloo
-```
-
-
-Docker
 apt update ; apt install -y docker.io docker-compose
 
+sudo mkdir /opt/laastutabloo
+sudo chown laastutabloo:laastutabloo /opt/laastutabloo 
+cd /opt && git clone git@github.com:timotoots/laastutabloo.git
+
+cd laastutabloo
 ./init_project.sh
+```
+
+
 
 
