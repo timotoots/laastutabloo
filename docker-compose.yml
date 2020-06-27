@@ -79,12 +79,12 @@ services:
       - './data/scrapyd_dbs:/var/lib/scrapyd/dbs/'
   curator:
     build:
-      context: curator
+      context: backend/curator
     ports:
       - '3030:3030/tcp'
     volumes:
       - './frontend:/opt/laastutabloo/frontend'
-      - './curator:/opt/laastutabloo/curator'
+      - './curator:/opt/laastutabloo/backend/curator'
 
 volumes:
   postgres-data:
