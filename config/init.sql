@@ -1,4 +1,3 @@
-CREATE EXTENSION postgis;
 
 CREATE TABLE datasets2 (id varchar(40), PRIMARY KEY (id));
 
