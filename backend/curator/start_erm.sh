@@ -1,0 +1,1 @@
+screen -dm bash -c 'while true; do node /opt/laastutabloo/curator/main.js erm; sleep 2; done; exec sh'

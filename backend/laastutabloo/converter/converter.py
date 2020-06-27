@@ -199,46 +199,53 @@ def populate_dict_from_json(record, field_description, dictionary):
 from shapely.geometry import shape
 
 def find_views(engine, dataset_name):
-  result = engine.execute("select id, tables from datasets2 where tables::jsonb ? '{}';".format(dataset_name))
-  return { r[0] : r[1] for r in result }
+  result = engine.execute("select master_dataset, id from datasets2 where master_dataset in (select d2.master_dataset from datasets2 as d2 where d2.id='{}' and dataset_type='merged')".format(dataset_name))
+  res = {}
+  for r in result:
+    if r[0] not in res:
+      res[r[0]] = []
+    res[r[0]].append(r[1]) 
+  return res
   
 def drop_views(engine, views):
   Session = sessionmaker(bind=engine) 
   session = Session()
-  for v in views.keys():
-    try:
-      sql = "drop view {};".format(v)
-      session.execute(sql)
-    except:
-      session.rollback()
   session.commit()
 
-def create_views(engine, views):
-  Session = sessionmaker(bind=engine) 
-  session = Session()
-
-  for v, tables in views.items():
-    try:
-      selects = [ "select * from {} ".format(t) for t in tables ]
-      union = " union ".join(selects)
-      sql = "create view {} as {}".format(v, union)
-      session.execute(sql)
-    except:
-      session.rollback()
-  session.commit()
 
 
 dtypes_map = { 'text': sqlalchemy.types.Text,
-               'float': sqlalchemy.types.Float }
+               'float': sqlalchemy.types.Float,
+               'int': sqlalchemy.types.Integer,
+               'timestamp' : sqlalchemy.types.Time}
 
-def handle_json_records(records, f, engine):
+def _reflect_dataset(engine):
+    metadata = MetaData()
+    metadata.reflect(engine, only=['datasets2',])
+    Session = sessionmaker(bind=engine) 
+    session = Session()
+
+    Base = automap_base(metadata=metadata)                                                                                                           
+    Base.prepare(engine)
+
+    Dataset = Base.classes.datasets2
+    return session, Dataset
+
+def handle_json_records(records, f, engine, limit=None):
   session = inspect(f).session
   data = pandas.DataFrame()
   first = True
   counter = 0
-  views = find_views(engine, f.id)
+  if limit is not None:
+    limit = int(limit)
 
-  schema = f.schema  # Mapping for columns
+  views = find_views(engine, f.id)
+  if f.dataset_type != 'merged':
+    schema = f.schema  # Mapping for columns
+  else:
+    session, Dataset = _reflect_dataset(engine)
+    master = session.query(Dataset).filter_by(id=f.master_dataset).first()
+    schema = master.schema
   dtypes = {'geom': Geometry('', srid=4326)}
   for k in schema:
     try:
