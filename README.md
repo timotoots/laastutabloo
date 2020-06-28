@@ -45,17 +45,16 @@ sudo pip3 install scrapyd-client flask_cors
 
 ```
 
-# Setup using docker
+# Setup using Docker
 ```
-apt update ; apt install -y docker.io docker-compose
-
+sudo apt update
+sudo apt install -y docker.io docker-compose
 sudo mkdir /opt/laastutabloo
-cd /opt && git clone git@github.com:timotoots/laastutabloo.git
-
+cd /opt && git clone https://github.com/timotoots/laastutabloo.git
 cd laastutabloo
 ```
 
-Change usernames and passwords in .env
+Change usernames and passwords in .env  
 (Optional) Add extra credentials for datasets to file config/datasets_private.json
 
 ```
