@@ -60,8 +60,9 @@ Change usernames and passwords in .env
 
 ```
 ./init_project.sh
+
+cp config/laastutabloo.service /etc/systemd/system/
+systemctl enable laastutabloo
 ```
-
-
 
 

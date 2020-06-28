@@ -1,0 +1,16 @@
+# /etc/systemd/system/laastutabloo.service
+[Unit]
+Description=Laastutabloo
+After=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+StandardError=null
+StandardOutput=null
+WorkingDirectory=/opt/laastutabloo
+ExecStart=/usr/bin/docker-compose -f /opt/laastutabloo/docker-compose.yml up -d
+ExecStop=/usr/bin/docker-compose -f /opt/laastutabloo/docker-compose.yml down
+
+[Install]
+WantedBy=multi-user.target
