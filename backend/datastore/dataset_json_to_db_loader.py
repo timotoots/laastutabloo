@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import pandas, numpy
 import argparse
-import glob, sys, os.path, os
+import glob, sys, os.path, os, os.path
 import requests
 import sqlalchemy
 from sqlalchemy import create_engine
@@ -37,16 +37,18 @@ def load_to_db(table):
     df['last_updated'] = df['last_updated'].fillna(pandas.Timestamp(0))
     df['tables'] = df['tables'].fillna("")
     df['data_count'] = 0
-    
-    df_auth = pandas.read_json("/opt/laastutabloo/config/datasets_private.json")
-    df_auth.fillna(False, inplace=True)
-    for auth in df_auth.itertuples():
-        df.loc[df['id'] == auth.id, 'username'] = auth.username
-        df.loc[df['id'] == auth.id, 'password'] = auth.password
-        if auth.url:
-            df.loc[df['id'] == auth.id, 'url'] = auth.url
-        if auth.http_header:
-            df.loc[df['id'] == auth.id, 'http_header'] = auth.http_header
+
+
+    if os.path.exists("/opt/laastutabloo/config/datasets_private.json"):
+        df_auth = pandas.read_json("/opt/laastutabloo/config/datasets_private.json")
+        df_auth.fillna(False, inplace=True)
+        for auth in df_auth.itertuples():
+            df.loc[df['id'] == auth.id, 'username'] = auth.username
+            df.loc[df['id'] == auth.id, 'password'] = auth.password
+            if auth.url:
+                df.loc[df['id'] == auth.id, 'url'] = auth.url
+            if auth.http_header:
+                df.loc[df['id'] == auth.id, 'http_header'] = auth.http_header
 
     df['last_updated'] = df['last_updated'].fillna(pandas.Timestamp(0))
     df.to_sql(table, engine, dtype={'schema':sqlalchemy.types.JSON,                                          
