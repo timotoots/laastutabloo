@@ -20,8 +20,8 @@ var allowedLetters = {};
 const cors = require('cors');
 
 // Our libraries
-var layout_lib = require('/opt/laastutabloo/curator/layout.js');
-var animator_lib = require('/opt/laastutabloo/curator/animator.js');
+var layout_lib = require('/opt/laastutabloo/backend/curator/layout.js');
+var animator_lib = require('/opt/laastutabloo/backend/curator/animator.js');
 
 var layout, animator, ehak, queries; // global classes
 

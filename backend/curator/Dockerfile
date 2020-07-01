@@ -1,3 +1,5 @@
 FROM node:14-stretch-slim
 
-CMD [ "node", "/opt/laastutabloo/curator/main.js", "erm"]
+WORKDIR /opt/laastutabloo/backend/curator/
+
+CMD [ "node", "/opt/laastutabloo/backend/curator/main.js", "erm"]

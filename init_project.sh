@@ -15,3 +15,4 @@ sleep 1
 docker-compose exec scrapyd scrapyd-deploy
 docker-compose exec scrapykeeper /init_scrapykeeper.sh
 docker-compose run datastore python3 /opt/laastutabloo/backend/datastore/dataset_json_to_db_loader.py --providers datasets2
+docker-compose run curator /usr/local/bin/npm install
