@@ -1,5 +1,10 @@
 #!/bin/sh
 
+
+mkdir -p backend/data/raw
+mkdir -p backend/data/logs
+
+
 docker-compose up --no-start
 docker-compose start postgres
 sleep 1
