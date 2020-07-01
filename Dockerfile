@@ -11,6 +11,7 @@ COPY backend/datastore/requirements.txt requirements.txt
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+ENV PYTHONIOENCODING UTF-8 
 
 RUN pip3 install -r requirements.txt
 COPY backend /opt/laastutabloo/backend

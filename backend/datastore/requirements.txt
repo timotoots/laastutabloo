@@ -50,12 +50,12 @@ numexpr==2.6.4
 numpy==1.13.3
 odfpy==1.4.0
 olefile==0.45.1
-pandas==0.22.0
+pandas
 pandas-ods-reader==0.0.7
 parsel==1.5.1
 pexpect==4.2.1
 pickleshare==0.7.4
-Pillow==5.1.0
+Pillow
 ply==3.11
 prompt-toolkit==1.0.15
 psycopg2==2.7.4
