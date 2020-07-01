@@ -51,6 +51,7 @@ services:
     depends_on:
       - datastore
       - scrapykeeper
+      - curator
   scrapykeeper:
     << : *restart_policy
     environment:
@@ -84,10 +85,15 @@ services:
       - '3030:3030/tcp'
     volumes:
       - './frontend:/opt/laastutabloo/frontend'
-      - './curator:/opt/laastutabloo/backend/curator'
+      - './backend/curator:/opt/laastutabloo/backend/curator'
+    networks:
+      default:
+        ipv4_address: 172.23.0.100
 
 volumes:
   postgres-data:
   datastore-smtp:
   datastore-smtp-log:
 
+networks:
+  default:
