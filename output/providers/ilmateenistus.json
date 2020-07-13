@@ -1,0 +1,18 @@
+[
+    {
+        "id":"ilmateenistus",
+        "meta":{
+            "en":{
+                "name":"Weather",
+                "description":"Business",
+                "url":"https:\/\/avaandmed.rik.ee"
+            },
+            "et":{
+                "name":"Ilmateenistus",
+                "description":"\u00c4ri",
+                "url":"https:\/\/avaandmed.rik.ee"
+            }
+        },
+        "wms":null
+    }
+]

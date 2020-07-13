@@ -1,0 +1,30 @@
+[
+    {
+        "id":"supluskohad_veeproovid",
+        "provider":"terviseamet",
+        "private":false,
+        "type":"xml",
+        "update_frequency":"daily",
+        "schema":[
+            {
+                "column":"ehak",
+                "type":"text",
+                "field":"AKOOD"
+            },
+            {
+                "column":"brutotulu",
+                "type":"text",
+                "field":"Palgat\u00f6\u00f6taja_brutotulu"
+            }
+        ],
+        "url":"http:\/\/vtiav.sm.ee\/index.php\/opendata\/supluskoha_veeproovid.xml",
+        "tables":"",
+        "converter_top_element":"supluskoha_veeproovid",
+        "cron_minutes":"*",
+        "timeout_min":null,
+        "remote_updated":"1970-01-01",
+        "last_updated":"1970-01-01",
+        "devel":false,
+        "data_count":0
+    }
+]

@@ -1,0 +1,18 @@
+[
+    {
+        "id":"github_mwgg",
+        "meta":{
+            "en":{
+                "name":"Airport List by mwgg",
+                "description":"Airport list by mwgg",
+                "url":"https:\/\/github.com\/mwgg\/Airports"
+            },
+            "et":{
+                "name":"Lennujaamad mwgg",
+                "description":"Airport list mwgg",
+                "url":"https:\/\/github.com\/mwgg\/Airports"
+            }
+        },
+        "wms":null
+    }
+]

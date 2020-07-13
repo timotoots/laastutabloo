@@ -1,0 +1,35 @@
+[
+    {
+        "id":"eelis_pk_objekt_metsas",
+        "provider":"kem-gsavalik",
+        "private":false,
+        "type":"geojson",
+        "update_frequency":"weekly",
+        "schema":[
+            {
+                "column":"koosseis",
+                "type":"text",
+                "field":"properties.koosseis"
+            },
+            {
+                "column":"nimi",
+                "type":"text",
+                "field":"properties.nimi"
+            },
+            {
+                "column":"tyyp",
+                "type":"text",
+                "field":"properties.tyyp"
+            }
+        ],
+        "url":"https:\/\/gsavalik.envir.ee\/geoserver\/eelis\/ows?service=WMS&version=1.3.0&request=GetMap&layers=eelis:pk_objekt_metsas&styles=&bbox=57.47267905667945,21.45187502623414,59.84501069564773,28.45838952388184&width=1200&height=300&srs=EPSG:4326&format=application\/json;type=geojson&feature_count=10",
+        "tables":"",
+        "converter_top_element":"features",
+        "cron_minutes":"*",
+        "timeout_min":null,
+        "remote_updated":"1970-01-01",
+        "last_updated":"1970-01-01",
+        "devel":false,
+        "data_count":0
+    }
+]

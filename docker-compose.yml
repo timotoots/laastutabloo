@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.4'
 x-restart-policy: &restart_policy
   restart: unless-stopped
 x-datastore-defaults: &datastore_defaults
@@ -14,6 +14,7 @@ x-datastore-defaults: &datastore_defaults
     - "5000:5000"
   volumes:
     - './data:/opt/laastutabloo/backend/data'
+    - './output:/output'
 services:
   smtp:
     << : *restart_policy
@@ -97,3 +98,6 @@ volumes:
 
 networks:
   default:
+    ipam:
+      config:
+        - subnet: 172.23.0.1/16

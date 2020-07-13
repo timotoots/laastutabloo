@@ -1,0 +1,18 @@
+[
+    {
+        "id":"haridusministeerium",
+        "meta":{
+            "en":{
+                "name":"Ministry of Education and Research",
+                "description":"",
+                "url":"https:\/\/www.hm.ee\/en"
+            },
+            "et":{
+                "name":"Haridus- ja Teadusministeerium",
+                "description":"",
+                "url":"https:\/\/www.hm.ee\/et\/"
+            }
+        },
+        "wms":null
+    }
+]

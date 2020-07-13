@@ -1,0 +1,18 @@
+[
+    {
+        "id":"ppa",
+        "meta":{
+            "en":{
+                "name":"Police",
+                "description":"Sport sport sport",
+                "url":"https:\/\/www.spordiregister.ee\/opendata\/"
+            },
+            "et":{
+                "name":"Politsei ja piirivalveamet",
+                "description":"Sport sport sport",
+                "url":"https:\/\/www.spordiregister.ee\/opendata\/"
+            }
+        },
+        "wms":null
+    }
+]

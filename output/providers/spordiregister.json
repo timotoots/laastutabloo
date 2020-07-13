@@ -1,0 +1,18 @@
+[
+    {
+        "id":"spordiregister",
+        "meta":{
+            "en":{
+                "name":"Sport Registry",
+                "description":"Sport sport sport",
+                "url":"https:\/\/www.spordiregister.ee\/opendata\/"
+            },
+            "et":{
+                "name":"Spordiregister",
+                "description":"Sport sport sport",
+                "url":"https:\/\/www.spordiregister.ee\/opendata\/"
+            }
+        },
+        "wms":null
+    }
+]

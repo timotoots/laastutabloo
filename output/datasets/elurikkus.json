@@ -1,0 +1,141 @@
+[
+    {
+        "id":"loodusvaatlused-2018",
+        "provider":"elurikkus",
+        "private":false,
+        "type":"csv",
+        "update_frequency":"manual",
+        "schema":[
+            {
+                "column":"klass",
+                "type":"text",
+                "field":"Class - matched"
+            },
+            {
+                "column":"time",
+                "type":"text",
+                "field":"Event Date - parsed"
+            },
+            {
+                "column":"liiginimi_et",
+                "type":"text",
+                "field":"Vernacular Name - matched"
+            },
+            {
+                "column":"lat",
+                "type":"text",
+                "field":"Latitude - processed"
+            },
+            {
+                "column":"lon",
+                "type":"text",
+                "field":"Longitude - processed"
+            },
+            {
+                "column":"sugu",
+                "type":"text",
+                "field":"Sex"
+            },
+            {
+                "column":"kaitumine",
+                "type":"text",
+                "field":"Behaviour"
+            },
+            {
+                "column":"taxon_guid",
+                "type":"text",
+                "field":"Match Taxon Concept GUID"
+            },
+            {
+                "column":"liiginimi_latin",
+                "type":"text",
+                "field":"Matched Scientific Name"
+            },
+            {
+                "column":"point",
+                "type":"geom",
+                "sql":"populate_point_from_lat_lon.sql"
+            }
+        ],
+        "url":"https:\/\/elurikkus.ee\/biocache-service\/occurrences\/index\/download?q=data_resource_uid%3Adr1&basis_of_record:'HumanObservation'&fq=occurrence_date:[1600-01-01T00:00:00Z TO 2018-12-31T00:00:00Z]&email=info@timo.ee&sourceTypeId=&reasonTypeId=10&file=elurikkus&extra=dataResourceUid,dataResourceName.p",
+        "delimiter":",",
+        "file_in_package":"elurikkus.csv",
+        "tables":"",
+        "cron_minutes":"*",
+        "timeout_min":null,
+        "remote_updated":"1970-01-01",
+        "last_updated":"1970-01-01",
+        "devel":false,
+        "data_count":0
+    }
+,
+    {
+        "id":"loodusvaatlused_2019",
+        "provider":"elurikkus",
+        "private":false,
+        "type":"csv",
+        "update_frequency":"daily",
+        "schema":[
+            {
+                "column":"klass",
+                "type":"text",
+                "field":"Class - matched"
+            },
+            {
+                "column":"time",
+                "type":"text",
+                "field":"Event Date - parsed"
+            },
+            {
+                "column":"liiginimi_et",
+                "type":"text",
+                "field":"Vernacular Name - matched"
+            },
+            {
+                "column":"lat",
+                "type":"text",
+                "field":"Latitude - processed"
+            },
+            {
+                "column":"lon",
+                "type":"text",
+                "field":"Longitude - processed"
+            },
+            {
+                "column":"sugu",
+                "type":"text",
+                "field":"Sex"
+            },
+            {
+                "column":"kaitumine",
+                "type":"text",
+                "field":"Behaviour"
+            },
+            {
+                "column":"taxon_guid",
+                "type":"text",
+                "field":"Match Taxon Concept GUID"
+            },
+            {
+                "column":"liiginimi_latin",
+                "type":"text",
+                "field":"Matched Scientific Name"
+            },
+            {
+                "column":"point",
+                "type":"geom",
+                "sql":"populate_point_from_lat_lon.sql"
+            }
+        ],
+        "url":"https:\/\/elurikkus.ee\/biocache-service\/occurrences\/index\/download?q=data_resource_uid%3Adr1&basis_of_record:'HumanObservation'&fq=occurrence_date:[2019-01-01T00:00:00Z TO 2019-12-31T00:00:00Z]&email=info@timo.ee&sourceTypeId=&reasonTypeId=10&file=elurikkus&extra=dataResourceUid,dataResourceName.p",
+        "delimiter":",",
+        "file_in_package":"elurikkus.csv",
+        "tables":"",
+        "cron_minutes":"*",
+        "timeout_min":null,
+        "remote_updated":"1970-01-01",
+        "last_updated":"1970-01-01",
+        "devel":false,
+        "data_count":0
+    }
+]

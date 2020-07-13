@@ -30,4 +30,9 @@ Create user with access to admin:
 htpasswd config/nginx/htpasswd username
 ```
 
+Export datasets from DB to JSON:
+```
+docker-compose run datastore python3 /opt/laastutabloo/backend/datastore/dataset_db_to_json_dumper.py --output /output --providers datasets2  
+```
+
 

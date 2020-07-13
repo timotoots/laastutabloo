@@ -60,6 +60,8 @@ def dump_from_db(table, output):
         if 'provider' not in row and 'master_dataset' in row:
             depend_datasets.append(row)
             continue
+        if 'provider' not in row:
+            row['provider'] = "None"
 
         provider_map[row['provider']].append(row)
 

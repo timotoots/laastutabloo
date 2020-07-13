@@ -1,0 +1,37 @@
+[
+    {
+        "id":"catalogueoflife_vernacular",
+        "provider":"catalogueoflife",
+        "private":false,
+        "type":"csv",
+        "update_frequency":"manual",
+        "schema":[
+            {
+                "column":"taxon_guid",
+                "type":"int",
+                "field":"taxonID"
+            },
+            {
+                "column":"name",
+                "type":"text",
+                "field":"vernacularName"
+            },
+            {
+                "column":"lang",
+                "type":"text",
+                "field":"language"
+            }
+        ],
+        "url":"http:\/\/www.catalogueoflife.org\/DCA_Export\/zip-fixed\/2019-05-01-archive-complete.zip",
+        "delimiter":"\t",
+        "file_in_package":"vernacular.txt",
+        "script_sql":"catalogueoflife.sql",
+        "tables":"",
+        "cron_minutes":"*",
+        "timeout_min":null,
+        "remote_updated":"1970-01-01",
+        "last_updated":"1970-01-01",
+        "devel":false,
+        "data_count":0
+    }
+]

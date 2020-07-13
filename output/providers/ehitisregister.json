@@ -1,0 +1,18 @@
+[
+    {
+        "id":"ehitisregister",
+        "meta":{
+            "en":{
+                "name":"Buildings Registry",
+                "description":"Buildings",
+                "url":"https:\/\/avaandmed.ehr.ee\/"
+            },
+            "et":{
+                "name":"Ehitisregister",
+                "description":"Majad",
+                "url":"https:\/\/avaandmed.ehr.ee\/"
+            }
+        },
+        "wms":null
+    }
+]

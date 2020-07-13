@@ -1,0 +1,18 @@
+[
+    {
+        "id":"local",
+        "meta":{
+            "en":{
+                "name":"Laastutabloo",
+                "description":"",
+                "url":""
+            },
+            "et":{
+                "name":"Laastutabloo",
+                "description":"",
+                "url":""
+            }
+        },
+        "wms":null
+    }
+]

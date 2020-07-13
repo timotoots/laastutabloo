@@ -1,0 +1,18 @@
+[
+    {
+        "id":"statistikaamet",
+        "meta":{
+            "en":{
+                "name":"",
+                "description":"",
+                "url":"https:\/\/www.stat.ee"
+            },
+            "et":{
+                "name":"Statistikaamet",
+                "description":"",
+                "url":"https:\/\/www.stat.ee"
+            }
+        },
+        "wms":null
+    }
+]

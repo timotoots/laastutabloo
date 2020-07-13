@@ -1,0 +1,40 @@
+[
+    {
+        "id":"tasutud_maksud",
+        "provider":"emta",
+        "private":false,
+        "type":"ods",
+        "update_frequency":"manual",
+        "schema":[
+            {
+                "column":"nimi",
+                "type":"text",
+                "field":"Nimi"
+            },
+            {
+                "column":"ariregistri_kood",
+                "type":"text",
+                "field":"Registrikood"
+            },
+            {
+                "column":"riiklikud_maksud",
+                "type":"text",
+                "field":"Riiklikud Maksud"
+            },
+            {
+                "column":"_ehak",
+                "type":"text",
+                "field":"asukoha_ehak_kood"
+            }
+        ],
+        "url":"https:\/\/www.emta.ee\/sites\/default\/files\/kontaktid-ja-ametist\/maksulaekumine-statistika\/tasutud-maksud\/tasutud_maksud_2019_i_kvartal.ods",
+        "delimiter":",",
+        "tables":"",
+        "cron_minutes":"*",
+        "timeout_min":null,
+        "remote_updated":"1970-01-01",
+        "last_updated":"1970-01-01",
+        "devel":false,
+        "data_count":0
+    }
+]

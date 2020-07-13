@@ -1,0 +1,18 @@
+[
+    {
+        "id":"ariregister",
+        "meta":{
+            "en":{
+                "name":"Business Registry",
+                "description":"Business",
+                "url":"https:\/\/avaandmed.rik.ee"
+            },
+            "et":{
+                "name":"\u00c4riregister",
+                "description":"\u00c4ri",
+                "url":"https:\/\/avaandmed.rik.ee"
+            }
+        },
+        "wms":null
+    }
+]
