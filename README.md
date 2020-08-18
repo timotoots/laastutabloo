@@ -46,12 +46,12 @@ htpasswd config/nginx/htpasswd username
 
 ## Check logs for backend
 ```
-docker logs...
+docker-compose logs -f datastore scrapyd
 ```
 
 ## Check logs for curator
 ```
-docker logs...
+docker-compose  logs -f composer
 ```
 
 ## Access admin interface here
@@ -71,7 +71,7 @@ docker-compose run datastore python3 /opt/laastutabloo/backend/datastore/dataset
 
 ## Commit all changes in datasets to git
 ```
-git add /opt/laastutabloo/config/*
+git add /opt/laastutabloo/output/*
 git commit -m "backup config"
 git pull
 git push
