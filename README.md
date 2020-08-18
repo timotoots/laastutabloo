@@ -7,8 +7,7 @@ Released here for self documentation and educational purposes.
 
 ## Start with fresh Ubuntu 20.04
 
-
-# Setup using Docker
+## Setup operating system
 ```
 sudo timedatectl set-timezone Europe/Tallinn
 sudo apt update
@@ -18,23 +17,70 @@ cd /opt && git clone https://github.com/timotoots/laastutabloo.git
 cd laastutabloo
 ```
 
-Change usernames and passwords in .env  
-(Optional) Add extra credentials for datasets to file config/datasets_private.json
+## Change usernames and passwords in .env  
+```
+nano .env
+```
 
+## Check configuration
+* Configuration for datasets, providers and scripts are imported during setup. 
+* Check ```config/datasets/``` for public datasets.
+* Create file ```config/datasets_private.json``` for private datasets. This file is not version controlled.
+
+
+## Initialize system
 ```
 ./init_project.sh
+```
+
+## Create service and enable for starting on boot
+```
 cp config/laastutabloo.service /etc/systemd/system/
 systemctl enable laastutabloo
 ```
 
-Create user with access to admin:
+## Create user to access admin interface:
 ```
 htpasswd config/nginx/htpasswd username
 ```
 
-Export datasets from DB to JSON:
+## Check logs for backend
+```
+docker logs...
+```
+
+## Check logs for curator
+```
+docker logs...
+```
+
+## Access admin interface here
+https://laastutabloo.erm.ee/admin
+
+## Access public web interface here
+https://laastutabloo.erm.ee
+
+## Success!! Your server should be oprational!
+
+# Making backups
+
+## Export datasets from database to JSON
 ```
 docker-compose run datastore python3 /opt/laastutabloo/backend/datastore/dataset_db_to_json_dumper.py --output /output --providers datasets2  
 ```
+
+## Commit all changes in datasets to git
+```
+git add /opt/laastutabloo/config/*
+git commit -m "backup config"
+git pull
+git push
+```
+
+## Copy private datasets to your computer
+```
+config/datasets_private.json
+```
+
 
 
