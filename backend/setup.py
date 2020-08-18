@@ -3,17 +3,18 @@ from setuptools import find_packages, setup
 
 
 setup(
-    name='laastutabloo.datastore',
+    name='laastutabloo',
     version='0.0.1',
     url='https://laastutabloo.eu/',
     author='Timo Toots',
     author_email='timo@timo.ee',
     description=('Laastutabloo backend.'),
-    packages=find_packages("."),
-#    packages=['laastutabloo'],
+    #package_dir={'datastore':'datastore'},
+    #packages=find_packages(),
+    packages=['datastore'],
     include_package_data=True,
     entry_points={'console_scripts': [
-        'datastore = datastore:execute_from_command_line',
+        'datastore = datastore.datastore:execute_from_command_line',
     ]},
     install_requires=['pytz', 'sqlparse', 'flask_cors', 'flask', 'flask_restful_swagger_2', 'scrapyd-client', 'json_schema_generator',
                       'xmltodict', 'geoalchemy2', 'geomet', 'shapely', 'pyshp', 'pyproj'],    

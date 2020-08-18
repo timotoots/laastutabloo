@@ -1,0 +1,23 @@
+[
+    {
+        "id":"pria",
+        "meta":{
+            "name":{
+                "et":"PRIA",
+                "en":"PRIA",
+                "ru":"PRIA"
+            },
+            "show_public":false,
+            "description":{
+
+            },
+            "url":"https:\/\/www.pria.ee"
+        },
+        "wms":{
+
+        },
+        "meta_internal":{
+
+        }
+    }
+]

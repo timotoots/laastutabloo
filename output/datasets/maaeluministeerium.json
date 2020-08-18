@@ -1,0 +1,47 @@
+[
+    {
+        "converter_top_element":"v_toidukaitleja_avaandmed.row",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/agri_toidukaitlejad.xml",
+        "devel":false,
+        "id":"agri_toidukaitlejad",
+        "last_updated":"2019-12-01 20:14:37.389776",
+        "private":false,
+        "provider":"maaeluministeerium",
+        "remote_hash":"W\/\"5de2e663-9b3952\"",
+        "remote_updated":"2019-11-30 22:00:03",
+        "schema":[
+            {
+                "column":"regkood",
+                "type":"int",
+                "field":"kaitleja_isikukood_regkood"
+            },
+            {
+                "column":"tegevuskoha_nimi",
+                "type":"text",
+                "field":"tegevuskoha_nimi"
+            },
+            {
+                "column":"adr",
+                "type":"text",
+                "field":"tegevuskoha_aadres"
+            },
+            {
+                "column":"pohikaitlemisvaldkond",
+                "type":"text",
+                "field":"pohikaitlemisvaldkond"
+            },
+            {
+                "column":"tunnustatud",
+                "type":"text",
+                "field":"tunnustatud"
+            }
+        ],
+        "status_converter":"done",
+        "status_updater":"done",
+        "type":"xml",
+        "update_frequency":"manual",
+        "url":"https:\/\/www.agri.ee\/sites\/default\/files\/opendata\/toit\/Toidukaitlejad.xml",
+        "data_count":16125,
+        "dataset_type":"regular"
+    }
+]

@@ -16,7 +16,7 @@ ENV PYTHONIOENCODING UTF-8
 RUN pip3 install -r requirements.txt
 COPY backend /opt/laastutabloo/backend
 COPY config /opt/laastutabloo/config
-WORKDIR /opt/laastutabloo/backend/datastore
+WORKDIR /opt/laastutabloo/backend
 
 RUN python3 setup.py develop
 

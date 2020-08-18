@@ -1,0 +1,23 @@
+[
+    {
+        "id":"elron",
+        "meta":{
+            "name":{
+                "et":"Elron",
+                "en":"Elron trains",
+                "ru":"Elron trains"
+            },
+            "show_public":false,
+            "description":{
+
+            },
+            "url":"https:\/\/www.elron.ee"
+        },
+        "wms":{
+
+        },
+        "meta_internal":{
+            "notes":"Ei ole luba k\u00fcsitud."
+        }
+    }
+]

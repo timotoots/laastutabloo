@@ -1,0 +1,23 @@
+[
+    {
+        "id":"maaeluministeerium",
+        "meta":{
+            "name":{
+                "et":"Maaeluministeerium",
+                "en":"Maaeluministeerium",
+                "ru":"Maaeluministeerium"
+            },
+            "show_public":false,
+            "description":{
+
+            },
+            "url":"https:\/\/www.agri.ee"
+        },
+        "wms":{
+
+        },
+        "meta_internal":{
+
+        }
+    }
+]

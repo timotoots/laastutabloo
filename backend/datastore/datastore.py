@@ -53,9 +53,13 @@ from geoalchemy2 import Geometry
 import geojson
 
 from sqlalchemy.dialects import postgresql
-from functions import get_wms_url, wms_get_capabilities
+try:
+    from .functions import get_wms_url, wms_get_capabilities
+    from .script import Script
+except ImportError:
+    from functions import get_wms_url, wms_get_capabilities
+    from script import Script
 
-from script import Script
 
 metadata = MetaData()
 metadata.reflect(engine, only=['datasets2', 'providers', 'ehak'])

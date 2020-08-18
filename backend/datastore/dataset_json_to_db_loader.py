@@ -14,6 +14,7 @@ def load_providers(input):
         df = pandas.read_json(f)
         all_df = pandas.concat([all_df, df], join="outer")
     all_df.to_sql("providers", engine, dtype={'meta':sqlalchemy.types.JSON,
+                                              'meta_internal':sqlalchemy.types.JSON,
                                               'wms':sqlalchemy.types.JSON}, if_exists='replace')
     engine.execute("ALTER TABLE providers ADD PRIMARY KEY (id)")
     
@@ -38,7 +39,7 @@ def load_to_db(table, input):
             if 'url' in df_auth and  auth.url:
                 df.loc[df['id'] == auth.id, 'url'] = auth.url
             if 'http_header' in df_auth and auth.http_header:
-                df.loc[df['id'] == auth.id, 'http_header'] = auth.http_header
+                df.loc[df['id'] == auth.id, 'http_header'] = auth.http_header[0]
 
     # df = pandas.read_json("/opt/laastutabloo/backend/config/datasets2.json", dtype={'devel':'bool'})
     # df = pandas.read_json("/opt/laastutabloo/backend/config/datasets2.json", convert_dates=['last_updated', 'remote_updated'])
