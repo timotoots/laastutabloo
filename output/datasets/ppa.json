@@ -1,10 +1,175 @@
 [
     {
-        "id":"avalik_merged",
-        "provider":"ppa",
+        "cron_custom":"",
+        "cron_day_of_month":"*",
+        "cron_day_of_week":"FRI",
+        "cron_hour":"0.0",
+        "cron_minutes":"0.0",
+        "cron_month":"*",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/avalik_1.csv",
+        "delimiter":"\t",
+        "devel":false,
+        "id":"avalik_master",
+        "last_updated":"2019-12-10 00:00:40.360101",
         "private":false,
+        "provider":"ppa",
+        "remote_hash":"\"5de8b47f-3f3ec1\"",
+        "remote_updated":"2019-12-05 07:40:47",
+        "schema":[
+            {
+                "column":"juhtum_id",
+                "type":"text",
+                "field":"JuhtumId"
+            },
+            {
+                "column":"syndmus_liik",
+                "type":"text",
+                "field":"SyndmusLiik",
+                "script":"replace_comma_space"
+            },
+            {
+                "column":"time",
+                "type":"timestamp",
+                "script":"ppa_timestamp"
+            },
+            {
+                "column":"lest_y",
+                "type":"text",
+                "field":"Lest_Y",
+                "script":"ppa_range_to_average"
+            },
+            {
+                "column":"lest_x",
+                "type":"text",
+                "field":"Lest_X",
+                "script":"ppa_range_to_average"
+            },
+            {
+                "column":"paragrahv",
+                "type":"text",
+                "field":"ParagrahvTais",
+                "script":"split_space_2"
+            },
+            {
+                "column":"kahjusumma",
+                "type":"text",
+                "field":"Kahjusumma"
+            }
+        ],
+        "status_converter":"done",
+        "status_updater":"done",
+        "tables":"",
         "type":"csv",
-        "update_frequency":"weekly",
+        "update_frequency":"manual",
+        "url":"https:\/\/",
+        "data_count":13852,
+        "dataset_type":"regular"
+    }
+,
+    {
+        "cron_custom":"",
+        "cron_day_of_month":"*",
+        "cron_day_of_week":"FRI",
+        "cron_hour":"0.0",
+        "cron_minutes":"0.0",
+        "cron_month":"*",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/liiklusjarelevalve_2.csv",
+        "delimiter":"\t",
+        "devel":false,
+        "encoding":"utf8",
+        "id":"liiklusjarelevalve_master",
+        "last_updated":"2019-12-10 00:05:57.249752",
+        "private":false,
+        "provider":"ppa",
+        "remote_hash":"\"5de8b486-b0db450\"",
+        "remote_updated":"2019-12-05 07:40:54",
+        "schema":[
+            {
+                "column":"juhtum_id",
+                "type":"text",
+                "field":"JuhtumId"
+            },
+            {
+                "column":"syndmus_liik",
+                "type":"text",
+                "field":"SyndmusLiik"
+            },
+            {
+                "column":"time",
+                "type":"timestamp",
+                "script":"ppa_timestamp"
+            },
+            {
+                "column":"lest_y",
+                "type":"text",
+                "field":"Lest_X",
+                "script":"ppa_range_to_average"
+            },
+            {
+                "column":"lest_x",
+                "type":"text",
+                "field":"Lest_Y",
+                "script":"ppa_range_to_average"
+            },
+            {
+                "column":"paragrahv",
+                "type":"text",
+                "field":"ParagrahvTais",
+                "script":"split_space_2"
+            },
+            {
+                "column":"paragrahv_tekst",
+                "type":"text",
+                "field":"ParagrahvTais"
+            },
+            {
+                "column":"seadus",
+                "type":"text",
+                "field":"Seadus"
+            },
+            {
+                "column":"soiduk_aasta",
+                "type":"text",
+                "field":"SoidukVlAasta"
+            },
+            {
+                "column":"soiduk_mark",
+                "type":"text",
+                "field":"SoidukMark"
+            },
+            {
+                "column":"rikkuja_sugu",
+                "type":"text",
+                "field":"RikkujaSugu"
+            },
+            {
+                "column":"rikkuja_vanus",
+                "type":"text",
+                "field":"RikkujaVanus"
+            }
+        ],
+        "status_converter":"done",
+        "status_updater":"done",
+        "tables":"",
+        "type":"csv",
+        "update_frequency":"manual",
+        "url":"https:\/\/opendata.smit.ee\/ppa\/csv\/liiklusjarelevalve_2.csv",
+        "data_count":468383,
+        "dataset_type":"regular"
+    }
+,
+    {
+        "cron_custom":"* * * * *",
+        "cron_minutes":"*",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/avalik_slave_2.csv",
+        "devel":false,
+        "encoding":"utf8",
+        "id":"avalik_slave_2",
+        "last_updated":"2019-12-11 13:05:01.305839",
+        "private":false,
+        "provider":"ppa",
+        "remote_hash":"\"5de8b47f-e21571\"",
+        "remote_updated":"2019-12-05 07:40:47",
         "schema":[
             {
                 "column":"juhtum_id",
@@ -42,126 +207,116 @@
                 "sql":"ppa_populate_ehak.sql"
             }
         ],
-        "delimiter":"\t",
-        "tables":"",
-        "cron_minutes":"0.0",
-        "cron_hour":"0.0",
-        "cron_day_of_month":"*",
-        "cron_month":"*",
-        "cron_day_of_week":"FRI",
-        "cron_custom":"",
+        "status_converter":"done",
+        "status_updater":"done",
+        "tables":[
+            "avalik_1",
+            "avalik_2"
+        ],
+        "update_frequency":"manual",
+        "url":"https:\/\/opendata.smit.ee\/ppa\/csv\/avalik_2.csv",
+        "data_count":49425,
         "dataset_type":"merged",
-        "timeout_min":60.0,
-        "remote_updated":"1970-01-01",
-        "last_updated":"1970-01-01",
-        "devel":false,
-        "data_count":0
+        "master_dataset":"avalik_master"
     }
 ,
     {
-        "id":"liiklusjarelevalve_1",
-        "provider":"ppa",
-        "private":false,
-        "type":"csv",
-        "update_frequency":"weekly",
-        "schema":[
-            {
-                "column":"juhtum_id",
-                "type":"text",
-                "field":"JuhtumId"
-            },
-            {
-                "column":"syndmus_liik",
-                "type":"text",
-                "field":"SyndmusLiik"
-            },
-            {
-                "column":"_lat",
-                "type":"float",
-                "script":"ppa_lest_x"
-            },
-            {
-                "column":"_lon",
-                "type":"float",
-                "script":"ppa_lest_y"
-            },
-            {
-                "column":"_time",
-                "type":"timestamp",
-                "script":"ppa_timestamp"
-            }
-        ],
-        "url":"https:\/\/opendata.smit.ee\/ppa\/csv\/liiklusjarelevalve_1.csv",
-        "delimiter":"\t",
-        "tables":"",
-        "cron_minutes":"0.0",
-        "cron_hour":"0.0",
-        "cron_day_of_month":"*",
-        "cron_month":"*",
-        "cron_day_of_week":"FRI",
-        "cron_custom":"",
-        "timeout_min":null,
-        "remote_updated":"1970-01-01",
-        "last_updated":"1970-01-01",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/liiklusjarelvalve_yearly.csv",
         "devel":false,
-        "data_count":0
-    }
-,
-    {
-        "id":"liiklusjarelevalve_2",
+        "encoding":"utf8",
+        "id":"liiklusjarelvalve_yearly",
+        "last_updated":"2019-12-12 11:23:47.668822",
         "provider":"ppa",
-        "private":false,
-        "type":"csv",
-        "update_frequency":"weekly",
-        "schema":[
-            {
-                "column":"juhtum_id",
-                "type":"text",
-                "field":"JuhtumId"
-            },
-            {
-                "column":"syndmus_liik",
-                "type":"text",
-                "field":"SyndmusLiik"
-            },
-            {
-                "column":"_lat",
-                "type":"float",
-                "script":"ppa_lest_x"
-            },
-            {
-                "column":"_lon",
-                "type":"float",
-                "script":"ppa_lest_y"
-            },
-            {
-                "column":"_time",
-                "type":"timestamp",
-                "script":"ppa_timestamp"
-            }
-        ],
+        "remote_hash":"\"5df21d4f-b0db8ff\"",
+        "remote_updated":"2019-12-12 10:58:23",
+        "status_converter":"done",
+        "status_updater":"done",
+        "update_frequency":"manual",
         "url":"https:\/\/opendata.smit.ee\/ppa\/csv\/liiklusjarelevalve_2.csv",
-        "delimiter":"\t",
-        "tables":"",
-        "cron_minutes":"0.0",
-        "cron_hour":"0.0",
-        "cron_day_of_month":"*",
-        "cron_month":"*",
-        "cron_day_of_week":"FRI",
-        "cron_custom":"",
-        "timeout_min":null,
-        "remote_updated":"1970-01-01",
-        "last_updated":"1970-01-01",
-        "devel":false,
-        "data_count":0
+        "data_count":468387,
+        "dataset_type":"merged",
+        "master_dataset":"liiklusjarelevalve_master"
     }
 ,
     {
+        "cron_custom":"",
+        "cron_day_of_month":"*",
+        "cron_day_of_week":"FRI",
+        "cron_hour":"0.0",
+        "cron_minutes":"0.0",
+        "cron_month":"*",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/avalik_slave_1.csv",
+        "delimiter":"\t",
+        "devel":false,
+        "encoding":"utf8",
+        "id":"avalik_slave_1",
+        "last_updated":"2019-12-12 07:37:44.628131",
+        "private":false,
+        "provider":"ppa",
+        "remote_hash":"\"5df1e938-3f3ec1\"",
+        "remote_updated":"2019-12-12 07:16:08",
+        "schema":[
+            {
+                "column":"juhtum_id",
+                "type":"text",
+                "field":"JuhtumId"
+            },
+            {
+                "column":"syndmus_liik",
+                "type":"text",
+                "field":"SyndmusLiik"
+            },
+            {
+                "column":"_time",
+                "type":"timestamp",
+                "script":"ppa_timestamp"
+            },
+            {
+                "column":"Lest_X",
+                "type":"text",
+                "field":"Lest_X"
+            },
+            {
+                "column":"Lest_Y",
+                "type":"text",
+                "field":"Lest_Y"
+            },
+            {
+                "column":"point",
+                "type":"geom"
+            },
+            {
+                "column":"ehak",
+                "type":"int"
+            }
+        ],
+        "status_converter":"done",
+        "status_updater":"done",
+        "tables":"",
+        "type":"csv",
+        "update_frequency":"manual",
+        "url":"https:\/\/opendata.smit.ee\/ppa\/csv\/avalik_1.csv",
+        "data_count":13852,
+        "dataset_type":"merged",
+        "master_dataset":"avalik_master"
+    }
+,
+    {
+        "cron_custom":"",
+        "cron_day_of_month":"*",
+        "cron_day_of_week":"FRI",
+        "cron_hour":"0.0",
+        "cron_minutes":"0.0",
+        "cron_month":"*",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/vara_1.csv",
+        "delimiter":"\t",
+        "devel":false,
         "id":"vara_1",
-        "provider":"ppa",
+        "last_updated":"2020-06-23 03:02:05.874430",
         "private":false,
-        "type":"csv",
-        "update_frequency":"weekly",
+        "provider":"ppa",
+        "remote_hash":"\"5eec4549-80eb50\"",
+        "remote_updated":"2020-06-19 04:55:37",
         "schema":[
             {
                 "column":"juhtum_id",
@@ -189,28 +344,32 @@
                 "script":"ppa_timestamp"
             }
         ],
-        "url":"https:\/\/opendata.smit.ee\/ppa\/csv\/vara_1.csv",
-        "delimiter":"\t",
+        "status_converter":"failed",
+        "status_updater":"done",
         "tables":"",
-        "cron_minutes":"0.0",
-        "cron_hour":"0.0",
-        "cron_day_of_month":"*",
-        "cron_month":"*",
-        "cron_day_of_week":"FRI",
-        "cron_custom":"",
-        "timeout_min":null,
-        "remote_updated":"1970-01-01",
-        "last_updated":"1970-01-01",
-        "devel":false,
-        "data_count":0
+        "type":"csv",
+        "update_frequency":"weekly",
+        "url":"https:\/\/opendata.smit.ee\/ppa\/csv\/vara_1.csv",
+        "data_count":33277
     }
 ,
     {
-        "id":"vara_2",
-        "provider":"ppa",
+        "cron_custom":"",
+        "cron_day_of_month":"*",
+        "cron_day_of_week":"FRI",
+        "cron_hour":"0.0",
+        "cron_minutes":"0.0",
+        "cron_month":"*",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/liiklusjarelevalve_weekly.csv",
+        "delimiter":"\t",
+        "devel":false,
+        "encoding":"utf8",
+        "id":"liiklusjarelevalve_weekly",
+        "last_updated":"2019-12-12 12:08:07.345632",
         "private":false,
-        "type":"csv",
-        "update_frequency":"weekly",
+        "provider":"ppa",
+        "remote_hash":"\"5df21d4a-4129585\"",
+        "remote_updated":"2019-12-12 10:58:18",
         "schema":[
             {
                 "column":"juhtum_id",
@@ -238,19 +397,66 @@
                 "script":"ppa_timestamp"
             }
         ],
-        "url":"https:\/\/opendata.smit.ee\/ppa\/csv\/vara_2.csv",
-        "delimiter":"\t",
+        "status_converter":"done",
+        "status_updater":"done",
         "tables":"",
-        "cron_minutes":"0.0",
-        "cron_hour":"0.0",
-        "cron_day_of_month":"*",
-        "cron_month":"*",
-        "cron_day_of_week":"FRI",
+        "type":"csv",
+        "update_frequency":"manual",
+        "url":"https:\/\/opendata.smit.ee\/ppa\/csv\/liiklusjarelevalve_1.csv",
+        "data_count":175173,
+        "dataset_type":"merged",
+        "master_dataset":"liiklusjarelevalve_master"
+    }
+,
+    {
         "cron_custom":"",
-        "timeout_min":null,
-        "remote_updated":"1970-01-01",
-        "last_updated":"1970-01-01",
+        "cron_day_of_month":"*",
+        "cron_day_of_week":"FRI",
+        "cron_hour":"0.0",
+        "cron_minutes":"0.0",
+        "cron_month":"*",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/vara_2.csv",
+        "delimiter":"\t",
         "devel":false,
-        "data_count":0
+        "id":"vara_2",
+        "last_updated":"2020-06-23 03:02:38.415971",
+        "private":false,
+        "provider":"ppa",
+        "remote_hash":"\"5eec4549-236b334\"",
+        "remote_updated":"2020-06-19 04:55:37",
+        "schema":[
+            {
+                "column":"juhtum_id",
+                "type":"text",
+                "field":"JuhtumId"
+            },
+            {
+                "column":"syndmus_liik",
+                "type":"text",
+                "field":"SyndmusLiik"
+            },
+            {
+                "column":"_lat",
+                "type":"float",
+                "script":"ppa_lest_x"
+            },
+            {
+                "column":"_lon",
+                "type":"float",
+                "script":"ppa_lest_y"
+            },
+            {
+                "column":"_time",
+                "type":"timestamp",
+                "script":"ppa_timestamp"
+            }
+        ],
+        "status_converter":"failed",
+        "status_updater":"done",
+        "tables":"",
+        "type":"csv",
+        "update_frequency":"weekly",
+        "url":"https:\/\/opendata.smit.ee\/ppa\/csv\/vara_2.csv",
+        "data_count":115001
     }
 ]

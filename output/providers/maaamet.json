@@ -2,17 +2,19 @@
     {
         "id":"maaamet",
         "meta":{
-            "en":{
-                "name":"Estonian Land Board",
-                "description":"The Land Board is a national competency centre in land related matters and the biggest producer, manager and distributor of spatial data as well as provider of spatial data services.",
-                "url":"https:\/\/www.maaamet.ee\/en"
+            "name":{
+                "et":"Maa-amet",
+                "en":"Estonian Land Board",
+                "ru":"Estonian Land Board"
             },
-            "et":{
-                "name":"Maa-amet",
-                "description":"Maa-amet on Eesti riigi kompetentsikeskus maak\u00fcsimustes ning suurim ruumiandmete tootja, haldaja, levitaja ja ruumiandmeteenuste pakkuja.",
-                "url":"https:\/\/www.maaamet.ee\/et"
+            "description":{
+                "et":"Maa-amet on Eesti riigi kompetentsikeskus maak\u00fcsimustes ning suurim ruumiandmete tootja, haldaja, levitaja ja ruumiandmeteenuste pakkuja.",
+                "en":"The Land Board is a national competency centre in land related matters and the biggest producer, manager and distributor of spatial data as well as provider of spatial data services."
             }
         },
-        "wms":null
+        "wms":null,
+        "meta_internal":{
+
+        }
     }
 ]

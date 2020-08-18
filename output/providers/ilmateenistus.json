@@ -2,17 +2,18 @@
     {
         "id":"ilmateenistus",
         "meta":{
-            "en":{
-                "name":"Weather",
-                "description":"Business",
-                "url":"https:\/\/avaandmed.rik.ee"
+            "name":{
+                "et":"Ilmateenistus",
+                "en":"Weather"
             },
-            "et":{
-                "name":"Ilmateenistus",
-                "description":"\u00c4ri",
-                "url":"https:\/\/avaandmed.rik.ee"
-            }
+            "description":{
+
+            },
+            "url":"http:\/\/www.ilmateenistus.ee"
         },
-        "wms":null
+        "wms":null,
+        "meta_internal":{
+
+        }
     }
 ]

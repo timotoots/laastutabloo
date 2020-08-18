@@ -1,10 +1,45 @@
 [
     {
-        "id":"oppeasutused",
-        "provider":"haridusministeerium",
+        "converter_top_element":"kml.Document",
+        "cron_minutes":"*",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/oppeasutused_kaart.xml",
+        "devel":false,
+        "id":"oppeasutused_kaart",
+        "last_updated":"2020-06-23 03:00:16.227273",
         "private":false,
-        "type":"json",
+        "provider":"haridusministeerium",
+        "remote_updated":"1970-01-01 00:00:00",
+        "schema":[
+            {
+                "column":"name",
+                "type":"text",
+                "field":"name"
+            },
+            {
+                "column":"latlon",
+                "type":"text",
+                "field":"Point.coordinates"
+            }
+        ],
+        "status_converter":"done",
+        "status_updater":"done",
+        "tables":"",
+        "type":"xml",
         "update_frequency":"weekly",
+        "url":"https:\/\/koolikaart.hm.ee\/kml_koolid.php?t=3",
+        "data_count":0
+    }
+,
+    {
+        "converter_top_element":"body.oppeasutused.oppeasutus",
+        "cron_minutes":"*",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/oppeasutused.json",
+        "devel":false,
+        "id":"oppeasutused",
+        "last_updated":"2019-12-31 00:00:05.043734",
+        "private":false,
+        "provider":"haridusministeerium",
+        "remote_updated":"1970-01-01 00:00:00",
         "schema":[
             {
                 "column":"nimi",
@@ -22,43 +57,12 @@
                 "field":"juriidilineAadress.adrId"
             }
         ],
-        "url":"http:\/\/enda.ehis.ee\/avaandmed\/rest\/oppeasutused\/-\/Kool\/E\/-\/-\/-\/-\/-\/-\/0\/0\/JSON",
+        "status_converter":"failed",
+        "status_updater":"failed",
         "tables":"",
-        "converter_top_element":"body.oppeasutused.oppeasutus",
-        "cron_minutes":"*",
-        "timeout_min":null,
-        "remote_updated":"1970-01-01",
-        "last_updated":"1970-01-01",
-        "devel":false,
-        "data_count":0
-    }
-,
-    {
-        "id":"oppeasutused_kaart",
-        "provider":"haridusministeerium",
-        "private":false,
-        "type":"xml",
+        "type":"json",
         "update_frequency":"weekly",
-        "schema":[
-            {
-                "column":"name",
-                "type":"text",
-                "field":"name"
-            },
-            {
-                "column":"latlon",
-                "type":"text",
-                "field":"Point.coordinates"
-            }
-        ],
-        "url":"https:\/\/koolikaart.hm.ee\/kml_koolid.php?t=3",
-        "tables":"",
-        "converter_top_element":"kml.Document",
-        "cron_minutes":"*",
-        "timeout_min":null,
-        "remote_updated":"1970-01-01",
-        "last_updated":"1970-01-01",
-        "devel":false,
-        "data_count":0
+        "url":"http:\/\/enda.ehis.ee\/avaandmed\/rest\/oppeasutused\/-\/Kool\/E\/-\/-\/-\/-\/-\/-\/0\/0\/JSON",
+        "data_count":737
     }
 ]

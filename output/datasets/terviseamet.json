@@ -1,10 +1,14 @@
 [
     {
+        "converter_top_element":"supluskoha_veeproovid",
+        "cron_minutes":"*",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/supluskohad_veeproovid.xml",
+        "devel":false,
         "id":"supluskohad_veeproovid",
-        "provider":"terviseamet",
+        "last_updated":"2020-06-27 04:00:26.909640",
         "private":false,
-        "type":"xml",
-        "update_frequency":"daily",
+        "provider":"terviseamet",
+        "remote_updated":"1970-01-01 00:00:00",
         "schema":[
             {
                 "column":"ehak",
@@ -17,14 +21,12 @@
                 "field":"Palgat\u00f6\u00f6taja_brutotulu"
             }
         ],
-        "url":"http:\/\/vtiav.sm.ee\/index.php\/opendata\/supluskoha_veeproovid.xml",
+        "status_converter":"done",
+        "status_updater":"done",
         "tables":"",
-        "converter_top_element":"supluskoha_veeproovid",
-        "cron_minutes":"*",
-        "timeout_min":null,
-        "remote_updated":"1970-01-01",
-        "last_updated":"1970-01-01",
-        "devel":false,
+        "type":"xml",
+        "update_frequency":"daily",
+        "url":"http:\/\/vtiav.sm.ee\/index.php\/opendata\/supluskoha_veeproovid.xml",
         "data_count":0
     }
 ]

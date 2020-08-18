@@ -53,7 +53,7 @@ def dump_from_db(table, output):
 
         datasets_map[row['id']] = row
 
-        if row['private']:
+        if 'private' in row and row['private']:
             private.append(row)
             continue
 

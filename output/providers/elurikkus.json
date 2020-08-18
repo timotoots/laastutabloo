@@ -2,17 +2,21 @@
     {
         "id":"elurikkus",
         "meta":{
-            "en":{
-                "name":"",
-                "description":"",
-                "url":"https:\/\/www.elurikkus.ee"
+            "name":{
+                "et":"eElurikkus",
+                "en":"eElurikkus",
+                "ru":"eElurikkus"
             },
-            "et":{
-                "name":"Elurikkus",
-                "description":"",
-                "url":"https:\/\/www.elurikkus.ee"
-            }
+            "description":{
+                "et":"eElurikkus",
+                "en":"eElurikkus",
+                "ru":"eElurikkus"
+            },
+            "url":"https:\/\/www.elurikkus.ee"
         },
-        "wms":null
+        "wms":null,
+        "meta_internal":{
+
+        }
     }
 ]

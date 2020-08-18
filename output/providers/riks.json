@@ -2,17 +2,23 @@
     {
         "id":"riks",
         "meta":{
-            "en":{
-                "name":"Raamatukogude Info- ja Kataloogis\u00fcsteem",
-                "description":"",
-                "url":"https:\/\/www.webriks.ee\/blog\/"
+            "name":{
+                "et":"Raamatukogude Info- ja Kataloogis\u00fcsteem",
+                "en":"Raamatukogude Info- ja Kataloogis\u00fcsteem",
+                "ru":"Raamatukogude Info- ja Kataloogis\u00fcsteem"
             },
-            "et":{
-                "name":"Raamatukogude Info- ja Kataloogis\u00fcsteem",
-                "description":"",
-                "url":"https:\/\/www.webriks.ee\/blog\/"
-            }
+            "show_public":false,
+            "description":{
+
+            },
+            "url":"https:\/\/www.webriks.ee\/blog\/"
         },
-        "wms":null
+        "wms":{
+
+        },
+        "meta_internal":{
+            "contact_person":"Otsesuhtlus arendajaga:\nMeelis Lilbok\nmeelis.lilbok@deltmar.ee",
+            "notes":"API doc:\nhttps:\/\/rxapi.raamatukogud.ee\/swagger\/index.html"
+        }
     }
 ]

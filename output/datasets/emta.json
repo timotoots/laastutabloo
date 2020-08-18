@@ -1,10 +1,63 @@
 [
     {
-        "id":"tasutud_maksud",
-        "provider":"emta",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/emta_maksuvolglased.csv",
+        "delimiter":";",
+        "devel":false,
+        "encoding":"",
+        "id":"emta_maksuvolglased",
+        "last_updated":"2019-12-05 11:21:42.332127",
         "private":false,
-        "type":"ods",
+        "provider":"emta",
+        "remote_hash":"\"30a18-598b42c41e651\"",
+        "remote_updated":"2019-12-02 08:14:47",
+        "schema":[
+            {
+                "column":"kood",
+                "type":"int",
+                "field":"KOOD"
+            },
+            {
+                "column":"nimi",
+                "type":"text",
+                "field":"NIMI"
+            },
+            {
+                "column":"volg",
+                "type":"text",
+                "field":"MAKSUV\u00d5LG",
+                "script":"remove_spaces"
+            },
+            {
+                "column":"alates",
+                "type":"text",
+                "field":"MAKSUV\u00d5LG ALATES"
+            },
+            {
+                "column":"sh_vaidlustatud",
+                "type":"text",
+                "field":"SH VAIDLUSTATUD"
+            }
+        ],
+        "status_converter":"done",
+        "status_updater":"done",
+        "type":"csv",
         "update_frequency":"manual",
+        "url":"https:\/\/www.emta.ee\/sites\/default\/files\/kontaktid-ja-ametist\/maksulaekumine-statistika\/maksuvolglaste-nimekiri_\/maksuvolglaste_nimekiri.csv",
+        "data_count":4267,
+        "dataset_type":"regular"
+    }
+,
+    {
+        "cron_minutes":"*",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/tasutud_maksud.ods",
+        "delimiter":",",
+        "devel":false,
+        "id":"tasutud_maksud",
+        "last_updated":"2019-12-05 11:16:37.549693",
+        "private":false,
+        "provider":"emta",
+        "remote_hash":"\"70d58d-5963132f8ee6a\"",
+        "remote_updated":"2019-10-31 09:08:56",
         "schema":[
             {
                 "column":"nimi",
@@ -22,19 +75,18 @@
                 "field":"Riiklikud Maksud"
             },
             {
-                "column":"_ehak",
+                "column":"ehak",
                 "type":"text",
                 "field":"asukoha_ehak_kood"
             }
         ],
-        "url":"https:\/\/www.emta.ee\/sites\/default\/files\/kontaktid-ja-ametist\/maksulaekumine-statistika\/tasutud-maksud\/tasutud_maksud_2019_i_kvartal.ods",
-        "delimiter":",",
+        "status_converter":"failed",
+        "status_updater":"done",
         "tables":"",
-        "cron_minutes":"*",
-        "timeout_min":null,
-        "remote_updated":"1970-01-01",
-        "last_updated":"1970-01-01",
-        "devel":false,
-        "data_count":0
+        "type":"ods",
+        "update_frequency":"manual",
+        "url":"https:\/\/www.emta.ee\/sites\/default\/files\/kontaktid-ja-ametist\/maksulaekumine-statistika\/tasutud-maksud\/tasutud_maksud_2019_iii_kvartal.ods",
+        "data_count":131492,
+        "dataset_type":"regular"
     }
 ]

@@ -2,17 +2,19 @@
     {
         "id":"haridusministeerium",
         "meta":{
-            "en":{
-                "name":"Ministry of Education and Research",
-                "description":"",
-                "url":"https:\/\/www.hm.ee\/en"
+            "name":{
+                "et":"Haridus- ja Teadusministeerium",
+                "en":"Ministry of Education and Research",
+                "ru":"Ministry of Education and Research"
             },
-            "et":{
-                "name":"Haridus- ja Teadusministeerium",
-                "description":"",
-                "url":"https:\/\/www.hm.ee\/et\/"
-            }
+            "description":{
+
+            },
+            "url":"https:\/\/www.hm.ee"
         },
-        "wms":null
+        "wms":null,
+        "meta_internal":{
+
+        }
     }
 ]

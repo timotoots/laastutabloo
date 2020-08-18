@@ -2,17 +2,23 @@
     {
         "id":"epj",
         "meta":{
-            "en":{
-                "name":"Estonian Livestock Performance Recording Ltd",
-                "description":"The main task of Estonian Livestock Performance Recording Ltd is the improvement of the efficiency of animal husbandry by performing animal recording and independent testing of the quality of raw milk.",
-                "url":"https:\/\/www.epj.ee\/jkk\/en.html"
+            "name":{
+                "et":"P\u00f5llumajandusloomade J\u00f5udluskontrolli AS",
+                "en":"Livestock Performance Recording Ltd",
+                "ru":"Livestock Performance Recording Ltd"
             },
-            "et":{
-                "name":"Eesti P\u00f5llumajandusloomade J\u00f5udluskontrolli AS",
-                "description":"Eesti P\u00f5llumajandusloomade J\u00f5udluskontrolli AS tegeleb piimaveiste-, lihaveiste-, sigade- ja kitsede j\u00f5udluskontrolliga, loomade geneetilise hindamise ning toorpiima kvaliteedi s\u00f5ltumatu m\u00e4\u00e4ramisega. EPJ m\u00fc\u00fcb veiste, kitsede, sigade ning lammaste k\u00f5rvam\u00e4rke (samuti v\u00e4ljastatakse asendusm\u00e4rke).",
-                "url":"https:\/\/www.epj.ee\/"
-            }
+            "show_public":false,
+            "description":{
+                "et":"Eesti P\u00f5llumajandusloomade J\u00f5udluskontrolli AS tegeleb piimaveiste-, lihaveiste-, sigade- ja kitsede j\u00f5udluskontrolliga, loomade geneetilise hindamise ning toorpiima kvaliteedi s\u00f5ltumatu m\u00e4\u00e4ramisega. EPJ m\u00fc\u00fcb veiste, kitsede, sigade ning lammaste k\u00f5rvam\u00e4rke (samuti v\u00e4ljastatakse asendusm\u00e4rke).",
+                "en":"The main task of Estonian Livestock Performance Recording Ltd is the improvement of the efficiency of animal husbandry by performing animal recording and independent testing of the quality of raw milk."
+            },
+            "url":"https:\/\/www.epj.ee\/"
         },
-        "wms":null
+        "wms":{
+
+        },
+        "meta_internal":{
+
+        }
     }
 ]

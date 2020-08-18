@@ -2,17 +2,21 @@
     {
         "id":"ehitisregister",
         "meta":{
-            "en":{
-                "name":"Buildings Registry",
-                "description":"Buildings",
-                "url":"https:\/\/avaandmed.ehr.ee\/"
+            "name":{
+                "et":"Ehitisregister",
+                "en":"Buildings Registry",
+                "ru":"Buildings Registry"
             },
-            "et":{
-                "name":"Ehitisregister",
-                "description":"Majad",
-                "url":"https:\/\/avaandmed.ehr.ee\/"
-            }
+            "description":{
+                "et":"Majad",
+                "en":"Majad",
+                "ru":"Majad"
+            },
+            "url":"https:\/\/avaandmed.ehr.ee"
         },
-        "wms":null
+        "wms":null,
+        "meta_internal":{
+
+        }
     }
 ]

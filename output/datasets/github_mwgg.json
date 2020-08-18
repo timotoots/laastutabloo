@@ -1,10 +1,15 @@
 [
     {
+        "converter_top_element":"",
+        "cron_minutes":"*",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/airports.json",
+        "devel":false,
         "id":"airports",
-        "provider":"github_mwgg",
+        "last_updated":"2020-06-16 03:02:22.150315",
         "private":false,
-        "type":"json",
-        "update_frequency":"weekly",
+        "provider":"github_mwgg",
+        "remote_hash":"W\/\"4179d8429330b9eb78d284aae58b79ff25cfafcc6ed463322395e3faa16f81fd\"",
+        "remote_updated":"1970-01-01 00:00:00",
         "schema":[
             {
                 "column":"icao",
@@ -27,14 +32,12 @@
                 "field":"lon"
             }
         ],
-        "url":"https:\/\/raw.githubusercontent.com\/mwgg\/Airports\/master\/airports.json",
+        "status_converter":"failed",
+        "status_updater":"done",
         "tables":"",
-        "converter_top_element":"",
-        "cron_minutes":"*",
-        "timeout_min":null,
-        "remote_updated":"1970-01-01",
-        "last_updated":"1970-01-01",
-        "devel":false,
-        "data_count":0
+        "type":"json",
+        "update_frequency":"weekly",
+        "url":"https:\/\/raw.githubusercontent.com\/mwgg\/Airports\/master\/airports.json",
+        "data_count":28865
     }
 ]

@@ -2,30 +2,22 @@
     {
         "id":"kem-gsavalik",
         "meta":{
-            "en":{
-                "name":"Environment",
-                "description":"Sport sport sport",
-                "url":"https:\/\/www.spordiregister.ee\/opendata\/"
+            "name":{
+                "et":"Keskkonnaministeerium",
+                "en":"Environment"
             },
-            "et":{
-                "name":"Keskkonnaministeerium",
-                "description":"Sport sport sport",
-                "url":"https:\/\/www.spordiregister.ee\/opendata\/"
-            }
+            "show_public":false,
+            "description":{
+
+            },
+            "url":"https:\/\/www.envir.ee"
         },
         "wms":{
-            "server":"https:\/\/gsavalik.envir.ee\/geoserver\/eelis\/ows",
-            "service":"WMS",
-            "version":"1.3.0",
-            "request":"GetMap",
-            "styles":"",
-            "srs":"EPSG:4326",
-            "format":"application\/json",
-            "type":"geojson",
-            "feature_count":"10",
-            "bbox":"57.47267905667945,21.45187502623414,59.84501069564773,28.45838952388184",
-            "width":"1200",
-            "height":"300"
+            "capabilities_url":"https:\/\/gsavalik.envir.ee\/geoserver\/eelis\/ows?service=WMS&version=1.3.0&request=GetCapabilities",
+            "request_url":"https:\/\/gsavalik.envir.ee\/geoserver\/eelis\/ows?service=WMS&version=1.3.0&request=GetMap&styles=&bbox=57.47267905667945,21.45187502623414,59.84501069564773,28.45838952388184&width=1200&height=300&srs=EPSG:4326&format=application\/json;type=geojson&feature_count=10&layers=eelis:pk_objekt_metsas"
+        },
+        "meta_internal":{
+
         }
     }
 ]

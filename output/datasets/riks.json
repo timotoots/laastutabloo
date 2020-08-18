@@ -1,34 +1,105 @@
 [
     {
-        "id":"raamatukogud",
-        "provider":"riks",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/riks_top_all.json",
+        "devel":false,
+        "id":"riks_top_all",
+        "last_updated":"2020-01-31 13:41:03.365271",
         "private":false,
-        "type":"json",
-        "update_frequency":"daily",
+        "provider":"riks",
+        "remote_updated":"1970-01-01 00:00:00",
         "schema":[
             {
-                "column":"nimi",
-                "type":"text",
-                "field":"nimi"
+                "column":"lat",
+                "type":"float",
+                "field":"latitude"
             },
             {
-                "column":"ariregistri_kood",
-                "type":"text",
-                "field":"ariregistri_kood"
+                "column":"lon",
+                "type":"float",
+                "field":"longitude"
             },
             {
-                "column":"_ehak",
+                "column":"title",
                 "type":"text",
-                "field":"asukoha_ehak_kood"
+                "field":"title"
+            },
+            {
+                "column":"author",
+                "type":"text",
+                "field":"author"
+            },
+            {
+                "column":"count",
+                "type":"int",
+                "field":"count"
+            },
+            {
+                "column":"library_type",
+                "type":"int",
+                "field":"libraryType"
             }
         ],
-        "url":"http:\/\/live.webriks.ee\/egov\/?query=2",
-        "tables":"",
-        "cron_minutes":"*",
-        "timeout_min":null,
-        "remote_updated":"1970-01-01",
-        "last_updated":"1970-01-01",
+        "status_converter":"done",
+        "status_updater":"done",
+        "type":"json",
+        "update_frequency":"manual",
+        "url":"https:\/\/rxapi.raamatukogud.ee\/opendata\/checkouts\/top-checkouts",
+        "data_count":4774,
+        "dataset_type":"regular"
+    }
+,
+    {
+        "cron_minutes":"3",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/riks_latest_checkouts.json",
         "devel":false,
-        "data_count":0
+        "id":"riks_latest_checkouts",
+        "last_updated":"2020-06-27 22:03:15.384573",
+        "private":false,
+        "provider":"riks",
+        "remote_updated":"1970-01-01 00:00:00",
+        "schema":[
+            {
+                "column":"lat",
+                "type":"float",
+                "field":"latitude"
+            },
+            {
+                "column":"lon",
+                "type":"float",
+                "field":"longitude"
+            },
+            {
+                "column":"title",
+                "type":"text",
+                "field":"title"
+            },
+            {
+                "column":"author",
+                "type":"text",
+                "field":"author"
+            },
+            {
+                "column":"ehak_debug",
+                "type":"int",
+                "field":"ehak"
+            },
+            {
+                "column":"time",
+                "type":"timestamp",
+                "field":"date"
+            },
+            {
+                "column":"library",
+                "type":"text",
+                "field":"library"
+            }
+        ],
+        "status_converter":"done",
+        "status_updater":"done",
+        "type":"json",
+        "update_frequency":"hourly",
+        "url":"https:\/\/rxapi.raamatukogud.ee\/opendata\/checkouts\/latest-checkouts",
+        "data_count":5130,
+        "dataset_type":"regular"
     }
 ]

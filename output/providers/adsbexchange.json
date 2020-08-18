@@ -2,17 +2,25 @@
     {
         "id":"adsbexchange",
         "meta":{
-            "en":{
-                "name":"ADSBexchange",
-                "description":"ADSBexchange is the world\u2019s largest source of unfiltered flight data. Thanks to our worldwide community of participants, if the data is broadcast over the air, you can find it here. ",
-                "url":"https:\/\/www.adsbexchange.com\/"
+            "name":{
+                "et":"ADSBexchange",
+                "en":"ADSBexchange",
+                "ru":"ADSBexchange"
             },
-            "et":{
-                "name":"ADSBexchange",
-                "description":"ADSBexchange on maailma suurim filtreerimata lennuinfo andmebaas. T\u00e4nu \u00fclemaailmsele v\u00f5rgustikule on v\u00f5imalik koguda infot suure osa lendude kohta.",
-                "url":"https:\/\/www.adsbexchange.com\/"
-            }
+            "show_public":true,
+            "description":{
+                "et":"ADSBexchange is the world\u2019s largest source of unfiltered flight data. Thanks to our worldwide community of participants, if the data is broadcast over the air, you can find it here.",
+                "en":"ADSBexchange is the world\u2019s largest source of unfiltered flight data. Thanks to our worldwide community of participants, if the data is broadcast over the air, you can find it here.",
+                "ru":"ADSBexchange is the world\u2019s largest source of unfiltered flight data. Thanks to our worldwide community of participants, if the data is broadcast over the air, you can find it here."
+            },
+            "url":"https:\/\/www.adsbexchange.com"
         },
-        "wms":null
+        "wms":{
+
+        },
+        "meta_internal":{
+            "contact_person":"Olikeegi",
+            "notes":"Eraldi"
+        }
     }
 ]

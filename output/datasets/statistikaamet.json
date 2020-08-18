@@ -1,11 +1,16 @@
 [
     {
-        "id":"brutotulu",
-        "provider":"statistikaamet",
-        "private":false,
-        "type":"csv",
-        "update_frequency":"yearly",
+        "cron_minutes":"*",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/brutotulu.csv",
+        "delimiter":";",
+        "devel":false,
         "encoding":"latin1",
+        "id":"brutotulu",
+        "last_updated":"2019-10-02 09:33:02.040957",
+        "private":false,
+        "provider":"statistikaamet",
+        "remote_hash":"\"7909-58b99304a8300\"",
+        "remote_updated":"1970-01-01 00:00:00",
         "schema":[
             {
                 "column":"ehak",
@@ -18,23 +23,26 @@
                 "field":"Palgat\u00f6\u00f6taja_brutotulu"
             }
         ],
-        "url":"https:\/\/www.stat.ee\/public\/data\/erm\/Palgatootaja_brutotulu.csv",
-        "delimiter":";",
+        "status_converter":"done",
+        "status_updater":"done",
         "tables":"",
-        "cron_minutes":"*",
-        "timeout_min":null,
-        "remote_updated":"1970-01-01",
-        "last_updated":"1970-01-01",
-        "devel":false,
-        "data_count":0
+        "type":"csv",
+        "update_frequency":"yearly",
+        "url":"https:\/\/www.stat.ee\/public\/data\/erm\/Palgatootaja_brutotulu.csv",
+        "data_count":2872
     }
 ,
     {
+        "cron_minutes":"*",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/rahvaarv.csv",
+        "delimiter":";",
+        "devel":false,
         "id":"rahvaarv",
-        "provider":"statistikaamet",
+        "last_updated":"2019-10-02 09:33:17.064719",
         "private":false,
-        "type":"csv",
-        "update_frequency":"yearly",
+        "provider":"statistikaamet",
+        "remote_hash":"\"2a2c7-58b992f8425c0\"",
+        "remote_updated":"1970-01-01 00:00:00",
         "schema":[
             {
                 "column":"ehak",
@@ -52,14 +60,12 @@
                 "field":"F#TOTAL"
             }
         ],
-        "url":"https:\/\/www.stat.ee\/public\/data\/erm\/Rahvaarv.csv",
-        "delimiter":";",
+        "status_converter":"done",
+        "status_updater":"done",
         "tables":"",
-        "cron_minutes":"*",
-        "timeout_min":null,
-        "remote_updated":"1970-01-01",
-        "last_updated":"1970-01-01",
-        "devel":false,
-        "data_count":0
+        "type":"csv",
+        "update_frequency":"yearly",
+        "url":"https:\/\/www.stat.ee\/public\/data\/erm\/Rahvaarv.csv",
+        "data_count":4712
     }
 ]

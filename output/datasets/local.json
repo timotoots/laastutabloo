@@ -1,10 +1,14 @@
 [
     {
+        "cron_minutes":"*",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/prefixsuffix.csv",
+        "devel":false,
         "id":"prefixsuffix",
-        "provider":"local",
+        "last_updated":"2019-10-02 09:33:31.697633",
         "private":false,
-        "type":"csv",
-        "update_frequency":"manual",
+        "provider":"local",
+        "remote_hash":"\"6c-59379cb10fc02\"",
+        "remote_updated":"1970-01-01 00:00:00",
         "schema":[
             {
                 "column":"et",
@@ -22,13 +26,12 @@
                 "field":"ru"
             }
         ],
-        "url":"http:\/\/laastutabloo.erm.ee\/uploads\/prefixsuffix.csv",
+        "status_converter":"done",
+        "status_updater":"done",
         "tables":"",
-        "cron_minutes":"*",
-        "timeout_min":null,
-        "remote_updated":"1970-01-01",
-        "last_updated":"1970-01-01",
-        "devel":false,
-        "data_count":0
+        "type":"csv",
+        "update_frequency":"manual",
+        "url":"http:\/\/laastutabloo.erm.ee\/uploads\/prefixsuffix.csv",
+        "data_count":3
     }
 ]

@@ -2,17 +2,19 @@
     {
         "id":"sotsiaalministeerium",
         "meta":{
-            "en":{
-                "name":"Ministry of Social Affairs",
-                "description":"",
-                "url":"https:\/\/www.sm.ee\/en"
+            "name":{
+                "et":"Sotsiaalministeerium",
+                "en":"Ministry of Social Affairs",
+                "ru":"Ministry of Social Affairs"
             },
-            "et":{
-                "name":"Sotsiaalministeerium",
-                "description":"",
-                "url":"https:\/\/www.sm.ee\/et"
-            }
+            "description":{
+
+            },
+            "url":"https:\/\/www.sm.ee\/et"
         },
-        "wms":null
+        "wms":null,
+        "meta_internal":{
+
+        }
     }
 ]

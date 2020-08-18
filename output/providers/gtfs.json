@@ -2,17 +2,21 @@
     {
         "id":"gtfs",
         "meta":{
-            "en":{
-                "name":"Peatus.ee",
-                "description":"Bus traffic",
-                "url":"https:\/\/www.peatus.ee\/"
+            "name":{
+                "et":"Peatus.ee",
+                "en":"Peatus.ee",
+                "ru":"Peatus.ee"
             },
-            "et":{
-                "name":"Peatus.ee",
-                "description":"Bussiajad",
-                "url":"https:\/\/www.peatus.ee\/"
-            }
+            "description":{
+                "et":"Bussiajad",
+                "en":"Bussiajad",
+                "ru":"Bussiajad"
+            },
+            "url":"https:\/\/www.peatus.ee"
         },
-        "wms":null
+        "wms":null,
+        "meta_internal":{
+            "contact_person":"Ei ole otsesuhtlust."
+        }
     }
 ]

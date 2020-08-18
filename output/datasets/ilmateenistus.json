@@ -1,10 +1,13 @@
 [
     {
-        "id":"observations",
-        "provider":"ilmateenistus",
+        "cron_minutes":"*",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/forecast.json",
+        "devel":false,
+        "id":"forecast",
+        "last_updated":"2019-12-28 15:00:07.110913",
         "private":false,
-        "type":"xml",
-        "update_frequency":"weekly",
+        "provider":"ilmateenistus",
+        "remote_updated":"1970-01-01 00:00:00",
         "schema":[
             {
                 "column":"name",
@@ -17,13 +20,49 @@
                 "field":"wmocode"
             },
             {
-                "column":"lan",
+                "column":"airtemperature",
                 "type":"text",
+                "field":"airtemperature"
+            }
+        ],
+        "status_converter":"failed",
+        "status_updater":"downloading",
+        "tables":"",
+        "type":"json",
+        "update_frequency":"live",
+        "url":"http:\/\/www.ilmateenistus.ee\/wp-content\/themes\/emhi2013\/meteogram.php\/?locationId=__EHAK__",
+        "data_count":0
+    }
+,
+    {
+        "converter_top_element":"observations.station",
+        "cron_minutes":"0",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/observations.xml",
+        "devel":false,
+        "id":"observations",
+        "last_updated":"2020-06-24 02:00:36.072608",
+        "private":false,
+        "provider":"ilmateenistus",
+        "remote_updated":"1970-01-01 00:00:00",
+        "schema":[
+            {
+                "column":"name",
+                "type":"text",
+                "field":"name"
+            },
+            {
+                "column":"wmocode",
+                "type":"text",
+                "field":"wmocode"
+            },
+            {
+                "column":"lat",
+                "type":"float",
                 "field":"latitude"
             },
             {
                 "column":"lon",
-                "type":"text",
+                "type":"float",
                 "field":"longitude"
             },
             {
@@ -67,114 +106,13 @@
                 "field":"watertemperature"
             }
         ],
+        "status_converter":"done",
+        "status_updater":"done",
+        "tables":"",
+        "type":"xml",
+        "update_frequency":"hourly",
         "url":"http:\/\/www.ilmateenistus.ee\/ilma_andmed\/xml\/observations.php",
-        "tables":"",
-        "cron_minutes":"*",
-        "timeout_min":null,
-        "remote_updated":"1970-01-01",
-        "last_updated":"1970-01-01",
-        "devel":false,
-        "data_count":0
-    }
-,
-    {
-        "id":"forecast",
-        "provider":"ilmateenistus",
-        "private":false,
-        "type":"json",
-        "update_frequency":"live",
-        "schema":[
-            {
-                "column":"name",
-                "type":"text",
-                "field":"name"
-            },
-            {
-                "column":"wmocode",
-                "type":"text",
-                "field":"wmocode"
-            },
-            {
-                "column":"airtemperature",
-                "type":"text",
-                "field":"airtemperature"
-            }
-        ],
-        "url":"http:\/\/www.ilmateenistus.ee\/wp-content\/themes\/emhi2013\/meteogram.php\/?locationId=__EHAK__",
-        "tables":"",
-        "cron_minutes":"*",
-        "timeout_min":null,
-        "remote_updated":"1970-01-01",
-        "last_updated":"1970-01-01",
-        "devel":false,
-        "data_count":0
-    }
-,
-    {
-        "id":"forecast_grib_test",
-        "provider":"ilmateenistus",
-        "private":false,
-        "type":"grib",
-        "update_frequency":"manual",
-        "schema":[
-            {
-                "column":"name",
-                "type":"text",
-                "field":"name"
-            },
-            {
-                "column":"wmocode",
-                "type":"text",
-                "field":"wmocode"
-            },
-            {
-                "column":"airtemperature",
-                "type":"text",
-                "field":"airtemperature"
-            }
-        ],
-        "url":"https:\/\/api.met.no\/weatherapi\/gribfiles\/1.1\/?area=oslofjord&content=weather",
-        "tables":"",
-        "cron_minutes":"*",
-        "timeout_min":null,
-        "remote_updated":"1970-01-01",
-        "last_updated":"1970-01-01",
-        "devel":false,
-        "data_count":0
-    }
-,
-    {
-        "id":"forecast_grib",
-        "provider":"ilmateenistus",
-        "private":false,
-        "type":"grib",
-        "update_frequency":"manual",
-        "schema":[
-            {
-                "column":"name",
-                "type":"text",
-                "field":"name"
-            },
-            {
-                "column":"wmocode",
-                "type":"text",
-                "field":"wmocode"
-            },
-            {
-                "column":"airtemperature",
-                "type":"text",
-                "field":"airtemperature"
-            }
-        ],
-        "url":"https:\/\/kaurteenused.envir.ee\/MUD\/",
-        "tables":"",
-        "cron_minutes":"*",
-        "timeout_min":null,
-        "remote_updated":"1970-01-01",
-        "last_updated":"1970-01-01",
-        "devel":false,
-        "username":"erm",
-        "password":"ic89QadRbK9y7mKh",
-        "data_count":0
+        "data_count":105,
+        "dataset_type":"regular"
     }
 ]

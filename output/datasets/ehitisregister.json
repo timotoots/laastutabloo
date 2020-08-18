@@ -1,10 +1,16 @@
 [
     {
+        "cron_minutes":"*",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/ehitisregister_ehitised.eh_ehitised_1994-01_2019-07-28.csv",
+        "delimiter":";",
+        "devel":false,
+        "file_in_package":"*.csv",
         "id":"ehitisregister_ehitised",
-        "provider":"ehitisregister",
+        "last_updated":"2019-12-05 10:01:37.257575",
         "private":false,
-        "type":"csv",
-        "update_frequency":"manual",
+        "provider":"ehitisregister",
+        "remote_hash":"\"42b151f-58ebb26d42a5e\"",
+        "remote_updated":"2019-07-28 10:22:25",
         "schema":[
             {
                 "column":"ehit_id",
@@ -38,12 +44,12 @@
             },
             {
                 "column":"maht_bruto",
-                "type":"int",
+                "type":"float",
                 "field":"maht_bruto"
             },
             {
                 "column":"kasulik_pind",
-                "type":"int",
+                "type":"float",
                 "field":"kasulik_pind"
             },
             {
@@ -63,7 +69,7 @@
             },
             {
                 "column":"korgus",
-                "type":"text",
+                "type":"float",
                 "field":"korgus"
             },
             {
@@ -72,24 +78,134 @@
                 "field":"esmane_kasutus"
             }
         ],
-        "url":"http:\/\/laastutabloo.erm.ee\/uploads\/eh_ehitised_1994-01_2019-07-28.zip",
-        "delimiter":";",
-        "file_in_package":"*.csv",
+        "status_converter":"done",
+        "status_updater":"done",
         "tables":"",
-        "cron_minutes":"*",
-        "timeout_min":null,
-        "remote_updated":"1970-01-01",
-        "last_updated":"1970-01-01",
-        "devel":false,
-        "data_count":0
+        "type":"csv",
+        "update_frequency":"manual",
+        "url":"http:\/\/laastutabloo.erm.ee\/uploads\/eh_ehitised_1994-01_2019-07-28.zip",
+        "data_count":1049534,
+        "dataset_type":"regular"
     }
 ,
     {
-        "id":"ehitisregister_ruumikuju",
-        "provider":"ehitisregister",
+        "cron_minutes":"*",
+        "devel":false,
+        "id":"ehitisregister_joined",
+        "last_updated":"1970-01-01 00:00:00.000000",
         "private":false,
-        "type":"csv",
-        "update_frequency":"manual",
+        "provider":"ehitisregister",
+        "remote_updated":"1970-01-01 00:00:00",
+        "schema":[
+            {
+                "column":"ehitisregister_ehitised.ehit_id",
+                "type":"text",
+                "field":"id"
+            },
+            {
+                "column":"ehitisregister_ehitised.seisund",
+                "type":"text",
+                "field":"seisund"
+            },
+            {
+                "column":"ehitisregister_ehitised.ehr_kood",
+                "type":"text",
+                "field":"ehr_kood"
+            },
+            {
+                "column":"ehitisregister_ehitised.nimetus",
+                "type":"text",
+                "field":"nimetus"
+            },
+            {
+                "column":"ehitisregister_ehitised.lift",
+                "type":"int",
+                "field":"lift"
+            },
+            {
+                "column":"ehitisregister_ehitised.esmane_kasutus",
+                "type":"text",
+                "field":"esmane_kasutus"
+            },
+            {
+                "column":"ehitisregister_ehitised.maht_bruto",
+                "type":"int",
+                "field":"maht_bruto"
+            },
+            {
+                "column":"ehitisregister_ehitised.kasulik_pind",
+                "type":"int",
+                "field":"kasulik_pind"
+            },
+            {
+                "column":"ehitisregister_ehitised.korterite_arv",
+                "type":"int",
+                "field":"korterite_arv"
+            },
+            {
+                "column":"ehitisregister_ehitised.rajatis_hoone",
+                "type":"text",
+                "field":"rajatis_hoone"
+            },
+            {
+                "column":"ehitisregister_ehitised.ehitisalune_pind",
+                "type":"text",
+                "field":"ehitisalune_pind"
+            },
+            {
+                "column":"ehitisregister_ehitised.korgus",
+                "type":"text",
+                "field":"korgus"
+            },
+            {
+                "column":"ehitisregister_ruumikuju.ehit_id",
+                "type":"text",
+                "field":"ehit_id"
+            },
+            {
+                "column":"ehitisregister_ruumikuju.geom2",
+                "type":"text",
+                "field":"geometry"
+            },
+            {
+                "column":"ehitisregister_ruumikuju.lest_x",
+                "type":"text",
+                "field":"viitepunkt_x"
+            },
+            {
+                "column":"ehitisregister_ruumikuju.lest_y",
+                "type":"text",
+                "field":"viitepunkt_y"
+            },
+            {
+                "column":"ehitisregister_ruumikuju.point",
+                "type":"geom",
+                "sql":"populate_point_from_lest.sql"
+            }
+        ],
+        "status_converter":"done",
+        "status_updater":"done",
+        "tables":[
+            "ehitisregister_ehitised",
+            "ehitisregister_ruumikuju"
+        ],
+        "tables_join_key":"ehit_id",
+        "data_count":0,
+        "dataset_type":"joined"
+    }
+,
+    {
+        "cron_minutes":"*",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/ehitisregister_ruumikuju.ehitise_ruumikuju_1994-01_2019-07-28.csv",
+        "delimiter":";",
+        "devel":false,
+        "file_in_package":"*.csv",
+        "id":"ehitisregister_ruumikuju",
+        "last_updated":"2019-12-05 10:33:47.340483",
+        "private":false,
+        "provider":"ehitisregister",
+        "remote_hash":"\"5f82382-58ebb307aeb6f\"",
+        "remote_updated":"2019-07-28 10:25:06",
         "schema":[
             {
                 "column":"ehit_id",
@@ -110,39 +226,15 @@
                 "column":"lest_y",
                 "type":"text",
                 "field":"viitepunkt_y"
-            },
-            {
-                "column":"point",
-                "type":"geom",
-                "sql":"populate_point_from_lest.sql"
             }
         ],
-        "url":"http:\/\/laastutabloo.erm.ee\/uploads\/ehitise_ruumikuju_1994-01_2019-07-28.zip",
-        "delimiter":";",
-        "file_in_package":"*.csv",
+        "status_converter":"done",
+        "status_updater":"done",
         "tables":"",
-        "cron_minutes":"*",
-        "timeout_min":null,
-        "remote_updated":"1970-01-01",
-        "last_updated":"1970-01-01",
-        "devel":false,
-        "data_count":0
-    }
-,
-    {
-        "id":"ehitisregister_joined",
-        "provider":"ehitisregister",
-        "private":false,
-        "tables":[
-            "ehitisregister_ehitised",
-            "ehitisregister_ruumikuju"
-        ],
-        "tables_join_key":"ehit_id",
-        "cron_minutes":"*",
-        "timeout_min":null,
-        "remote_updated":"1970-01-01",
-        "last_updated":"1970-01-01",
-        "devel":false,
-        "data_count":0
+        "type":"csv",
+        "update_frequency":"manual",
+        "url":"http:\/\/laastutabloo.erm.ee\/uploads\/ehitise_ruumikuju_1994-01_2019-07-28.zip",
+        "data_count":1069856,
+        "dataset_type":"regular"
     }
 ]

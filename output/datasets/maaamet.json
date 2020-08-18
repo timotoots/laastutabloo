@@ -1,51 +1,17 @@
 [
     {
-        "id":"ads",
-        "provider":"maaamet",
-        "private":false,
-        "type":"csv",
-        "update_frequency":"weekly",
-        "schema":[
-            {
-                "column":"ads_oid",
-                "type":"text",
-                "field":"ADS_OID"
-            },
-            {
-                "column":"aadress",
-                "type":"text",
-                "field":"LAHIAADRESS"
-            },
-            {
-                "column":"lest_x",
-                "type":"text",
-                "field":"VIITEPUNKT_X"
-            },
-            {
-                "column":"lest_y",
-                "type":"text",
-                "field":"VIITEPUNKT_Y"
-            }
-        ],
-        "url":"http:\/\/xgis.maaamet.ee\/adsavalik\/xads?FYMVOd9Z",
-        "delimiter":";",
-        "file_in_package":"*.csv",
-        "tables":"",
+        "converter_top_element":"features",
         "cron_minutes":"*",
-        "timeout_min":null,
-        "remote_updated":"1970-01-01",
-        "last_updated":"1970-01-01",
+        "dataset_files":"\/opt\/laastutabloo\/backend\/data\/raw\/shapefile_test.asustusyksus_20200601.dbf,\/opt\/laastutabloo\/backend\/data\/raw\/shapefile_test.asustusyksus_20200601.prj,\/opt\/laastutabloo\/backend\/data\/raw\/shapefile_test.asustusyksus_20200601.shp,\/opt\/laastutabloo\/backend\/data\/raw\/shapefile_test.asustusyksus_20200601.shx",
         "devel":false,
-        "data_count":0
-    }
-,
-    {
-        "id":"shapefile_test",
-        "provider":"maaamet",
-        "private":false,
-        "type":"shapefile",
-        "update_frequency":"monthly",
         "encoding":"latin1",
+        "file_in_package":"asustusyksus_*.*",
+        "id":"shapefile_test",
+        "last_updated":"2020-06-01 03:00:26.701264",
+        "private":false,
+        "provider":"maaamet",
+        "remote_hash":"\"d14022-d1b0f7-5a6f8ae9a47c0\"",
+        "remote_updated":"2020-05-31 21:51:35",
         "schema":[
             {
                 "column":"name",
@@ -58,15 +24,58 @@
                 "field":"properties.AKOOD"
             }
         ],
-        "url":"https:\/\/geoportaal.maaamet.ee\/docs\/haldus_asustus\/asustusyksus_shp.zip",
-        "file_in_package":"asustusyksus_*.*",
+        "status_converter":"done",
+        "status_updater":"done",
         "tables":"",
-        "converter_top_element":"features",
+        "type":"shapefile",
+        "update_frequency":"monthly",
+        "url":"https:\/\/geoportaal.maaamet.ee\/docs\/haldus_asustus\/asustusyksus_shp.zip",
+        "data_count":4713
+    }
+,
+    {
         "cron_minutes":"*",
-        "timeout_min":null,
-        "remote_updated":"1970-01-01",
-        "last_updated":"1970-01-01",
+        "delimiter":";",
         "devel":false,
-        "data_count":0
+        "file_in_package":"*.csv",
+        "id":"ads",
+        "last_updated":"1970-01-01 00:00:00.000000",
+        "private":false,
+        "provider":"maaamet",
+        "remote_updated":"1970-01-01 00:00:00",
+        "schema":[
+            {
+                "column":"ads_id",
+                "type":"text",
+                "field":"ADR_ID"
+            },
+            {
+                "column":"aadress",
+                "type":"text",
+                "field":"TAISAADRESS"
+            },
+            {
+                "column":"lest_x",
+                "type":"text",
+                "field":"VIITEPUNKT_X"
+            },
+            {
+                "column":"lest_y",
+                "type":"text",
+                "field":"VIITEPUNKT_Y"
+            },
+            {
+                "column":"zip",
+                "type":"int",
+                "field":"SIHTNUMBER"
+            }
+        ],
+        "status_updater":"failed",
+        "tables":"",
+        "type":"csv",
+        "update_frequency":"weekly",
+        "url":"ftp:\/\/ftp2.maaamet.ee\/ADS_valjavotted\/SHN\/sihtnumbrid_20191127.zip",
+        "data_count":0,
+        "dataset_type":"regular"
     }
 ]

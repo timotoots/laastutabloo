@@ -2,17 +2,19 @@
     {
         "id":"statistikaamet",
         "meta":{
-            "en":{
-                "name":"",
-                "description":"",
-                "url":"https:\/\/www.stat.ee"
+            "name":{
+                "et":"Statistikaamet",
+                "en":"Statistikaamet",
+                "ru":"Statistikaamet"
             },
-            "et":{
-                "name":"Statistikaamet",
-                "description":"",
-                "url":"https:\/\/www.stat.ee"
-            }
+            "description":{
+
+            },
+            "url":"https:\/\/www.stat.ee"
         },
-        "wms":null
+        "wms":null,
+        "meta_internal":{
+
+        }
     }
 ]

@@ -2,17 +2,17 @@
     {
         "id":"local",
         "meta":{
-            "en":{
-                "name":"Laastutabloo",
-                "description":"",
-                "url":""
+            "name":{
+                "et":"Laastutabloo local",
+                "en":"Laastutabloo local"
             },
-            "et":{
-                "name":"Laastutabloo",
-                "description":"",
-                "url":""
+            "description":{
+
             }
         },
-        "wms":null
+        "wms":null,
+        "meta_internal":{
+
+        }
     }
 ]

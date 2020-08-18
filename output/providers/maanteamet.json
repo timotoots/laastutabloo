@@ -2,16 +2,14 @@
     {
         "id":"maanteamet",
         "meta":{
-            "en":{
-                "name":"Environment",
-                "description":"Sport sport sport",
-                "url":"https:\/\/teeregister.mnt.ee\/reet\/map"
+            "name":{
+                "et":"Maanteameti teeregister",
+                "en":"Road"
             },
-            "et":{
-                "name":"Maanteameti teeregister",
-                "description":"Teede olukord",
-                "url":"https:\/\/teeregister.mnt.ee\/reet\/map"
-            }
+            "description":{
+
+            },
+            "url":"https:\/\/teeregister.mnt.ee\/reet\/map"
         },
         "wms":{
             "server":"https:\/\/teeregister-api.mnt.ee\/teenus\/wfs",
@@ -26,6 +24,9 @@
             "bbox":"57.47267905667945,21.45187502623414,59.84501069564773,28.45838952388184",
             "width":"1200",
             "height":"300"
+        },
+        "meta_internal":{
+            "notes":"WMS"
         }
     }
 ]

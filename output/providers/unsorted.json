@@ -2,17 +2,18 @@
     {
         "id":"unsorted",
         "meta":{
-            "en":{
-                "name":"Unsorted",
-                "description":"Unsorted",
-                "url":""
+            "name":{
+                "et":"Sorteerimata",
+                "en":"Unsorted",
+                "ru":"Unsorted"
             },
-            "et":{
-                "name":"Unsorted",
-                "description":"Unsorted",
-                "url":""
+            "description":{
+
             }
         },
-        "wms":null
+        "wms":null,
+        "meta_internal":{
+
+        }
     }
 ]

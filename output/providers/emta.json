@@ -2,17 +2,19 @@
     {
         "id":"emta",
         "meta":{
-            "en":{
-                "name":"",
-                "description":"",
-                "url":"https:\/\/www.emta.ee\/et\/kontaktid-ja-ametist\/maksulaekumine-statistika\/tasutud-maksud-kaive-ja-tootajate-arv"
+            "name":{
+                "et":"Maksu- ja Tolliamet",
+                "en":"Maksu- ja Tolliamet",
+                "ru":"Maksu- ja Tolliamet"
             },
-            "et":{
-                "name":"Maksu- ja Tolliamet",
-                "description":"",
-                "url":"https:\/\/www.emta.ee\/et\/kontaktid-ja-ametist\/maksulaekumine-statistika\/tasutud-maksud-kaive-ja-tootajate-arv"
-            }
+            "description":{
+                "et":"Maksu- ja Tolliamet"
+            },
+            "url":"https:\/\/www.emta.ee\/et\/kontaktid-ja-ametist\/maksulaekumine-statistika\/tasutud-maksud-kaive-ja-tootajate-arv"
         },
-        "wms":null
+        "wms":null,
+        "meta_internal":{
+
+        }
     }
 ]

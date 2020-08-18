@@ -68,7 +68,8 @@ def load_to_db(table, input):
                                           'last_updated':sqlalchemy.types.DateTime,
                                           'tables':sqlalchemy.types.JSON,
                                           'http_header':sqlalchemy.types.JSON,
-                                          'devel': sqlalchemy.types.Boolean}, if_exists='replace')
+                                          'devel': sqlalchemy.types.Boolean}, if_exists='replace', index=False)
+
     engine.execute("ALTER TABLE {} ADD PRIMARY KEY (id, devel)".format(table))
     engine.execute("CREATE SCHEMA IF NOT EXISTS devel")
 
