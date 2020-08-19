@@ -27,6 +27,10 @@ nano .env
 * Check ```config/datasets/``` for public datasets.
 * Create file ```config/datasets_private.json``` for private datasets. This file is not version controlled.
 
+## Create user to access admin interface:
+```
+htpasswd config/nginx/htpasswd username
+```
 
 ## Initialize system
 ```
@@ -35,23 +39,13 @@ nano .env
 
 ## Create service and enable for starting on boot
 ```
-cp config/laastutabloo.service /etc/systemd/system/
-systemctl enable laastutabloo
+sudo cp config/laastutabloo.service /etc/systemd/system/
+sudo systemctl enable laastutabloo
 ```
 
-## Create user to access admin interface:
+## Start the system
 ```
-htpasswd config/nginx/htpasswd username
-```
-
-## Check logs for backend
-```
-docker-compose logs -f datastore scrapyd
-```
-
-## Check logs for curator
-```
-docker-compose  logs -f composer
+sudo systemctl start laastutabloo
 ```
 
 ## Access admin interface here
@@ -61,6 +55,30 @@ https://laastutabloo.erm.ee/admin
 https://laastutabloo.erm.ee
 
 ## Success!! Your server should be oprational!
+
+# Operational tools
+
+## Check logs for backend
+```
+docker-compose logs -f --tail=50 datastore scrapyd
+```
+
+## Check logs for curator
+```
+docker-compose logs -f --tail=50 curator
+```
+
+## Restart all processes
+```
+sudo systemctl restart laastutabloo
+```
+
+## Restart specific containers
+```
+docker-compose restart -t 0 -f curator
+docker-compose restart -t 0 -f nginx
+
+```
 
 # Making backups
 
