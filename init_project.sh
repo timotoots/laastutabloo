@@ -24,4 +24,4 @@ docker-compose run datastore python3 /opt/laastutabloo/backend/datastore/dataset
 docker-compose run curator /usr/local/bin/npm install
 docker-compose run curator /usr/local/bin/npm install /opt/laastutabloo/frontend/public/
 docker-compose run curator /usr/local/bin/npm install /opt/laastutabloo/frontend/admin/
-
+docker-compose run curator /usr/local/bin/npm install /opt/laastutabloo/frontend/public/lib/
