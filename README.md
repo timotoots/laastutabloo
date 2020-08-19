@@ -85,6 +85,11 @@ docker-compose stop curator
 docker-compose up curator
 ```
 
+## Start with all ports public for debugging
+```
+docker-compose run --service-ports
+```
+
 # Making backups
 
 ## Export datasets from database to JSON
