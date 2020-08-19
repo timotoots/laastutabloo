@@ -75,9 +75,14 @@ sudo systemctl restart laastutabloo
 
 ## Restart specific containers
 ```
-docker-compose restart -t 0 -f curator
-docker-compose restart -t 0 -f nginx
+docker-compose restart curator
+docker-compose restart nginx
+```
 
+## Restart and run curator
+```
+docker-compose stop curator
+docker-compose up curator
 ```
 
 # Making backups
