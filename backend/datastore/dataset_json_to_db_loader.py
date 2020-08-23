@@ -113,11 +113,18 @@ if __name__ == '__main__':
     parser.add_argument("table", default="datasets2", help="Database table to import datasets. Defaults to datasets2")
     parser.add_argument("--input", default="/opt/laastutabloo/config", help="Configuration directiory to read JSON files from.")
     parser.add_argument("--providers", action='store_true', default=False, help="Also load dataset providers from JSON to table providers.")
+    parser.add_argument("--queries", action='store_true', default=False, help="Load queries from JSON to table prepared_statements.")
+    parser.add_argument("--scripts", action='store_true', default=False, help="Load scripts from JSON to table script.")
     args = parser.parse_args()
 
     if args.providers:
-        load_providers(args.input)
-    load_scripts(args.input)
-    load_queries(args.input)
+        load_providers(args.input)    
+    if args.scripts:
+        load_scripts(args.input)
+        exit()
+    if args.queries:
+        load_queries(args.input)
+        exit()
+
     load_to_db(args.table, args.input)
 
