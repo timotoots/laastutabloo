@@ -17,8 +17,33 @@ def load_providers(input):
                                               'meta_internal':sqlalchemy.types.JSON,
                                               'wms':sqlalchemy.types.JSON}, if_exists='replace')
     engine.execute("ALTER TABLE providers ADD PRIMARY KEY (id)")
-    
-    
+
+def load_queries(input):
+
+    f = os.path.join(input, "queries.json")
+    df = pandas.read_json(f)
+    df.fillna(False, inplace=True)
+    df.to_sql("prepared_statements", engine, dtype={'meta':sqlalchemy.types.JSON,
+                                                    'name':sqlalchemy.types.JSON,
+                                                    'style':sqlalchemy.types.JSON,
+                                                    'columns':sqlalchemy.types.JSON,
+                                                    'orderby':sqlalchemy.types.JSON,
+                                                    'custom_sql': sqlalchemy.types.TEXT,
+                                                    'meta_internal':sqlalchemy.types.JSON,
+                                                    'wms':sqlalchemy.types.JSON}, if_exists='replace', index=False)
+    engine.execute("ALTER TABLE prepared_statements ADD PRIMARY KEY (id)")
+    engine.execute("CREATE SEQUENCE IF NOT EXISTS prepared_statements_id_seq AS integer START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1")
+    engine.execute("ALTER TABLE prepared_statements ALTER COLUMN id SET DEFAULT  nextval('prepared_statements_id_seq'::regclass)")
+
+
+def load_scripts(input):
+    f = os.path.join(input, "scripts.json")
+    df = pandas.read_json(f)
+    df.to_sql("script", engine, dtype={'meta':sqlalchemy.types.JSON,
+                                              'meta_internal':sqlalchemy.types.JSON,
+                                              'wms':sqlalchemy.types.JSON}, if_exists='replace', index=False)
+    engine.execute("ALTER TABLE script ADD PRIMARY KEY (id)")
+
 
 def load_to_db(table, input):
     df = pandas.DataFrame()
@@ -88,9 +113,18 @@ if __name__ == '__main__':
     parser.add_argument("table", default="datasets2", help="Database table to import datasets. Defaults to datasets2")
     parser.add_argument("--input", default="/opt/laastutabloo/config", help="Configuration directiory to read JSON files from.")
     parser.add_argument("--providers", action='store_true', default=False, help="Also load dataset providers from JSON to table providers.")
+    parser.add_argument("--queries", action='store_true', default=False, help="Load queries from JSON to table prepared_statements.")
+    parser.add_argument("--scripts", action='store_true', default=False, help="Load scripts from JSON to table script.")
     args = parser.parse_args()
 
     if args.providers:
-        load_providers(args.input)
+        load_providers(args.input)    
+    if args.scripts:
+        load_scripts(args.input)
+        exit()
+    if args.queries:
+        load_queries(args.input)
+        exit()
+
     load_to_db(args.table, args.input)
 

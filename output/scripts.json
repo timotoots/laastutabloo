@@ -1,0 +1,130 @@
+[
+    {
+        "id":"date_to_timestamp",
+        "type":"converter_sql",
+        "script":"UPDATE {tablename} SET \"{fieldname}\" = CONCAT({fieldname},' 00:00:00')\n",
+        "meta":{
+            "description":"Date to timestamp"
+        }
+    },
+    {
+        "id":"rahvaarv_m",
+        "type":"query_sql",
+        "script":"CONCAT('Mehi: ',{fieldname}) as {fieldname}",
+        "meta":{
+            "description":"Mehi: _"
+        }
+    },
+    {
+        "id":"ppa_range_to_average",
+        "type":"converter_sql",
+        "script":"UPDATE {tablename}  SET {fieldname} = split_part({fieldname}, '-', 1)::integer + (split_part({fieldname}, '-', 2)::integer - split_part({fieldname}, '-', 1)::integer) \/ 2 WHERE {fieldname} != ''\n",
+        "meta":{
+            "description":"PPA Lest"
+        }
+    },
+    {
+        "id":"rahvaarv_f",
+        "type":"query_sql",
+        "script":"CONCAT('Naisi: ',{fieldname}) as {fieldname}",
+        "meta":{
+            "description":"Naisi: _"
+        }
+    },
+    {
+        "id":"kasulik_pind",
+        "type":"query_sql",
+        "script":"CONCAT('Kasulik pind: ',{fieldname},'m2') as {fieldname}",
+        "meta":{
+            "description":"Kasulik pind: _ m2"
+        }
+    },
+    {
+        "id":"split_space_1",
+        "type":"converter_sql",
+        "script":"UPDATE {tablename} SET \"{fieldname}\" = split_part(\"{fieldname}\"::TEXT, ' ', 1);\n",
+        "meta":{
+            "description":"Split by space, pos=1"
+        }
+    },
+    {
+        "id":"split_space_2",
+        "type":"converter_sql",
+        "script":"UPDATE {tablename} SET \"{fieldname}\" = split_part(\"{fieldname}\"::TEXT, ' ', 2);\n",
+        "meta":{
+            "description":"Split by space, pos=2"
+        }
+    },
+    {
+        "id":"temperatuur_kraadi",
+        "type":"query_sql",
+        "script":"CONCAT('Temperatuur: ',{fieldname}, 'kraadi') as {fieldname}",
+        "meta":{
+            "description":"Temperatuur: _ kraadi"
+        }
+    },
+    {
+        "id":"replace_comma_space",
+        "type":"converter_sql",
+        "script":"UPDATE {tablename} SET \"{fieldname}\" = REPLACE (\"{fieldname}\"::TEXT,',',' ');\n",
+        "meta":{
+            "description":"Replace comma with space"
+        }
+    },
+    {
+        "id":"timestamp_ddmmyyyy",
+        "type":"query_sql",
+        "script":"TO_TIMESTAMP({fieldname},'DD.MM.YYYY') as {fieldname}",
+        "meta":{
+            "description":"Kuup\u00e4ev DD.MM.YYYY"
+        }
+    },
+    {
+        "id":"find_airport_city",
+        "type":"converter_sql",
+        "script":"UPDATE {tablename} SET \"{fieldname}\" = (SELECT city FROM airports WHERE icao= split_part(\"{fieldname}\"::TEXT, ' ', 1) );\n",
+        "meta":{
+            "description":"Find airport city"
+        }
+    },
+    {
+        "id":"ehr_find_ruumikuju_x",
+        "type":"converter_sql",
+        "script":"UPDATE {tablename} SET \"lest_x\" = (SELECT lest_x FROM ehitisregister_ruumikuju WHERE ehit_id=\"{fieldname}\" );\n",
+        "meta":{
+            "description":"Find EHR ruumikuju X"
+        }
+    },
+    {
+        "id":"remove_spaces",
+        "type":"converter_sql",
+        "script":"UPDATE {tablename} SET \"{fieldname}\" = REPLACE (\"{fieldname}\"::TEXT,' ','');\n",
+        "meta":{
+            "description":"Remove spaces"
+        }
+    },
+    {
+        "id":"korgus_m",
+        "type":"query_sql",
+        "script":"CONCAT('K\u00f5rgus: ',{fieldname}, 'm') as {fieldname}",
+        "meta":{
+            "description":"K\u00f5rgus: _ m"
+        }
+    },
+    {
+        "id":"kaugus_km",
+        "type":"query_sql",
+        "script":"CONCAT('Kaugus: ',ROUND({fieldname}\/1000), ' km') as {fieldname}",
+        "meta":{
+            "description":"Kaugus: _ km"
+        }
+    },
+    {
+        "id":"ppa_timestamp",
+        "type":"converter_python",
+        "script":"def ppa_timestamp(data):\n        # convert two fields to 2016-06-22 19:10:25\n        if len(data[\"ToimKell\"])==5:\n                timestamp = str(data[\"ToimKpv\"]) + \" \" + str(data[\"ToimKell\"]) + \":00\"\n        else:\n                timestamp = str(data[\"ToimKpv\"]) + \" 00:00:00\"\n        return timestamp",
+        "meta":{
+            "description":"PPA Timestamp"
+        }
+    }
+]

@@ -24,6 +24,23 @@ def dump_providers(output):
             f.write("]")
 
 
+def dump_queries(output):
+    df = pandas.read_sql_table("prepared_statements", engine)
+    df['meta'].fillna('{}', inplace=True)
+    queries_file = os.path.join(output, "queries.json")
+    with open(queries_file, "w") as f:
+        df.to_json(f, indent=4, orient='records')
+
+
+
+def dump_scripts(output):
+    df = pandas.read_sql_table("script", engine)
+
+    scripts_file = os.path.join(output, "scripts.json")
+    with open(scripts_file, "w") as f:
+        df.to_json(f, indent=4, orient='records')
+
+
     
 
 def dump_from_db(table, output):
@@ -41,7 +58,8 @@ def dump_from_db(table, output):
     datasets_map = {}
 
     for row in df.to_dict('records'):
-        del row['index']
+        if 'index' in row:
+            del row['index']
 
         del_keys = []
 
@@ -145,5 +163,8 @@ if __name__ == '__main__':
 
     if args.providers:
         dump_providers(args.output)
+    dump_queries(args.output)
+    dump_scripts(args.output)
+
     dump_from_db(args.table, args.output)
 
