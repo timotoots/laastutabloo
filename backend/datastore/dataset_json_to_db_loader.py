@@ -17,8 +17,33 @@ def load_providers(input):
                                               'meta_internal':sqlalchemy.types.JSON,
                                               'wms':sqlalchemy.types.JSON}, if_exists='replace')
     engine.execute("ALTER TABLE providers ADD PRIMARY KEY (id)")
-    
-    
+
+def load_queries(input):
+
+    f = os.path.join(input, "queries.json")
+    df = pandas.read_json(f)
+    df.fillna(False, inplace=True)
+    df.to_sql("prepared_statements", engine, dtype={'meta':sqlalchemy.types.JSON,
+                                                    'name':sqlalchemy.types.JSON,
+                                                    'style':sqlalchemy.types.JSON,
+                                                    'columns':sqlalchemy.types.JSON,
+                                                    'orderby':sqlalchemy.types.JSON,
+                                                    'custom_sql': sqlalchemy.types.TEXT,
+                                                    'meta_internal':sqlalchemy.types.JSON,
+                                                    'wms':sqlalchemy.types.JSON}, if_exists='replace', index=False)
+    engine.execute("ALTER TABLE prepared_statements ADD PRIMARY KEY (id)")
+    engine.execute("CREATE SEQUENCE IF NOT EXISTS prepared_statements_id_seq AS integer START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1")
+    engine.execute("ALTER TABLE prepared_statements ALTER COLUMN id SET DEFAULT  nextval('prepared_statements_id_seq'::regclass)")
+
+
+def load_scripts(input):
+    f = os.path.join(input, "scripts.json")
+    df = pandas.read_json(f)
+    df.to_sql("script", engine, dtype={'meta':sqlalchemy.types.JSON,
+                                              'meta_internal':sqlalchemy.types.JSON,
+                                              'wms':sqlalchemy.types.JSON}, if_exists='replace', index=False)
+    engine.execute("ALTER TABLE script ADD PRIMARY KEY (id)")
+
 
 def load_to_db(table, input):
     df = pandas.DataFrame()
@@ -92,5 +117,7 @@ if __name__ == '__main__':
 
     if args.providers:
         load_providers(args.input)
+    load_scripts(args.input)
+    load_queries(args.input)
     load_to_db(args.table, args.input)
 
