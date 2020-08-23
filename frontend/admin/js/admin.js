@@ -7,7 +7,7 @@
 
 // URLs
 
-var backend_server = "http://laastutabloo.erm.ee:5000";
+var backend_server = "/datastore";
 
 // Live version
 var datasets_url = backend_server + "/datasets";
