@@ -13,8 +13,10 @@ x-datastore-defaults: &datastore_defaults
   ports:
     - "5000:5000"
   volumes:
-    - './data:/opt/laastutabloo/backend/data'
+    - './backend/data:/opt/laastutabloo/backend/data'
     - './output:/output'
+    - './backend/datastore:/opt/laastutabloo/backend/datastore'
+    - './frontend:/opt/laastutabloo/frontend'
 services:
   smtp:
     << : *restart_policy
@@ -76,7 +78,7 @@ services:
     depends_on:
       - postgres
     volumes:
-      - './data:/opt/laastutabloo/backend/data'
+      - './backend/data:/opt/laastutabloo/backend/data'
       - './config:/opt/laastutabloo/config/'
       - './data/scrapyd_dbs:/var/lib/scrapyd/dbs/'
   curator:

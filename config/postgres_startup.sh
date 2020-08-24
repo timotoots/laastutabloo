@@ -5,3 +5,5 @@ createdb -O $laastutabloo_db_user scrapykeeper
 psql -d $laastutabloo_db  -c "CREATE EXTENSION postgis;"
 psql -d $laastutabloo_db  -c "GRANT CREATE ON DATABASE $laastutabloo_db TO $laastutabloo_db_user;"
 psql -U $laastutabloo_db_user -d $laastutabloo_db -f /opt/laastutabloo/config/init.sql
+psql -U $laastutabloo_db_user -d $laastutabloo_db -f /opt/laastutabloo/config/ehak/ehak-full.sql
+

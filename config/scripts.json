@@ -1,0 +1,29 @@
+{
+	"split_space_0": {
+		"id":"split_space_0",
+		"type":"sql_field",
+		"script": "split.sql",
+		"param1": " ",
+		"param2": 0
+	},
+	"ppa_range_to_average": {
+		"id":"ppa_range_to_average",
+		"type":"sql_field",
+		"script": "ppa_range_to_average.sql"
+	},
+	"ppa_timestamp": {
+		"id":"ppa_timestamp",
+		"type":"python",
+		"script": "ppa_timestamp.py"
+	},
+	"populate_point_from_lat_lon": {
+		"id":"populate_point_from_lat_lon",
+		"type":"sql_table",
+		"script": "populate_point_from_lat_lon.sql"
+	},
+	"populate_point_from_lest": {
+		"id":"populate_point_from_lest",
+		"type":"sql_table",
+		"script": "populate_point_from_lest.sql"
+	}
+}

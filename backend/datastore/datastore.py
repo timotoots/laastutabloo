@@ -669,7 +669,7 @@ def index():
 ## From querybuilder
 class Translations:
     def __init__(self, translation_file):
-        r = csv.reader(open(translation_file))
+        r = csv.reader(open(translation_file, encoding="utf-8"))
         header = next(r)
         lang_num = len(header)
         self.translations = {}
@@ -1317,7 +1317,7 @@ def render_query():
   val1 = request.args.get('val1', None)
 
   ehak_type_trans = Translations("/opt/laastutabloo/frontend/uploads/translation.csv")
-  jt = json.load(open("/opt/laastutabloo/backend/laastutabloo/querybuilder/slide_template.json"))
+  jt = json.load(open("/opt/laastutabloo/backend/datastore/slide_template.json", encoding="utf-8"))
   jt['district']['id'] = ehak
   jt['district']['name'] = clean_ehak_name(ehak_name, int(ehak_type))
   jt['district']['type'] = dict( [ (l, ehak_type_trans._(ehak_type_map[int(ehak_type)], l)) for l in ehak_type_trans.all_langs  ])
@@ -1339,14 +1339,14 @@ def render_query():
                                          "name": s.name }
 
 
-  for p in session.query(QuerySlide).filter_by(query=s.id):
-      qdict = {'config' : ['s']}
-      for page_num in range(p.pages_num):
-          for subtemp in p.template.subtemplates:
-              lines = []
-              lines.append(subtemp.render(values, {'ehak': jt['district']['id'],
-                                                            'query_id': s.query_id}, page_num).split("\n"))
-          # qdict['pages'].append(lines[0])
+  # for p in session.query(QuerySlide).filter_by(query=s.id):
+  #     qdict = {'config' : ['s']}
+  #     for page_num in range(p.pages_num):
+  #         for subtemp in p.template.subtemplates:
+  #             lines = []
+  #             lines.append(subtemp.render(values, {'ehak': jt['district']['id'],
+  #                                                           'query_id': s.query_id}, page_num).split("\n"))
+  #         # qdict['pages'].append(lines[0])
       # jt['queries'][s.query_id] = qdict
   session.commit()
   session.close()

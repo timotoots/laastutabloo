@@ -373,7 +373,7 @@ def handle_json_records(records, f, engine, limit=None):
   if table_script:
       session = Session()
       filename = scripts[table_script]['script']
-      sql_template = open("/opt/laastutabloo/scripts/converter_sql_table/" + filename).read()
+      sql_template = open("/opt/laastutabloo/backend/converter/scripts/converter_sql_table/" + filename).read()
       sql = sql_template.format(tablename=new_table, fieldname="_point")
       print(sql)
       session.execute(sql)

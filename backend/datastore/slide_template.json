@@ -1,0 +1,48 @@
+{
+    "district": {
+        "id": 123,
+        "name":"Aa",
+        "type":{"et":"küla","en":"village"}
+    },
+    "queries": {
+        "avalik": {
+            "config": {      
+                "query_id": "avalik",
+                "sql": "SELECT * from avalik_merged where ehak = $1",
+                "name": {
+                    "et": "Avalikud rikkumised",
+                    "en": "Public crimes",
+                    "ru": "Public crimes"
+                },
+                "style": {
+                    "template": "table",
+                    "num_of_pages": 4,
+                    "align": "center"
+                },
+                "columns": [
+                    {
+                        "name": "syndmus_liik",
+                        "width": 15,
+                        "align": "left",
+                        "prefix": "Kaugus:",
+                        "wrap": "truncate"
+                    },
+                    {
+                        "name": "_time",
+                        "width": 12,
+                        "align": "right",
+                        "suffix": "km",
+                        "wrap": "wrap"
+                    }
+                ]
+            },
+            "data":
+            [
+                {"time":"13:42","name":{"et":"Rebane","en":"Vul Vulpes"}},
+                {"time":"17:42","name":{"et":"Konn"}},
+                {"time":"19:42","name":{"et":"Konn fewuifbew uifbwe ufybewfy bewfo ewybfewubf ewoewu"}}
+                
+            ]
+        }
+    }
+}
