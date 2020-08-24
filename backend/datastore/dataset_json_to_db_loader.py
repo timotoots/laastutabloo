@@ -22,7 +22,9 @@ def load_queries(input):
 
     f = os.path.join(input, "queries.json")
     df = pandas.read_json(f)
+    df['statement'].fillna("", inplace=True)
     df.fillna(False, inplace=True)
+    engine.execute("DROP TABLE prepared_statements CASCADE")    
     df.to_sql("prepared_statements", engine, dtype={'meta':sqlalchemy.types.JSON,
                                                     'name':sqlalchemy.types.JSON,
                                                     'style':sqlalchemy.types.JSON,
