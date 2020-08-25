@@ -59,7 +59,7 @@
         "status_updater":"done",
         "type":"json",
         "update_frequency":"minutely",
-        "url":"http:\/\/elron.ee\/api\/v1\/map",
+        "url":"https://elron.ee/map_data.json",
         "data_count":10,
         "dataset_type":"regular"
     }

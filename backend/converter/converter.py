@@ -193,7 +193,10 @@ def populate_dict_from_json(record, field_description, dictionary):
     if 'script' in field_description: 
       #filename = scripts[]['script']
       if not module_cache.get(field_description["script"]):
-        module_cache[field_description["script"]] = import_module("converter.scripts." + field_description['script'])
+        try:
+          module_cache[field_description["script"]] = import_module("scripts.converter_python." + field_description['script'])
+        except ModuleNotFoundError:
+          log.critical("Cannot find Python script: {}".format(field_description['script']))
       function = getattr(module_cache[field_description["script"]], field_description["script"])
       try:
         field = function(record)

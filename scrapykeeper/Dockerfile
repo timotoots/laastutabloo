@@ -5,8 +5,8 @@ RUN apt-get update -y && \
     apt-get install -y python3-pip git python3-psycopg2 libmysqlclient-dev python3-numpy wget
 
 
-#RUN git clone https://github.com/fliot/ScrapyKeeper.git
-RUN git clone https://github.com/c-lorand/ScrapyKeeper.git
+RUN git clone https://github.com/fliot/ScrapyKeeper.git
+#RUN git clone https://github.com/c-lorand/ScrapyKeeper.git
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
