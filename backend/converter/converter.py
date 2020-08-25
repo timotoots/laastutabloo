@@ -552,13 +552,13 @@ def convert_and_insert_DB(ds, engine, pdb, limit, files):
 
     elif filetype == 'csv':
       encoding = 'utf-8'
-      if ds.encoding:
+      if hasattr(ds, 'encoding') and ds.encoding:
         encoding = ds.encoding
       else:
         encoding = detect_encoding(path)
 
       kwargs = {}
-      if ds.csv_colnames:
+      if hasattr(ds, 'csv_colnames') and ds.csv_colnames:
         kwargs['names'] = ds.csv_colnames.strip('{}').split(",")
       objects = pandas.read_csv(open(path, "r", encoding=encoding), sep=ds.delimiter, na_filter=False, **kwargs)
       data.fillna('', inplace=True)
