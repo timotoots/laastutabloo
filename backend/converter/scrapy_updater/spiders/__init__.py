@@ -95,12 +95,14 @@ class DownloadingSpider(scrapy.Spider):
       #  import pdb; pdb.set_trace()
       try:
         self._headers = {}
-        headers_str = ds.http_header if ds.http_header else ""
-        for header_row in headers_str:
-          k, v = header_row.split(":")
-          self._headers[k] = v
-        if ds.username and ds.password:
-          self._headers[b'Authorization'] = basic_auth_header(ds.username, ds.password)
+        if hasattr(ds, 'http_header'):
+          headers_str = ds.http_header if ds.http_header else ""
+          for header_row in headers_str:
+            k, v = header_row.split(":")
+            self._headers[k] = v
+        if hasattr(ds, 'username') and hasattr(ds, 'password'):
+          if ds.username and ds.password:
+            self._headers[b'Authorization'] = basic_auth_header(ds.username, ds.password)
         yield scrapy.Request(url=self.construct_url(ds) , method="HEAD", callback=self.check, errback=self.request_failed,
                              headers=self._headers, meta={'dataset' : ds, 'download_timeout': task_timeout * 60})
       except BaseException as ex:

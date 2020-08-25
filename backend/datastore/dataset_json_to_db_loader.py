@@ -23,6 +23,8 @@ def load_queries(input):
     f = os.path.join(input, "queries.json")
     df = pandas.read_json(f)
     df['statement'].fillna("", inplace=True)
+    df['where'].fillna("", inplace=True)
+    df['custom_sql'].fillna("", inplace=True)
     df.fillna(False, inplace=True)
     engine.execute("DROP TABLE prepared_statements CASCADE")    
     df.to_sql("prepared_statements", engine, dtype={'meta':sqlalchemy.types.JSON,
@@ -66,7 +68,7 @@ def load_to_db(table, input):
             if 'url' in df_auth and  auth.url:
                 df.loc[df['id'] == auth.id, 'url'] = auth.url
             if 'http_header' in df_auth and auth.http_header:
-                df.loc[df['id'] == auth.id, 'http_header'] = auth.http_header[0]
+                df.loc[df['id'] == auth.id, 'http_header'] = auth.http_header
 
     # df = pandas.read_json("/opt/laastutabloo/backend/config/datasets2.json", dtype={'devel':'bool'})
     # df = pandas.read_json("/opt/laastutabloo/backend/config/datasets2.json", convert_dates=['last_updated', 'remote_updated'])
