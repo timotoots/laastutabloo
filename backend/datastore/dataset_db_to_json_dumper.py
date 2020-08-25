@@ -159,12 +159,18 @@ if __name__ == '__main__':
     parser.add_argument("table", default="datasets2", help="Database table to export datasets from. Defaults to datasets2")
     parser.add_argument("--output", default="/opt/laastutabloo/config/", help="Configuration directory to write JSON files to.")
     parser.add_argument("--providers", action='store_true', default=False, help="Also dump dataset providers from table providers.")
+    parser.add_argument("--queries", action='store_true', default=False, help="Also dump queries.")
+    parser.add_argument("--scripts", action='store_true', default=False, help="Also dump scripts.")
+
     args = parser.parse_args()
 
     if args.providers:
         dump_providers(args.output)
-    dump_queries(args.output)
-    dump_scripts(args.output)
+
+    if args.queries:
+        dump_queries(args.output)
+    if args.scripts:
+        dump_scripts(args.output)
 
     dump_from_db(args.table, args.output)
 

@@ -94,7 +94,7 @@ docker-compose run --service-ports
 
 ## Export datasets from database to JSON
 ```
-docker-compose run datastore python3 /opt/laastutabloo/backend/datastore/dataset_db_to_json_dumper.py --output /output --providers datasets2  
+docker-compose run datastore python3 /opt/laastutabloo/backend/datastore/dataset_db_to_json_dumper.py --output /output --providers --scripts --queries datasets2  
 ```
 
 ## Commit all changes in datasets to git
