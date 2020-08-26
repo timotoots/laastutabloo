@@ -31,7 +31,7 @@ api = Api(app, api_version='0.1')
 
 SCRAPYKEEPER_API_URL = "http://{scrapykeeper_user}:{scrapykeeper_password}@scrapykeeper:5050/api/projects/1/jobs".format(**os.environ)
 SCRAPYKEEPER_API_URL = "http://{scrapykeeper_user}:{scrapykeeper_password}@scrapykeeper:5050/api/projects/1/jobs".format(**os.environ)
-SCRAPYKEEPER_API_SPIDER_URL = "http://{scrapykeeper_user}:{scrapykeeper_password}@scrapykeeper:505/api/projects/1/spiders/1".format(**os.environ)
+SCRAPYKEEPER_API_SPIDER_URL = "http://{scrapykeeper_user}:{scrapykeeper_password}@scrapykeeper:5050/api/projects/1/spiders/1".format(**os.environ)
 SCRAPYKEEPER_FRONTEND_URL = "http://{scrapykeeper_user}:{scrapykeeper_password}@scrapykeeper:5050/project/1/job/".format(**os.environ)
 
 from beautifultable import BeautifulTable
