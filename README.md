@@ -29,7 +29,7 @@ nano .env
 
 ## Create user to access admin interface:
 ```
-htpasswd config/nginx/htpasswd username
+htpasswd -c config/nginx/htpasswd username
 ```
 
 ## Initialize system
