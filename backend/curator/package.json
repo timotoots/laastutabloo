@@ -12,7 +12,10 @@
     "colors": "^1.4.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "frontend": "file:../../frontend/public",
+    "laastutabloo": "file:../../frontend/public/lib",
     "node-fetch": "^2.6.0",
-    "request": "^2.88.0"
+    "request": "^2.88.0",
+    "timo": "file:../../frontend/admin"
   }
 }
