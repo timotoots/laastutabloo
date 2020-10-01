@@ -13,6 +13,8 @@ x-datastore-defaults: &datastore_defaults
   ports:
     - "5000:5000"
   volumes:
+    - '/etc/timezone:/etc/timezone:ro'
+    - '/etc/localtime:/etc/localtime:ro'
     - './backend/data:/opt/laastutabloo/backend/data'
     - './output:/output'
     - './backend/datastore:/opt/laastutabloo/backend/datastore'
@@ -22,6 +24,8 @@ services:
     << : *restart_policy
     image: tianon/exim4
     volumes:
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
       - 'datastore-smtp:/var/spool/exim4'
       - 'datastore-smtp-log:/var/log/exim4'
   postgres:
@@ -33,6 +37,8 @@ services:
       POSTGRES_HOST_AUTH_METHOD: 'trust'
       PGHOST: 'postgres'
     volumes:
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
       - 'postgres-data:/var/lib/postgresql/data'
       - './config:/opt/laastutabloo/config/'
   datastore:
@@ -46,6 +52,8 @@ services:
       - '80:80/tcp'
     image: "nginx:latest"
     volumes:
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
       - './frontend:/frontend'
       - type: bind
         read_only: true
@@ -78,6 +86,8 @@ services:
     depends_on:
       - postgres
     volumes:
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
       - './backend/data:/opt/laastutabloo/backend/data'
       - './config:/opt/laastutabloo/config/'
       - './data/scrapyd_dbs:/var/lib/scrapyd/dbs/'
@@ -87,6 +97,8 @@ services:
     ports:
       - '3030:3030/tcp'
     volumes:
+      - '/etc/timezone:/etc/timezone:ro'
+      - '/etc/localtime:/etc/localtime:ro'
       - './frontend:/opt/laastutabloo/frontend'
       - './backend/curator:/opt/laastutabloo/backend/curator'
     networks:
