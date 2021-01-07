@@ -42,7 +42,7 @@ jsonschema==0.8.0
 keyring==10.6.0
 keyrings.alt==3.0
 lml==0.0.9
-lxml==4.3.4
+lxml==4.6.2
 MarkupSafe==1.1.1
 matplotlib==2.1.1
 numexpr==2.6.4
